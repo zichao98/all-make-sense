@@ -1,0 +1,47 @@
+{
+  "f_main": {
+    "width": 363,
+    "height": 42,
+    "tex": "y = \\max(0,\\; w x + b)"
+  },
+  "f_kink": {
+    "width": 123,
+    "height": 67,
+    "tex": "x = -\\frac{b}{w}"
+  },
+  "f_frac": {
+    "width": 171,
+    "height": 91,
+    "tex": "N \\approx \\frac{B}{\\sqrt{8\\varepsilon}}"
+  },
+  "f_int": {
+    "width": 309,
+    "height": 86,
+    "tex": "B = \\int_{-1}^{1} \\sqrt{|f''(x)|}\\,dx"
+  },
+  "f_rule": {
+    "width": 342,
+    "height": 37,
+    "tex": "\\varepsilon \\to \\tfrac{\\varepsilon}{10} \\;\\Rightarrow\\; N \\to 3.2\\,N"
+  },
+  "f_sum": {
+    "width": 434,
+    "height": 65,
+    "tex": "f(x) \\approx c + \\sum_i a_i\\,\\mathrm{ReLU}(w_i x + b_i)"
+  },
+  "f_x2": {
+    "width": 31,
+    "height": 27,
+    "tex": "x^{2}"
+  },
+  "f_sin": {
+    "width": 95,
+    "height": 30,
+    "tex": "\\sin(\\pi x)"
+  },
+  "f_dark": {
+    "width": 162,
+    "height": 86,
+    "tex": "N \\approx \\frac{B}{\\sqrt{8\\varepsilon}}"
+  }
+}

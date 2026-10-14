@@ -4,7 +4,14 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "preview": "node build.mjs && python -m http.server 8788 --directory dist",
+    "build:all": "node build.mjs --all",
+    "check": "node build.mjs --all --strict",
+    "formulas": "node tools/tex2svg.mjs",
+    "new": "node tools/new-deck.mjs",
+    "preview": "node build.mjs --all && python -m http.server 8788 --directory dist",
     "deploy": "node build.mjs && npx wrangler deploy"
+  },
+  "devDependencies": {
+    "mathjax-full": "^3.2.2"
   }
 }

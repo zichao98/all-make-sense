@@ -17,14 +17,23 @@
 
 網址後面的 `#5` 代表第 5 頁，可以直接分享某一頁。
 
+## 讓 AI agent 做新簡報
+
+把這個 repo 給任何 AI agent，請它先讀 [`AGENTS.md`](AGENTS.md)。裡面有完整流程、設計規則、範本和檢查清單，照著做就能做出跟現有簡報一樣風格的新簡報。
+
 ## 目錄結構
 
 ```
+AGENTS.md          給 AI agent 的入口：流程與規則
+docs/              playbook、投影片格式、動畫、公式、檢查清單
 decks/<slug>/
   deck.json        投影片順序、章節、字型（Claude Slides 的格式）
   meta.json        首頁顯示的標題、說明、日期、標籤
+  formulas.txt     公式清單（LaTeX）
   slides/<id>.html 每頁一個 <section>
-  assets/<id>.svg  圖片和公式（檔名 = 投影片裡 /_blob/<id> 的 id）
+  assets/          公式 SVG 和圖片
+decks/_template/   每種版型各一頁的範本（node build.mjs --all 才會出現）
+tools/             tex2svg.mjs（LaTeX → SVG）、new-deck.mjs（建立新簡報）
 site/              播放器與首頁的 CSS / JS
 build.mjs          把 decks/ 組成靜態網站，輸出到 dist/
 wrangler.jsonc     Cloudflare Workers 設定（只有靜態檔案）

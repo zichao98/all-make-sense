@@ -1,0 +1,62 @@
+<section id="train" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">05 · 真的訓練看看</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">［在瀏覽器裡真的訓練神經網路］</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:26px;line-height:1.5;color:#6A727C">右圖：三個一層 ReLU 網路用 Adam 從隨機初始值訓練［目標函數］，底下的小刻度是轉折點的位置。</p>
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">［觀察一］：</span></b>［說明］</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">［觀察二］：</span></b>［說明］</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#F0995E">［實務建議］</p>
+<p style="font-size:24px;color:#B9C4CF">［標明這是觀察到的經驗值，不是定理］</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+// ===== CONFIG =====
+function target(x){return x*x*x*x*x}   // 要學的函數，x 在 [-1, 1]
+var Ns=[4,13,40];                       // 三排各用幾個神經元
+var T=6000,STEPS_PER_FRAME=10,LR0=0.02; // 總步數、每格動畫跑幾步、初始學習率（會衰減到 5%）
+var YR=[-1.2,1.2];                      // 圖的 y 範圍
+// ===== 以下是一層 ReLU 網路 + Adam，通常不用改 =====
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B';
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function frame(p){g.setLineDash([]);g.strokeStyle=GR;g.lineWidth=2;g.strokeRect(p.x0,p.y0,p.w,p.h)}
+function plot(p,fn,col,lw,dash){g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;200>=i;i++){var x=p.a+(p.b-p.a)*i/200,y=fn(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function Net(N,seed){var r=rng(seed),n={N:N,w:[],b:[],a:[],c:0,t:0},i;
+for(i=0;N>i;i++){var w=(0.5>r()?-1:1)*(0.5+r()*1.5);n.w.push(w);n.b.push(-w*(r()*2-1));n.a.push((r()*2-1)*0.3)}
+n.m=new Float64Array(3*N+1);n.v=new Float64Array(3*N+1);return n}
+function fwd(n,x){var y=n.c;for(var i=0;n.N>i;i++){var z=n.w[i]*x+n.b[i];if(z>0)y+=n.a[i]*z}return y}
+function step(n,X,Y,lr){var N=n.N,gr=new Float64Array(3*N+1),M=X.length,z=new Float64Array(N),i,k,j;
+for(k=0;M>k;k++){var x=X[k],y=n.c;for(i=0;N>i;i++){z[i]=n.w[i]*x+n.b[i];if(z[i]>0)y+=n.a[i]*z[i]}
+var e=2*(y-Y[k])/M;gr[3*N]+=e;for(i=0;N>i;i++)if(z[i]>0){gr[i]+=e*n.a[i]*x;gr[N+i]+=e*n.a[i];gr[2*N+i]+=e*z[i]}}
+n.t++;var c1=1-Math.pow(0.9,n.t),c2=1-Math.pow(0.999,n.t);
+for(j=0;3*N+1>j;j++){n.m[j]=0.9*n.m[j]+0.1*gr[j];n.v[j]=0.999*n.v[j]+0.001*gr[j]*gr[j];
+var d=lr*(n.m[j]/c1)/(Math.sqrt(n.v[j]/c2)+1e-8);
+if(N>j)n.w[j]-=d;else if(2*N>j)n.b[j-N]-=d;else if(3*N>j)n.a[j-2*N]-=d;else n.c-=d}}
+function maxerr(fn){var e=0;for(var k=0;400>=k;k++){var x=-1+k/200,d=Math.abs(fn(x)-target(x));if(d>e)e=d}return e}
+var X=[],Y=[];for(var k=0;128>k;k++){var x=-1+2*k/127;X.push(x);Y.push(target(x))}
+var seed=1,nets,t,hold;
+function reset(){nets=Ns.map(function(N,i){return Net(N,seed*31+i*7+N)});t=0;hold=0;seed++}
+reset();
+function draw(){var s,i;
+if(T>t){for(s=0;STEPS_PER_FRAME>s;s++){var lr=LR0*Math.pow(0.05,t/T);for(i=0;Ns.length>i;i++)step(nets[i],X,Y,lr);t++}}else if(++hold>150)reset();
+g.clearRect(0,0,W,H);
+txt('梯度下降訓練中：第 '+t+' / '+T+' 步',40,38,INK,26,'left',600);
+for(i=0;Ns.length>i;i++){var n=nets[i],y0=64+i*186,p=P(250,y0,W-290,160,-1.05,1.05,YR[0],YR[1]),fn=function(x){return fwd(n,x)};
+frame(p);plot(p,target,BL,3,[10,8]);plot(p,fn,OR,5);
+g.fillStyle=OR;for(var j=0;n.N>j;j++){var kx=-n.b[j]/n.w[j];if(kx>-1.05)if(1.05>kx){g.fillRect(p.X(kx)-2,y0+p.h-14,4,14)}}
+txt('N = '+n.N,40,y0+40,INK,30,'left',700);
+txt('最大誤差 '+maxerr(fn).toFixed(3),40,y0+84,OR,26,'left',700)}
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">［簡報名］ · 09</p>
+<aside>真實訓練動畫：每次重新開始會換隨機種子。放進簡報前，先用 node 跑同一段訓練程式確認會收斂、記下典型誤差，文字裡的數字以實測為準。</aside>
+</section>

@@ -1,0 +1,20 @@
+{
+  "v": 4,
+  "createdOnFiles": {"v": 1, "at": "2026-10-15T00:00:00Z"},
+  "lists": "css",
+  "title": "範本：每種版型一頁",
+  "cover": "cover",
+  "order": ["cover", "divider", "text-embed", "statement", "formula-table", "bigcards", "flow", "train", "surface", "heatmap", "summary"],
+  "sections": {
+    "s1": {"description": "封面與章節分隔", "start": "cover"},
+    "s2": {"description": "文字＋動畫、大字句、公式表格、數字卡片、三步驟流程", "start": "text-embed"},
+    "s3": {"description": "三種動畫：真實訓練、3D 曲面、熱圖", "start": "train"},
+    "s4": {"description": "總結", "start": "summary"}
+  },
+  "faces": {
+    "noto-sans-tc": {"family": "Noto Sans TC", "href": "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"},
+    "noto-serif-tc": {"family": "Noto Serif TC", "href": "https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&display=swap"},
+    "jetbrains-mono": {"family": "JetBrains Mono", "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"}
+  },
+  "designSystems": []
+}

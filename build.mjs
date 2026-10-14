@@ -23,10 +23,16 @@ function transformSlide(html, assetIndex, deckSlug) {
     if (!file) { warn(`${deckSlug}: 找不到素材 ${id}（請放到 assets/${id}.<副檔名>）`); return m; }
     return `${pre}assets/${file}`;
   });
+  // 直接寫 assets/<檔名> 的圖片要真的存在
+  for (const [, file] of html.matchAll(/src="assets\/([^"]+)"/g)) {
+    if (!assetIndex.has(path.parse(file).name)) warn(`${deckSlug}: 找不到素材 assets/${file}`);
+  }
   // <x-embed>…</x-embed> → 沙盒 iframe（srcdoc 由播放器在切到該頁時才載入）
   // 投影片整張會被縮放，canvas 用 2 倍解析度畫才不會糊
   const HIDPI = '<script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 2}})}catch(e){}</script>';
   html = html.replace(/<x-embed([^>]*)>([\s\S]*?)<\/x-embed>/g, (m, attrs, inner) => {
+    const kb = Buffer.byteLength(inner) / 1024;
+    if (kb > 16) warn(`${deckSlug}: 有一個 x-embed ${kb.toFixed(1)} KB，超過 16 KB（Claude Slides 的上限）`);
     inner = /<head>/i.test(inner) ? inner.replace(/<head>/i, '<head>' + HIDPI) : HIDPI + inner;
     return `<iframe class="x-embed"${attrs} sandbox="allow-scripts" title="動畫" data-srcdoc="${esc(inner)}"></iframe>`;
   });
@@ -61,8 +67,14 @@ function loadDeck(slug) {
   const files = fs.existsSync(slideDir) ? fs.readdirSync(slideDir).filter((f) => f.endsWith('.html')) : [];
   const ids = files.map((f) => f.slice(0, -5));
   const order = (deck.order || []).filter((id) => ids.includes(id)).concat(ids.filter((id) => !(deck.order || []).includes(id)));
+  for (const id of deck.order || []) if (!ids.includes(id)) warn(`${slug}: deck.json 的 order 有 "${id}"，但沒有 slides/${id}.html`);
   const slides = order
-    .map((id) => ({ id, html: transformSlide(fs.readFileSync(path.join(slideDir, id + '.html'), 'utf8'), assetIndex, slug) }))
+    .map((id) => {
+      const raw = fs.readFileSync(path.join(slideDir, id + '.html'), 'utf8');
+      const sid = (raw.match(/<section[^>]*\sid="([^"]+)"/) || [])[1];
+      if (sid !== id) warn(`${slug}: slides/${id}.html 的 <section id> 是 "${sid}"，要跟檔名一樣`);
+      return { id, html: transformSlide(raw, assetIndex, slug) };
+    })
     .filter((s) => !/^<section[^>]*\shidden[\s>=]/.test(s.html));
   if (!slides.length) { warn(`${slug}: 沒有投影片`); return null; }
   const cover = slides.find((s) => s.id === deck.cover) || slides[0];
@@ -150,8 +162,10 @@ fs.rmSync(DIST, { recursive: true, force: true });
 fs.mkdirSync(DIST, { recursive: true });
 fs.cpSync(SITE, path.join(DIST, 'site'), { recursive: true });
 
+// 名稱以 _ 開頭的資料夾（例如 _template）是草稿，只有 --all 時才放進網站
+const ALL = process.argv.includes('--all');
 const decks = fs.readdirSync(DECKS, { withFileTypes: true })
-  .filter((e) => e.isDirectory())
+  .filter((e) => e.isDirectory() && !e.name.startsWith('.') && (ALL || !e.name.startsWith('_')))
   .map((e) => loadDeck(e.name))
   .filter(Boolean)
   .sort((a, b) => (b.date || '').localeCompare(a.date || '') || a.title.localeCompare(b.title));
@@ -166,4 +180,4 @@ for (const d of decks) {
 }
 fs.writeFileSync(path.join(DIST, 'index.html'), indexPage(decks));
 console.log(`完成：${decks.length} 份簡報 → dist/` + (warnings ? `，${warnings} 個警告` : ''));
-if (warnings && process.env.STRICT) process.exit(1);
+if (warnings && (process.env.STRICT || process.argv.includes('--strict'))) process.exit(1);

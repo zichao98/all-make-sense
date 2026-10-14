@@ -1,0 +1,42 @@
+<section id="formula-table" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">02 · ［章節小標］</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">［一條估算公式＋一張對照表］</h2>
+<div style="display:flex;gap:24px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:start;gap:6px;background:#F4DCC8;padding:20px 28px;border-radius:14px">
+<img src="assets/f_frac.svg" alt="N ≈ B / √(8ε)" style="width:171px;height:91px;object-fit:contain">
+<p style="font-size:24px;color:#8A3E12">［這個符號是什麼］</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:start;gap:6px;background:#ECE6DA;padding:20px 28px;border-radius:14px">
+<img src="assets/f_int.svg" alt="B = ∫ √|f''(x)| dx" style="width:309px;height:86px;object-fit:contain">
+<p style="font-size:24px;color:#4A5563">［白話解釋］</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:start;gap:6px;background:#ECE6DA;padding:20px 28px;border-radius:14px">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+<img src="assets/f_rule.svg" alt="ε 變成 ε/10，N 變成 3.2N" style="width:342px;height:37px;object-fit:contain">
+</div>
+<p style="font-size:24px;color:#4A5563">［經驗法則］</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;flex-direction:row;align-items:center;background:#E7E0D2;padding:8px 16px">
+<p style="width:40%;font-size:24px;font-weight:700;color:#17212B">［欄位一］</p>
+<p style="width:20%;font-size:24px;font-weight:700;text-align:right;color:#17212B">［欄位二］</p>
+<p style="width:20%;font-size:24px;font-weight:700;text-align:right;color:#17212B">［欄位三］</p>
+<p style="width:20%;font-size:24px;font-weight:700;text-align:right;color:#17212B">［欄位四］</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:40%;display:flex;flex-direction:row;align-items:center"><img src="assets/f_x2.svg" alt="x²" style="width:31px;height:27px;object-fit:contain"></div>
+<p style="width:20%;font-size:26px;text-align:right">2.8</p><p style="width:20%;font-size:26px;text-align:right">10</p><p style="width:20%;font-size:26px;text-align:right">32</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;background:#F4DCC8;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:40%;display:flex;flex-direction:row;align-items:center"><img src="assets/f_sin.svg" alt="sin(πx)" style="width:95px;height:30px;object-fit:contain"></div>
+<p style="width:20%;font-size:26px;text-align:right">4.8</p><p style="width:20%;font-size:26px;text-align:right">17</p><p style="width:20%;font-size:26px;text-align:right">54</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:40%;display:flex;flex-direction:row;align-items:center;gap:16px"><p style="font-size:26px">［純文字也可以］</p></div>
+<p style="width:20%;font-size:26px;text-align:right">—</p><p style="width:20%;font-size:26px;text-align:right">2</p><p style="width:20%;font-size:26px;text-align:right">2</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">［簡報名］ · 05　　［表格的前提條件或資料來源］</p>
+<aside>表格第一欄要放公式時，不能用 table（儲存格只能放純文字），改用 flex 列：每列一個 display:flex;flex-direction:row 的 div，欄寬用 width:%。強調列用 background:#F4DCC8。表格裡的數字都要是實際算出來的。</aside>
+</section>

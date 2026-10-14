@@ -1,0 +1,11 @@
+// 名稱    顏色      字級(px)  LaTeX（照寫，不用跳脫反斜線）
+// 淺色投影片的深色字用 #17212B，橘色重點 #B5531C，橘色卡片上 #8A3E12，深色投影片上 #F0995E
+f_main    #17212B   42   y = \max(0,\; w x + b)
+f_kink    #B5531C   32   x = -\frac{b}{w}
+f_frac    #8A3E12   38   N \approx \frac{B}{\sqrt{8\varepsilon}}
+f_int     #17212B   34   B = \int_{-1}^{1} \sqrt{|f''(x)|}\,dx
+f_rule    #17212B   34   \varepsilon \to \tfrac{\varepsilon}{10} \;\Rightarrow\; N \to 3.2\,N
+f_sum     #17212B   30   f(x) \approx c + \sum_i a_i\,\mathrm{ReLU}(w_i x + b_i)
+f_x2      #17212B   30   x^{2}
+f_sin     #17212B   30   \sin(\pi x)
+f_dark    #F0995E   36   N \approx \frac{B}{\sqrt{8\varepsilon}}

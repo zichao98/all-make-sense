@@ -1,0 +1,27 @@
+<section id="cover" data-transition="fade" style="background:#15202B;color:#F3EEE3;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:start;gap:32px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;color:#F0995E">［一句話：這份簡報給誰看］</p>
+<h1 style="font-family:'Noto Serif TC', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F3EEE3">［簡報標題］</h1>
+<p style="font-size:44px;line-height:1.4;color:#B9C4CF">［副標：看完能得到什麼直覺］</p>
+<p style="font-size:26px;color:#8C9AA8;letter-spacing:2px">［關鍵字 · 關鍵字 · 關鍵字］</p>
+<x-embed style="position:absolute;left:128px;top:640px;width:1664px;height:300px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+// ===== CONFIG：封面裝飾動畫，換成跟主題有關的曲線 =====
+function f(x){return 0.5+0.28*Math.sin(3*Math.PI*x)+0.12*Math.sin(11*x)}
+var Ns=[2,3,4,6,8,12,16,24,32];
+// ===== 以下不用改 =====
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+function X(x){return 20+x*(W-40)}function Y(y){return H-20-y*(H-40)}
+var t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,k=Math.floor(t/1.4)%(Ns.length+2),N=Ns[Math.min(k,Ns.length-1)],i,x;
+g.clearRect(0,0,W,H);
+g.strokeStyle='rgba(127,178,232,0.75)';g.lineWidth=3;g.setLineDash([10,10]);g.beginPath();
+for(i=0;400>=i;i++){x=i/400;i?g.lineTo(X(x),Y(f(x))):g.moveTo(X(x),Y(f(x)))}g.stroke();g.setLineDash([]);
+g.strokeStyle='#F0995E';g.lineWidth=5;g.beginPath();
+for(i=0;N>=i;i++){x=i/N;i?g.lineTo(X(x),Y(f(x))):g.moveTo(X(x),Y(f(x)))}g.stroke();
+g.fillStyle='#F0995E';for(i=1;N>i;i++){x=i/N;g.beginPath();g.arc(X(x),Y(f(x)),6,0,7);g.fill()}
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<aside>封面：深色底。上半部是文字，下半部 y 640 以後放一個寬版裝飾動畫（1664×300）。備註寫這份簡報要回答的問題。</aside>
+</section>

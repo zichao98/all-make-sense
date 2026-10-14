@@ -1,0 +1,7 @@
+{
+  "title": "範本：每種版型一頁",
+  "subtitle": "給 AI agent 複製用",
+  "description": "每一種投影片版型、動畫和公式的寫法各一頁。用 node build.mjs --all 才會出現在網站上。",
+  "date": "2026-10-15",
+  "tags": ["範本"]
+}
