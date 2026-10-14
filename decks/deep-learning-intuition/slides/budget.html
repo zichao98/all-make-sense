@@ -1,0 +1,59 @@
+<section id="budget" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">05 · 一條估算公式</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">彎曲預算 B：一眼估出神經元數</h2>
+<div style="display:flex;gap:24px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:start;gap:6px;background:#F4DCC8;padding:20px 28px;border-radius:14px">
+<img src="/_blob/86d0d407e2d53fb7ec61f56f619c5563" alt="N ≈ B / √(8ε)" style="width:171px;height:91px;object-fit:contain">
+<p style="font-size:24px;color:#8A3E12">ε 是允許的最大誤差</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:start;gap:6px;background:#ECE6DA;padding:20px 28px;border-radius:14px">
+<img src="/_blob/448f6179b88ecd51861dcf25fb1dc4b2" alt="B = ∫ from −1 to 1 of √|f''(x)| dx" style="width:309px;height:86px;object-fit:contain">
+<p style="font-size:24px;color:#4A5563">整段的「彎曲總量」</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:start;gap:6px;background:#ECE6DA;padding:20px 28px;border-radius:14px">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+<img src="/_blob/4a501eceda5e8ba26dfeafabdc34016c" alt="ε 變成 ε/10，N 變成 3.2N" style="width:342px;height:37px;object-fit:contain">
+</div>
+<p style="font-size:24px;color:#4A5563">精度提高 10 倍，神經元約 ×3.2</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;flex-direction:row;align-items:center;background:#E7E0D2;padding:8px 16px">
+<p style="width:34%;font-size:24px;font-weight:700;color:#17212B">函數（x 在 −1 到 1）</p>
+<p style="width:18%;font-size:24px;font-weight:700;text-align:right;color:#17212B">彎曲預算 B</p>
+<p style="width:16%;font-size:24px;font-weight:700;text-align:right;color:#17212B">ε = 0.1</p>
+<p style="width:16%;font-size:24px;font-weight:700;text-align:right;color:#17212B">ε = 0.01</p>
+<p style="width:16%;font-size:24px;font-weight:700;text-align:right;color:#17212B">ε = 0.001</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/568b4f44a8c5f444bf8ce848917c9f04" alt="e^x" style="width:29px;height:23px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">2.1</p><p style="width:16%;font-size:26px;text-align:right">3</p><p style="width:16%;font-size:26px;text-align:right">8</p><p style="width:16%;font-size:26px;text-align:right">24</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/3409400a131db5cc854332e16d6d7c51" alt="x²" style="width:31px;height:27px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">2.8</p><p style="width:16%;font-size:26px;text-align:right">4</p><p style="width:16%;font-size:26px;text-align:right">10</p><p style="width:16%;font-size:26px;text-align:right">32</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;background:#F4DCC8;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/cb23e25058aa92805f7bcce5828db802" alt="x⁵" style="width:31px;height:27px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">3.6</p><p style="width:16%;font-size:26px;text-align:right">5</p><p style="width:16%;font-size:26px;text-align:right">13</p><p style="width:16%;font-size:26px;text-align:right">41</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/19b68b3b3c2ca6342ed6e2c90c97f5a7" alt="sin(πx)" style="width:95px;height:30px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">4.8</p><p style="width:16%;font-size:26px;text-align:right">6</p><p style="width:16%;font-size:26px;text-align:right">17</p><p style="width:16%;font-size:26px;text-align:right">54</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/8695295f7344cbaf927e0e6b7c27a64f" alt="T₅(x) = 16x⁵ − 20x³ + 5x" style="width:338px;height:35px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">11.4</p><p style="width:16%;font-size:26px;text-align:right">13</p><p style="width:16%;font-size:26px;text-align:right">41</p><p style="width:16%;font-size:26px;text-align:right">128</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/166aaa6c0faf288af6a3114bc3d41092" alt="sin(5πx)" style="width:110px;height:30px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">24.0</p><p style="width:16%;font-size:26px;text-align:right">27</p><p style="width:16%;font-size:26px;text-align:right">85</p><p style="width:16%;font-size:26px;text-align:right">268</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center;gap:16px"><img src="/_blob/f83f3c8b6a8a259a01481e1aa8a41ae7" alt="|x|" style="width:34px;height:30px;object-fit:contain"><p style="font-size:24px;color:#6A727C">只有一個尖角</p></div>
+<p style="width:18%;font-size:26px;text-align:right">—</p><p style="width:16%;font-size:26px;text-align:right">2</p><p style="width:16%;font-size:26px;text-align:right">2</p><p style="width:16%;font-size:26px;text-align:right">2</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">深度學習的直覺 · 07　　表中是「轉折點放在最佳位置」時的神經元數（＝段數），是理論上的下限參考。</p>
+<aside>推導：把誤差平均分配到每一段，每段長度 h 和 √|f″| 成反比，加總起來就得到 N ≈ B/√(8ε)。B 就像函數的「彎曲預算」：越彎、彎的次數越多，B 越大。幾個值得注意的點：x² 和 x⁵ 差不多難；T₅ 也是五次多項式，卻要三倍以上的神經元，因為它上下擺了四次；|x| 只要 2 個神經元就完全精確，因為它本身就是折線。這些函數的值都在 −1 到 1 附近，所以 ε = 0.01 大約就是 1% 的誤差。</aside>
+</section>

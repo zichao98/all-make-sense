@@ -1,0 +1,56 @@
+<section id="stack" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">02 · 疊加</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">很多個轉折加起來＝一條折線</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;align-items:start;background:#ECE6DA;padding:20px 32px;border-radius:12px">
+<img src="/_blob/026d90e6e6244722c2b950775c681e80" alt="f(x) = c + Σ a_i ReLU(x − k_i)" style="width:486px;height:108px;object-fit:contain">
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:14px">
+<img src="/_blob/d27e828ed49151839e4b7128209cee9d" alt="k_i" style="width:29px;height:29px;object-fit:contain">
+<p style="flex:1;font-size:28px;line-height:1.5;color:#4A5563">第 i 個神經元把轉折放在哪裡</p>
+</div>
+<div style="display:flex;align-items:center;gap:14px">
+<img src="/_blob/2a9ebc13975853af7baabf21de3aced6" alt="a_i" style="width:30px;height:21px;object-fit:contain">
+<p style="flex:1;font-size:28px;line-height:1.5;color:#4A5563">經過這個轉折時，斜率「改變多少」</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">N 個神經元：</span></b>最多 N 個轉折，也就是一條 N+1 段的折線</p>
+</div>
+<p style="font-size:26px;line-height:1.5;color:#6A727C">右圖：用 6 個神經元一個一個加上去，去貼 y = x⁵（藍色虛線）。每加一個，折線就多貼合一段。</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B';
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function frame(p){g.setLineDash([]);g.strokeStyle=GR;g.lineWidth=2;g.strokeRect(p.x0,p.y0,p.w,p.h);g.strokeStyle='#C9C0AE';g.beginPath();g.moveTo(p.x0,p.Y(0));g.lineTo(p.x0+p.w,p.Y(0));g.moveTo(p.X(0),p.y0);g.lineTo(p.X(0),p.y0+p.h);g.stroke()}
+function plot(p,f,col,lw,dash){g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;400>=i;i++){var x=p.a+(p.b-p.a)*i/400,y=f(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function relu(z){return z>0?z:0}
+function f5(x){return x*x*x*x*x}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=/[一-鿿]/.test(ch)?'400 '+sz+'px '+F:(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v){return (v>0?'+':'')+v.toFixed(2).replace('-','−')}
+var N=6,K=[],S=[],A=[],j;
+for(j=0;N>=j;j++){var v=-1+2*j/N;K.push((v>0?1:-1)*Math.pow(Math.abs(v),0.4))}
+for(j=0;N>j;j++)S.push((f5(K[j+1])-f5(K[j]))/(K[j+1]-K[j]));
+for(j=0;N>j;j++)A.push(j?S[j]-S[j-1]:S[0]);
+function part(k){return function(x){var y=-1;for(var i=0;k>i;i++)y+=A[i]*relu(x-K[i]);return y}}
+var t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,ph=Math.floor(t/1.8)%(N+2),k=Math.min(ph+1,N);g.clearRect(0,0,W,H);
+var p=P(40,40,W-80,H-164,-1.15,1.15,-1.45,1.45);frame(p);
+plot(p,f5,BL,4,[12,10]);
+if(k>1)plot(p,part(k-1),'rgba(224,120,47,0.3)',4);
+var nk=k-1;plot(p,function(x){return A[nk]*relu(x-K[nk])-1.25},'#9A8F7B',3,[4,6]);
+plot(p,part(k),OR,7);
+g.fillStyle=OR;for(var i=0;k>i;i++){g.beginPath();g.arc(p.X(K[i]),p.Y(part(k)(K[i])),9,0,7);g.fill()}
+txt('第 '+k+' / '+N+' 個神經元',40,H-76,OR,28,'left',700);
+txt('灰色虛線 = 這個神經元本身',W-40,H-76,'#8A7F6B',24,'right');
+mt('在 x = '+fm(K[nk]).replace('+','')+' 把斜率改變 '+fm(A[nk]),40,H-30,TX,30);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">深度學習的直覺 · 03</p>
+<aside>把很多個 ReLU 加起來，每個神經元只負責「在某個位置把斜率扭一下」。所以一層 ReLU 網路（1 維輸入）畫出來的永遠是一條折線，神經元數量就是轉折點數量。這裡寫成 ReLU(x − kᵢ) 是把 w 的大小併進 aᵢ 裡，本質一樣。右邊的轉折點不是均勻放的：x⁵ 在中間幾乎是平的，彎曲集中在兩端，所以轉折點也集中在兩端。</aside>
+</section>

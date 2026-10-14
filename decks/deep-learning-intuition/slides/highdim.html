@@ -1,0 +1,40 @@
+<section id="highdim" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">18 · 1 維直覺的限制</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">輸入變成高維，格子數會爆炸</h2>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">每個維度切 10 段（像 x² 那樣，誤差約 1%），整個空間就要 10^d 塊：</p>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px 28px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">1 維</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">10</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px 28px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">2 維</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">100</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px 28px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">3 維</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">1,000</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#F4DCC8;padding:24px 28px;border-radius:16px">
+<p style="font-size:26px;color:#8A3E12">28×28 小圖：784 維</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#8A3E12">10⁷⁸⁴</p>
+</div>
+</div>
+<p style="font-size:28px;font-weight:700;color:#17212B">那為什麼深度學習在圖片上還能用？</p>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">資料只住在一小塊</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">所有「貓的照片」只佔像素空間極小的一片，真正的維度低得多。</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">函數是一層層組起來的</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">像素 → 邊 → 形狀 → 物體。這種組合結構正好是深度擅長的。</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">頻譜夠平滑</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Barron 的誤差界跟維度無關：高頻成分不多，就不怕維度高。</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">深度學習的直覺 · 241 維的公式用來建立直覺；真實任務要多大的網路，最後還是靠實驗。</p>
+<aside>前面所有的公式都是 1 維輸入。在 d 維空間裡用小塊片段線性函數去拼，需要的塊數大約是 (1/√ε)^d，這就是「維度詛咒」。深度學習能在高維資料上成功，靠的是資料和目標函數本身有結構：低維流形、組合性、頻譜平滑。這也是為什麼深度（組合）比寬度更重要。</aside>
+</section>

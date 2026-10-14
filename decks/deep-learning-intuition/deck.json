@@ -1,0 +1,23 @@
+{
+  "v": 4,
+  "createdOnFiles": {"v": 1, "at": "2026-10-14T10:00:00Z"},
+  "lists": "css",
+  "title": "深度學習的直覺：神經元、ReLU 與傅立葉",
+  "cover": "cover",
+  "order": ["cover", "neuron", "stack", "key", "errlaw", "x5", "budget", "degree", "train", "depth", "sawtooth", "square", "fourier", "fmap", "gibbs", "barron", "spectral", "dims", "ridge2d", "creases", "bump", "planewave", "bridge", "highdim", "cheat"],
+  "sections": {
+    "s1": {"description": "開場：這份簡報要回答的問題", "start": "cover"},
+    "s2": {"description": "一個 ReLU 神經元是一個轉折，很多個加起來是一條折線", "start": "neuron"},
+    "s3": {"description": "看函數估神經元數：誤差法則、彎曲預算與真實訓練", "start": "errlaw"},
+    "s4": {"description": "深度讓轉折數指數成長，用很少的神經元做出平方與乘法", "start": "depth"},
+    "s5": {"description": "傅立葉級數是固定頻率的 sin 神經元，兩者如何互相解釋", "start": "fourier"},
+    "s6": {"description": "二維、三維：折痕變成直線與平面，傅立葉變成平面波", "start": "dims"},
+    "s7": {"description": "高維度的限制與一頁總結", "start": "highdim"}
+  },
+  "faces": {
+    "noto-sans-tc": {"family": "Noto Sans TC", "href": "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"},
+    "noto-serif-tc": {"family": "Noto Serif TC", "href": "https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&display=swap"},
+    "jetbrains-mono": {"family": "JetBrains Mono", "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"}
+  },
+  "designSystems": []
+}

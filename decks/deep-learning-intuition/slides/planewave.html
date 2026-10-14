@@ -1,0 +1,53 @@
+<section id="planewave" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">16 · 傅立葉的二維版</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">傅立葉在二維：平面波</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;align-items:start;background:#DCE7F3;padding:28px 32px;border-radius:12px">
+<img src="/_blob/c62d40b4ef9faa39484c0aed428ad2e3" alt="sin(k₁x₁ + k₂x₂ + φ)" style="width:362px;height:40px;object-fit:contain">
+</div>
+<table style="font-size:26px;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif">
+<tr style="background:#E7E0D2"><th style="width:50%;text-align:left">ReLU 神經元</th><th style="width:50%;text-align:left">平面波</th></tr>
+<tr><td>方向 w</td><td>波向量 k（方向＋頻率）</td></tr>
+<tr><td>位置 b</td><td>相位 φ</td></tr>
+<tr><td>沿 w 折一次</td><td>沿 k 一直起伏</td></tr>
+</table>
+<div style="display:flex;flex-direction:row;align-items:center;gap:14px">
+<p style="font-size:28px;color:#4A5563">兩者都是</p>
+<img src="/_blob/47d048e0e9706f21a55037d4706a21c0" alt="g(w·x + b)" style="width:183px;height:36px;object-fit:contain">
+<p style="font-size:28px;color:#4A5563">這種「脊函數」</p>
+</div>
+<p style="font-size:24px;line-height:1.5;color:#6A727C">JPEG 把每個 8×8 小方塊拆成 64 種二維餘弦圖樣，每一種都是兩個平面波相加。</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+var M=96,P0=[239,233,221],PO=[224,120,47],PB=[45,108,176];
+function mk(){var c=document.createElement('canvas');c.width=M;c.height=M;return c}
+var o1=mk(),o2=mk(),c1=o1.getContext('2d'),c2=o2.getContext('2d'),d1=c1.createImageData(M,M),d2=c2.createImageData(M,M);
+function put(D,k,C,t){D.data[k]=P0[0]+(C[0]-P0[0])*t;D.data[k+1]=P0[1]+(C[1]-P0[1])*t;D.data[k+2]=P0[2]+(C[2]-P0[2])*t;D.data[k+3]=255}
+function arrow(cx,cy,wx,wy,lab){var L=150,ex=cx+wx*L,ey=cy-wy*L,an=Math.atan2(-wy,wx);g.strokeStyle=INK;g.fillStyle=INK;g.lineWidth=4;
+g.beginPath();g.moveTo(cx,cy);g.lineTo(ex,ey);g.stroke();g.beginPath();g.moveTo(ex+Math.cos(an)*12,ey+Math.sin(an)*12);
+g.lineTo(ex+Math.cos(an+2.5)*16,ey+Math.sin(an+2.5)*16);g.lineTo(ex+Math.cos(an-2.5)*16,ey+Math.sin(an-2.5)*16);g.closePath();g.fill();
+g.font='italic 700 34px "Cambria Math","STIX Two Math","Times New Roman",serif';g.textAlign='center';g.fillText(lab,ex+wx*30,ey-wy*30+12)}
+var t0=performance.now(),S=380,Y0=96,XA=40,XB=492;
+function draw(){var t=(performance.now()-t0)/1000,th=t*0.35,wx=Math.cos(th),wy=Math.sin(th),b=0.3*Math.sin(t*0.7),ph=t*1.5,K=3*Math.PI,i,j;
+for(j=0;M>j;j++)for(i=0;M>i;i++){var x=-1+2*(i+0.5)/M,y=1-2*(j+0.5)/M,s=wx*x+wy*y,k=4*(j*M+i);
+var v=s+b;put(d1,k,PO,v>0?Math.min(v/1.6,1):0);var w=Math.sin(K*s+ph);put(d2,k,w>0?PO:PB,Math.abs(w))}
+c1.putImageData(d1,0,0);c2.putImageData(d2,0,0);
+g.clearRect(0,0,W,H);g.imageSmoothingEnabled=true;g.drawImage(o1,XA,Y0,S,S);g.drawImage(o2,XB,Y0,S,S);
+g.strokeStyle='#C9C0AE';g.lineWidth=2;g.strokeRect(XA,Y0,S,S);g.strokeRect(XB,Y0,S,S);
+arrow(XA+S/2,Y0+S/2,wx,wy,'w');arrow(XB+S/2,Y0+S/2,wx,wy,'k');
+txt('ReLU 神經元：一道折痕',XA,74,'#B5531C',28,'left',700);
+txt('傅立葉：一個平面波',XB,74,'#1F4E80',28,'left',700);
+txt('兩者都只沿著箭頭方向變化，',40,H-70,TX,26);
+txt('垂直箭頭的方向完全不變（波峰也是一條條直線）。',40,H-30,TX,26);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">深度學習的直覺 · 22</p>
+<aside>一維的傅立葉基底是 sin(kx)；二維的是 sin(k₁x₁ + k₂x₂ + φ)，叫平面波。它的波峰是一條條平行的直線，就像 ReLU 的折痕。對照起來：神經元的 w 決定折痕方向，平面波的 k 決定波的方向和頻率；b 和 φ 都是在決定位置。兩者都是「脊函數」：只沿著某個方向 w 變化，垂直方向完全不變。差別一樣是：傅立葉的 k 被固定在整數格點上，神經元的 w 可以自由學。JPEG 用的 8×8 二維餘弦基底，每個都是 cos(ux)·cos(vy)，可以寫成兩個平面波相加。</aside>
+</section>

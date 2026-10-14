@@ -1,0 +1,52 @@
+<section id="x5" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">04 · 實算 y = x⁵（x 在 −1 到 1）</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">x⁵ 中間幾乎是直的，彎曲都在兩端</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<img src="/_blob/d76a5daae51548d36f0fb84a0e8cdec0" alt="f''(x) = 20x³" style="width:226px;height:44px;object-fit:contain">
+<p style="font-size:28px;line-height:1.5;color:#4A5563">在 0 附近幾乎是 0，到 ±1 變成 ±20。把轉折點均勻撒，會浪費在中間那段直線上。</p>
+</div>
+<p style="font-size:28px;font-weight:700;color:#17212B">要讓最大誤差 ≤ 0.01（約值域的 0.5%）</p>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#ECE6DA;padding:28px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">均勻放轉折</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:72px;font-weight:600;line-height:1.1;color:#17212B">32</p>
+<p style="font-size:26px;color:#4A5563">個神經元</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F4DCC8;padding:28px;border-radius:16px">
+<p style="font-size:26px;color:#8A3E12">照彎曲程度放</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:72px;font-weight:600;line-height:1.1;color:#8A3E12">13</p>
+<p style="font-size:26px;color:#8A3E12">個神經元</p>
+</div>
+</div>
+<p style="font-size:24px;line-height:1.5;color:#6A727C">這兩個數字是實際算出來的折線誤差（右圖），不是猜的。</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B';
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function frame(p){g.setLineDash([]);g.strokeStyle=GR;g.lineWidth=2;g.strokeRect(p.x0,p.y0,p.w,p.h);g.strokeStyle='#C9C0AE';g.beginPath();g.moveTo(p.x0,p.Y(0));g.lineTo(p.x0+p.w,p.Y(0));g.moveTo(p.X(0),p.y0);g.lineTo(p.X(0),p.y0+p.h);g.stroke()}
+function plot(p,f,col,lw,dash){g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;400>=i;i++){var x=p.a+(p.b-p.a)*i/400,y=f(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function f5(x){return x*x*x*x*x}
+function knots(N,ad){var K=[];for(var j=0;N>=j;j++){var v=-1+2*j/N;K.push(ad?(v>0?1:-1)*Math.pow(Math.abs(v),0.4):v)}return K}
+function interp(K){return function(x){var j=0;while(K.length-2>j)if(x>K[j+1])j++;else break;var u=(x-K[j])/(K[j+1]-K[j]);return f5(K[j])+u*(f5(K[j+1])-f5(K[j]))}}
+function err(f){var e=0;for(var i=0;2000>=i;i++){var x=-1+i/1000,d=Math.abs(f(x)-f5(x));if(d>e)e=d}return e}
+var Ns=[3,5,8,13,20,32],C={};
+Ns.forEach(function(N){var a=knots(N,0),b=knots(N,1);C[N]=[a,b,interp(a),interp(b),err(interp(a)),err(interp(b))]});
+var t0=performance.now();
+function panel(y0,K,f,e,lab){var p=P(40,y0,W-80,258,-1.05,1.05,-1.15,1.15);frame(p);plot(p,f5,BL,4,[12,10]);plot(p,f,OR,6);
+g.fillStyle=OR;for(var i=0;K.length>i;i++){g.beginPath();g.arc(p.X(K[i]),p.Y(f5(K[i])),7,0,7);g.fill()}
+txt(lab,p.x0+20,y0+38,INK,26,'left',700);txt('最大誤差 '+e.toFixed(3),p.x0+p.w-20,y0+p.h-20,e>0.0101?TX:OR,26,'right',700)}
+function draw(){var t=(performance.now()-t0)/1000,N=Ns[Math.floor(t/2.4)%Ns.length],c=C[N];g.clearRect(0,0,W,H);
+txt('N = '+N+' 個神經元',40,40,OR,30,'left',700);
+panel(60,c[0],c[2],c[4],'均勻放');panel(344,c[1],c[3],c[5],'照彎曲程度放');
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">深度學習的直覺 · 06</p>
+<aside>右圖上下兩排用一樣多的神經元。上面轉折點等間距；下面把轉折點照「彎曲程度的平方根」分配，密集放在兩端。同樣 13 個神經元，下面的誤差大約只有上面的五分之一。神經網路訓練時，其實就是在學「轉折點放哪」——這是它比固定基底（例如多項式、傅立葉）更有彈性的地方。</aside>
+</section>

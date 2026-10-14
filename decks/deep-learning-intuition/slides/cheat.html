@@ -1,0 +1,32 @@
+<section id="cheat" data-transition="fade" style="background:#15202B;color:#F3EEE3;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#F0995E">總結</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#F3EEE3">一頁帶走</h2>
+<div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#F0995E">一個神經元＝一個轉折</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">每個 ReLU 只在一個點折一下：b 管位置，w 管斜率。</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#F0995E">一層網路＝一條折線</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">N 個神經元，最多 N 個轉折。問幾個神經元，就是問要幾段。</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<img src="/_blob/e3bd4d33ae5ef9dfb2b8a0b87516ea7e" alt="N ≈ B / √(8ε)" style="width:162px;height:86px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">B 是整段的彎曲預算。精度 ×10，神經元 ×3.2。</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#7FB2E8">眼估法</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">數彎：1% 誤差每個彎 6～10 個。數波：每個波約 17 個。實際訓練再 ×2～5。</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#7FB2E8">深度讓轉折相乘</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">L 層可以有 2ᴸ 段。精度要求越高，深度省下的神經元越多。</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#7FB2E8">傅立葉＝釘死的 sin 神經元</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">神經網路是會自己搬動基底的傅立葉；訓練時先學低頻、後學高頻。</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#8C9AA8">深度學習的直覺 · 25所有估算都是 1 維輸入、轉折點放在最佳位置的理論值，用來建立直覺。</p>
+<aside>回到一開始的問題：「我要一個五次方的函數，要幾個神經元？」答案：先看它長什麼樣子。x⁵ 在 [−1, 1] 上只有兩端在彎，1% 誤差理論上 13 個就夠，實際訓練抓 30～60 個比較保險；如果是上下擺四次的五次多項式（像 T₅），理論 41 個。想要更省，就加深度。</aside>
+</section>

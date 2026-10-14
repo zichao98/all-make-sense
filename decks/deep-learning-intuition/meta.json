@@ -1,0 +1,8 @@
+{
+  "title": "深度學習的直覺",
+  "subtitle": "神經元、ReLU 與傅立葉",
+  "description": "看到一個函數，就大概知道要幾個神經元：ReLU 折線、彎曲預算、深度、傅立葉，以及走到二維、三維。",
+  "date": "2026-10-14",
+  "tags": ["深度學習", "數學直覺"],
+  "artifact": "https://claude.ai/artifact/KfijR3GxmLjJREVa3PS5PN"
+}

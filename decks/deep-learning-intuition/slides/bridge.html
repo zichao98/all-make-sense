@@ -1,0 +1,32 @@
+<section id="bridge" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">17 · 把高維拆回一維</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">高維函數＝很多平面波＝很多個一維問題</h2>
+<div style="display:flex;flex-direction:row;align-items:stretch;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2D6CB0">第一步</p>
+<h3 style="font-size:30px;font-weight:700;color:#17212B">傅立葉拆解</h3>
+<img src="/_blob/570618952ccdd5e59028e0842cd13968" alt="f(x) = Σ A_k sin(k·x + φ_k)" style="width:380px;height:65px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#4A5563">任何函數＝很多個不同方向、不同頻率的平面波相加。</p>
+</div>
+<x-shape kind="arrow-right" style="width:56px;height:28px;align-self:center;background:#C9C0AE"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2D6CB0">第二步</p>
+<h3 style="font-size:30px;font-weight:700;color:#17212B">每個波只看一個方向</h3>
+<img src="/_blob/3f93303851d51c9094a8c003c2b45683" alt="t = k·x" style="width:124px;height:27px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#4A5563">沿著 k 的方向看，平面波就是一條普通的一維波 sin(t + φ)。</p>
+</div>
+<x-shape kind="arrow-right" style="width:56px;height:28px;align-self:center;background:#C9C0AE"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F4DCC8;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#8A3E12">第三步</p>
+<h3 style="font-size:30px;font-weight:700;color:#17212B">用一維折線去畫</h3>
+<img src="/_blob/6ae79410e7840280c0c059cc914e2e68" alt="sin(t + φ) ≈ Σ a_j ReLU(t − t_j)" style="width:390px;height:64px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#4A5563">這些神經元的方向都是 w = k，只差在 b。就是前面的一維直覺。</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#15202B;padding:28px 32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:700;color:#F0995E">神經元數 ≈ 重要平面波的數量 × 每個波要的折數</h3>
+<p style="font-size:26px;line-height:1.5;color:#E6E1D6">這正是 Barron 定理證明背後的想法：維度再高，只要重要的平面波不多，神經元就不用多。反過來，像雜訊那樣什麼方向、什麼頻率都有的函數，任何方法都很貴。</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">深度學習的直覺 · 23</p>
+<aside>這頁把前面所有東西串起來。高維函數先用傅立葉拆成平面波；每一個平面波只沿著一個方向 k 變化，所以只要把座標投影成 t = k·x，它就變成一維的波；一維的波可以用一排折線（ReLU）去畫，每個神經元的 w 都等於 k，只是 bias 不同，把轉折放在不同位置。所以在高維裡估神經元，可以想成：有幾個重要的方向和頻率？每個方向要折幾次？Barron 在 1993 年就是用類似的論證（平面波 → 一維 → sigmoid 階梯，再隨機抽樣），證明誤差上界跟維度無關。</aside>
+</section>

@@ -1,0 +1,61 @@
+<section id="train" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">06 · 真的訓練看看</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">實際訓練出來的，會比理論差</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:26px;line-height:1.5;color:#6A727C">右圖：三個網路用 Adam 從隨機初始值訓練 y = x⁵（128 個取樣點），底下的小刻度是轉折點的位置。</p>
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">找不到最佳位置：</span></b>梯度下降只會慢慢挪轉折點，常停在「不錯但不完美」的地方</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">神經元會「死掉」：</span></b>轉折點跑出範圍外，那個神經元就白費了</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">目標是平均誤差：</span></b>訓練壓的是平均，最大誤差通常比較大</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#F0995E">實務起點：公式估的數字 × 2～5</p>
+<p style="font-size:24px;color:#B9C4CF">再用實驗調整（這個倍數是本例觀察到的經驗值）</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B';
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function frame(p){g.setLineDash([]);g.strokeStyle=GR;g.lineWidth=2;g.strokeRect(p.x0,p.y0,p.w,p.h)}
+function plot(p,f,col,lw,dash){g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;200>=i;i++){var x=p.a+(p.b-p.a)*i/200,y=f(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function f5(x){return x*x*x*x*x}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function Net(N,seed){var r=rng(seed),n={N:N,w:[],b:[],a:[],c:0,t:0},i;
+for(i=0;N>i;i++){var w=(0.5>r()?-1:1)*(0.5+r()*1.5);n.w.push(w);n.b.push(-w*(r()*2-1));n.a.push((r()*2-1)*0.3)}
+n.m=new Float64Array(3*N+1);n.v=new Float64Array(3*N+1);return n}
+function fwd(n,x){var y=n.c;for(var i=0;n.N>i;i++){var z=n.w[i]*x+n.b[i];if(z>0)y+=n.a[i]*z}return y}
+function step(n,X,Y,lr){var N=n.N,gr=new Float64Array(3*N+1),M=X.length,z=new Float64Array(N),i,k,j;
+for(k=0;M>k;k++){var x=X[k],y=n.c;for(i=0;N>i;i++){z[i]=n.w[i]*x+n.b[i];if(z[i]>0)y+=n.a[i]*z[i]}
+var e=2*(y-Y[k])/M;gr[3*N]+=e;for(i=0;N>i;i++)if(z[i]>0){gr[i]+=e*n.a[i]*x;gr[N+i]+=e*n.a[i];gr[2*N+i]+=e*z[i]}}
+n.t++;var c1=1-Math.pow(0.9,n.t),c2=1-Math.pow(0.999,n.t);
+for(j=0;3*N+1>j;j++){n.m[j]=0.9*n.m[j]+0.1*gr[j];n.v[j]=0.999*n.v[j]+0.001*gr[j]*gr[j];
+var d=lr*(n.m[j]/c1)/(Math.sqrt(n.v[j]/c2)+1e-8);
+if(N>j)n.w[j]-=d;else if(2*N>j)n.b[j-N]-=d;else if(3*N>j)n.a[j-2*N]-=d;else n.c-=d}}
+function maxerr(f){var e=0;for(var k=0;400>=k;k++){var x=-1+k/200,d=Math.abs(f(x)-f5(x));if(d>e)e=d}return e}
+function ideal(N){var K=[],j;for(j=0;N>=j;j++){var v=-1+2*j/N;K.push((v>0?1:-1)*Math.pow(Math.abs(v),0.4))}
+return maxerr(function(x){var j=0;while(K.length-2>j)if(x>K[j+1])j++;else break;var u=(x-K[j])/(K[j+1]-K[j]);return f5(K[j])+u*(f5(K[j+1])-f5(K[j]))})}
+var X=[],Y=[];for(var k=0;128>k;k++){var x=-1+2*k/127;X.push(x);Y.push(f5(x))}
+var Ns=[4,13,40],ID=Ns.map(ideal),T=6000,seed=1,nets,t,hold;
+function reset(){nets=Ns.map(function(N,i){return Net(N,seed*31+i*7+N)});t=0;hold=0;seed++}
+reset();
+function draw(){var s,i;
+if(T>t){for(s=0;10>s;s++){var lr=0.02*Math.pow(0.05,t/T);for(i=0;3>i;i++)step(nets[i],X,Y,lr);t++}}else if(++hold>150)reset();
+g.clearRect(0,0,W,H);
+txt('梯度下降訓練中：第 '+t+' / '+T+' 步',40,38,INK,26,'left',600);
+for(i=0;3>i;i++){var n=nets[i],y0=64+i*186,p=P(250,y0,W-290,160,-1.05,1.05,-1.2,1.2),fn=function(x){return fwd(n,x)};
+frame(p);plot(p,f5,BL,3,[10,8]);plot(p,fn,OR,5);
+g.fillStyle=OR;for(var j=0;n.N>j;j++){var kx=-n.b[j]/n.w[j];if(kx>-1.05)if(1.05>kx){g.fillRect(p.X(kx)-2,y0+p.h-14,4,14)}}
+txt('N = '+n.N,40,y0+40,INK,30,'left',700);
+txt('訓練後 '+maxerr(fn).toFixed(3),40,y0+84,OR,26,'left',700);
+txt('理論最佳 '+ID[i].toFixed(3),40,y0+124,TX,24)}
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">深度學習的直覺 · 09</p>
+<aside>這是真的在瀏覽器裡跑梯度下降，每次重新開始會換一組隨機初始值，所以結果每輪不一樣。「理論最佳」是轉折點放在完美位置時的最大誤差。通常會看到：N = 13 訓練完的誤差是理論值的好幾倍；N = 40 的理論值很小，但訓練常常到不了，因為優化器不會把轉折點精準地搬到兩端。這也是為什麼實務上會多給一些神經元。</aside>
+</section>

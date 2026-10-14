@@ -1,0 +1,10 @@
+// Cloudflare Workers：只有靜態檔案（沒有程式碼），內容是 build.mjs 產生的 dist/
+{
+  "name": "learning-decks",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  }
+}

@@ -1,0 +1,58 @@
+<section id="spectral" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">12 · 訓練時的傅立葉觀點</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">神經網路先學低頻，後學高頻</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<p style="font-size:26px;line-height:1.5;color:#6A727C">右圖目標 = sin(πx) + 0.35·sin(6πx)，64 個神經元。長條是兩個頻率各學到幾成。</p>
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#1F4E80">頻譜偏差：</span></b>梯度下降先抓大輪廓，細節最後才補上（Rahaman 等人，2019）</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#1F4E80">好處：</span></b>天生偏好平滑的解，比較不容易過擬合</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#1F4E80">壞處：</span></b>影像紋理、尖銳邊緣這類高頻細節學很慢</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#7FB2E8">兩者合體</p>
+<p style="font-size:24px;line-height:1.5;color:#E6E1D6">先把 x 換成 sin(kx)、cos(kx) 再餵進網路（Fourier features，Tancik 等人 2020），或直接用 sin 當 activation（SIREN，Sitzmann 等人 2020）。</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B';
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function plot(p,f,col,lw,dash){g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;300>=i;i++){var x=p.a+(p.b-p.a)*i/300,y=f(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function tgt(x){return Math.sin(Math.PI*x)+0.35*Math.sin(6*Math.PI*x)}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function Net(N,seed){var r=rng(seed),n={N:N,w:[],b:[],a:[],c:0,t:0},i;
+for(i=0;N>i;i++){var w=(0.5>r()?-1:1)*(0.5+r()*1.5);n.w.push(w);n.b.push(-w*(r()*2-1));n.a.push((r()*2-1)*0.3)}
+n.m=new Float64Array(3*N+1);n.v=new Float64Array(3*N+1);return n}
+function fwd(n,x){var y=n.c;for(var i=0;n.N>i;i++){var z=n.w[i]*x+n.b[i];if(z>0)y+=n.a[i]*z}return y}
+function step(n,X,Y,lr){var N=n.N,gr=new Float64Array(3*N+1),M=X.length,z=new Float64Array(N),i,k,j;
+for(k=0;M>k;k++){var x=X[k],y=n.c;for(i=0;N>i;i++){z[i]=n.w[i]*x+n.b[i];if(z[i]>0)y+=n.a[i]*z[i]}
+var e=2*(y-Y[k])/M;gr[3*N]+=e;for(i=0;N>i;i++)if(z[i]>0){gr[i]+=e*n.a[i]*x;gr[N+i]+=e*n.a[i];gr[2*N+i]+=e*z[i]}}
+n.t++;var c1=1-Math.pow(0.9,n.t),c2=1-Math.pow(0.999,n.t);
+for(j=0;3*N+1>j;j++){n.m[j]=0.9*n.m[j]+0.1*gr[j];n.v[j]=0.999*n.v[j]+0.001*gr[j]*gr[j];
+var d=lr*(n.m[j]/c1)/(Math.sqrt(n.v[j]/c2)+1e-8);
+if(N>j)n.w[j]-=d;else if(2*N>j)n.b[j-N]-=d;else if(3*N>j)n.a[j-2*N]-=d;else n.c-=d}}
+function coef(n,f){var s=0;for(var k=0;400>k;k++){var x=-1+(k+0.5)/200;s+=fwd(n,x)*Math.sin(f*Math.PI*x)/200}return s}
+var X=[],Y=[];for(var k=0;200>k;k++){var x=-1+2*k/199;X.push(x);Y.push(tgt(x))}
+var T=6000,seed=3,net,t,hold;
+function reset(){net=Net(64,seed);t=0;hold=0;seed+=11}
+reset();
+function bar(y,lab,v,col){var x0=300,w=W-300-150;txt(lab,40,y+30,INK,26,'left',600);g.fillStyle='#ECE6DA';g.fillRect(x0,y,w,40);
+var c=Math.max(0,Math.min(1,v));g.fillStyle=col;g.fillRect(x0,y,w*c,40);txt(Math.round(Math.max(0,v)*100)+'%',x0+w+20,y+30,col==BL?'#1F4E80':'#B5531C',28,'left',700)}
+function draw(){var s;
+if(T>t){for(s=0;12>s;s++){step(net,X,Y,0.004);t++}}else if(++hold>150)reset();
+g.clearRect(0,0,W,H);
+txt('訓練第 '+t+' / '+T+' 步',40,40,INK,28,'left',700);txt('灰虛線 = 目標',W-40,40,TX,24,'right');
+var p=P(40,64,W-80,320,-1,1,-1.6,1.6);g.strokeStyle=GR;g.lineWidth=2;g.strokeRect(p.x0,p.y0,p.w,p.h);
+plot(p,tgt,'#7A828C',3,[10,8]);plot(p,function(x){return fwd(net,x)},OR,5);
+bar(440,'低頻 sin(πx)',coef(net,1),BL);
+bar(520,'高頻 sin(6πx)',coef(net,6)/0.35,OR);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">深度學習的直覺 · 17</p>
+<aside>這也是真的在瀏覽器裡訓練。通常幾百步內低頻就學到接近 100%，高頻卻要好幾千步才慢慢爬上來。這個現象叫 spectral bias（頻譜偏差）。它解釋了為什麼神經網路傾向學到平滑的函數，也解釋了為什麼要畫出清晰細節時，人們會先把輸入做傅立葉特徵轉換。</aside>
+</section>

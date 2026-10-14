@@ -1,0 +1,56 @@
+<section id="ridge2d" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">13 · 二維的一個神經元</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">二維：轉折點變成一條折痕</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;align-items:start;background:#ECE6DA;padding:28px 32px;border-radius:12px">
+<img src="/_blob/bd2266a2dc3a9615ca9745b2ef7e3220" alt="y = ReLU(w₁x₁ + w₂x₂ + b)" style="width:495px;height:40px;object-fit:contain">
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;gap:14px">
+<p style="font-size:28px;font-weight:700;color:#B5531C">折痕</p>
+<img src="/_blob/89ccecd4360e493d293d2aa6d5df0b6e" alt="w₁x₁ + w₂x₂ + b = 0" style="width:289px;height:28px;object-fit:contain">
+<p style="font-size:28px;color:#4A5563">是一條直線</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">一邊是平地：</span></b>輸出 0。<b><span style="color:#B5531C">另一邊是斜坡：</span></b>w 指向上坡的方向，w 越長坡越陡。</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">三維輸入：</span></b>折痕變成一個平面。<b><span style="color:#B5531C">d 維：</span></b>一個 d − 1 維的「超平面」。</p>
+<p style="font-size:26px;line-height:1.5;color:#6A727C">想像把一張紙沿著一條直線折起來：折線兩邊都還是平的。</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function relu(z){return z>0?z:0}
+var CA=Math.cos(0.65),SA=Math.sin(0.65),SE=Math.sin(0.62),CE=Math.cos(0.62);
+function hx(c){return[parseInt(c.substr(1,2),16),parseInt(c.substr(3,2),16),parseInt(c.substr(5,2),16)]}
+var C0=hx('#EFE9DD'),C1=hx('#E0782F'),C2=hx('#7FA6CF');
+function pr(x,y,z,o){var u=x*CA-y*SA,v=x*SA+y*CA;return[o.cx+o.sc*u,o.cy-o.sc*(v*SE+z*o.zs*CE),v]}
+function surf(f,o){var P=[],i,j,k,q=[],n=o.n,R=o.R;
+for(i=0;n>=i;i++){P.push([]);for(j=0;n>=j;j++){var x=-R+2*R*i/n,y=-R+2*R*j/n;P[i].push([x,y,f(x,y)])}}
+for(i=0;n>i;i++)for(j=0;n>j;j++){var c=[P[i][j],P[i+1][j],P[i+1][j+1],P[i][j+1]],pp=[],d=0,zc=0;
+for(k=0;4>k;k++){var p=pr(c[k][0],c[k][1],c[k][2],o);pp.push(p);d+=p[2];zc+=c[k][2]/4}
+var ax=c[2][0]-c[0][0],ay=c[2][1]-c[0][1],az=(c[2][2]-c[0][2])*o.zs,bx=c[3][0]-c[1][0],by=c[3][1]-c[1][1],bz=(c[3][2]-c[1][2])*o.zs;
+var nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx,nl=Math.sqrt(nx*nx+ny*ny+nz*nz)||1;
+q.push([d,pp,zc,0.72+0.28*Math.abs((-0.3*nx-0.5*ny+0.81*nz)/nl)])}
+q.sort(function(a,b){return b[0]-a[0]});
+for(i=0;q.length>i;i++){var Q=q[i],t=Q[2]/o.zm,C=t>0?C1:C2;t=Math.min(Math.abs(t),1);
+var r=Math.round((C0[0]+(C[0]-C0[0])*t)*Q[3]),gg=Math.round((C0[1]+(C[1]-C0[1])*t)*Q[3]),b=Math.round((C0[2]+(C[2]-C0[2])*t)*Q[3]);
+g.fillStyle='rgb('+r+','+gg+','+b+')';g.strokeStyle='rgba(255,253,248,0.45)';g.lineWidth=1;g.beginPath();
+g.moveTo(Q[1][0][0],Q[1][0][1]);for(k=1;4>k;k++)g.lineTo(Q[1][k][0],Q[1][k][1]);g.closePath();g.fill();g.stroke()}}
+var t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,th=t*0.4,wx=Math.cos(th),wy=Math.sin(th),b=0.35*Math.sin(t*0.6);
+g.clearRect(0,0,W,H);
+var o={n:26,R:1,sc:220,cx:W/2,cy:380,zs:0.45,zm:1.6};
+surf(function(x,y){return relu(wx*x+wy*y+b)},o);
+g.strokeStyle='#B5531C';g.lineWidth=5;g.beginPath();var st=0;
+for(var s=-2;2>=s;s+=0.01){var x=-b*wx-s*wy,y=-b*wy+s*wx;if(1.0001>Math.abs(x))if(1.0001>Math.abs(y)){var p=pr(x,y,0,o);st?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);st=1}}
+g.stroke();
+txt('橘線 = 折痕（一條直線）',40,46,'#B5531C',28,'left',700);
+txt('w 轉動 → 折痕跟著轉；b 改變 → 折痕平移',40,H-28,TX,26);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">深度學習的直覺 · 19</p>
+<aside>二維輸入時，一個神經元算的是 w₁x₁ + w₂x₂ + b。讓它等於 0 的所有點剛好是一條直線，這就是折痕。直線的一側輸出 0（平地），另一側是一個斜面（斜坡），w 這個向量就指向上坡的方向。三維輸入時同樣的式子等於 0 是一個平面；d 維就是超平面。所以「一個神經元 = 一次對摺」這個直覺在任何維度都成立，只是折痕的維度變高了。</aside>
+</section>

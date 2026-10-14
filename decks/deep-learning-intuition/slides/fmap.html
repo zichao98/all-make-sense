@@ -1,0 +1,25 @@
+<section id="fmap" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">09 · 同一種結構</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">把兩條公式並排看</h2>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F4DCC8;padding:24px 28px;border-radius:14px">
+<p style="font-size:26px;font-weight:700;color:#8A3E12">一層神經網路</p>
+<img src="/_blob/ed3c6440dea154033a9e9dbf2997da24" alt="f(x) ≈ c + Σ a_i ReLU(w_i x + b_i)" style="width:521px;height:78px;object-fit:contain">
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#DCE7F3;padding:24px 28px;border-radius:14px">
+<p style="font-size:26px;font-weight:700;color:#1F4E80">傅立葉級數</p>
+<img src="/_blob/cd52c2dc50a5333871cd93e3017173c8" alt="f(x) ≈ c + Σ A_k sin(kπx + φ_k)" style="width:500px;height:78px;object-fit:contain">
+</div>
+</div>
+<table style="font-size:26px;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif">
+<tr style="background:#E7E0D2"><th style="width:24%;text-align:left">零件</th><th style="width:38%;text-align:left">一層神經網路</th><th style="width:38%;text-align:left">傅立葉級數</th></tr>
+<tr><td>形狀（activation）</td><td>ReLU：一個折角，只影響一側</td><td>sin：一個波，影響整個範圍</td></tr>
+<tr><td>第一層權重 w</td><td>訓練學出來</td><td>釘死成 1, 2, 3 …（頻率 k）</td></tr>
+<tr><td>偏差 b</td><td>訓練學出來（轉折的位置）</td><td>相位 φ（波左右平移）</td></tr>
+<tr><td>輸出權重 a</td><td>訓練學出來</td><td>用積分直接算出來</td></tr>
+<tr style="background:#ECE6DA"><td>形狀能不能移動</td><td>能：哪裡需要就搬去哪裡</td><td>不能：事先決定好</td></tr>
+</table>
+<p style="font-size:30px;line-height:1.5;font-weight:700;color:#17212B">傅立葉＝第一層釘死、activation 換成 sin 的一層網路；神經網路＝會自己挑形狀和位置的傅立葉。</p>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">深度學習的直覺 · 14</p>
+<aside>A·sin(kπx + φ) 就是一個 activation 用 sin 的神經元：權重 w = kπ，偏差 b = φ，輸出權重 a = A。所以傅立葉級數在結構上就是一層網路。差別是傅立葉的 w 被固定成整數倍的頻率，只有 A 和 φ 要決定，而且可以用積分直接算，不用訓練。神經網路則讓 w 和 b 也自由移動，這叫做「自適應基底」，代價是要用梯度下降慢慢找。</aside>
+</section>

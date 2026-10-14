@@ -1,0 +1,59 @@
+<section id="creases" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">14 · 很多條折痕</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">很多條折痕把平面切成一塊塊斜面</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:28px;line-height:1.5;color:#4A5563">N 個神經元＝N 條折痕。在同一塊裡，每個神經元不是開就是關，所以函數在那一塊就是一片平的斜面，像寶石的切面。</p>
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:8px;background:#F4DCC8;padding:22px 24px;border-radius:14px">
+<p style="font-size:24px;color:#8A3E12">二維最多切出</p>
+<img src="/_blob/073a79a6c95ab709d8a82202ea991238" alt="1 + N + C(N,2)" style="width:223px;height:87px;object-fit:contain">
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:8px;background:#F4DCC8;padding:22px 24px;border-radius:14px">
+<p style="font-size:24px;color:#8A3E12">d 維最多切出</p>
+<img src="/_blob/60bf315a6c36f472016414d465aa63f4" alt="Σ C(N,k)，k 從 0 到 d" style="width:143px;height:109px;object-fit:contain">
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#F0995E">但每條折痕都一路切到底</p>
+<p style="font-size:24px;line-height:1.5;color:#E6E1D6">一維的轉折是一個點，影響範圍是局部的；二維的折痕卻橫跨整個平面。所以只靠一層，做不出「只在某個小地方隆起」的形狀。</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#B5531C';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+var r=rng(11),NE=[],i;
+for(i=0;8>i;i++){var th=r()*Math.PI*2;NE.push({wx:Math.cos(th),wy:Math.sin(th),b:(r()*2-1)*0.55,a:(0.5>r()?-1:1)*(0.6+r()*0.8)})}
+var M=130,off=document.createElement('canvas');off.width=M;off.height=M;var oc=off.getContext('2d'),cur=-1,regions=0;
+function render(N){var seen={},cnt=0,a,b2,k;
+for(a=0;M>a;a++)for(b2=0;M>b2;b2++){var x=-1+2*(a+0.5)/M,y=1-2*(b2+0.5)/M,gx=0,gy=0,key='';
+for(k=0;N>k;k++){var n=NE[k];if(n.wx*x+n.wy*y+n.b>0){gx+=n.a*n.wx;gy+=n.a*n.wy;key+='1'}else key+='0'}
+if(!seen[key]){seen[key]=1;cnt++}
+var m=Math.sqrt(gx*gx+gy*gy),h=Math.round(Math.atan2(gy,gx)*180/Math.PI+360)%360;
+oc.fillStyle=m>1e-9?'hsl('+h+',55%,'+Math.round(84-Math.min(m,2.5)*13)+'%)':'#F3EFE6';oc.fillRect(a,b2,1,1)}
+regions=cnt}
+var t0=performance.now(),S=520,X0=40,Y0=56;
+function draw(){var t=(performance.now()-t0)/1000,N=Math.min(1+Math.floor(t/1.8)%10,8);
+if(N!=cur){render(N);cur=N}
+g.clearRect(0,0,W,H);g.imageSmoothingEnabled=false;g.drawImage(off,X0,Y0,S,S);
+g.save();g.beginPath();g.rect(X0,Y0,S,S);g.clip();g.strokeStyle=INK;g.lineWidth=2.5;
+for(var k=0;N>k;k++){var n=NE[k],px=-n.b*n.wx,py=-n.b*n.wy;g.beginPath();
+g.moveTo(X0+(px-3*n.wy+1)/2*S,Y0+(1-(py+3*n.wx))/2*S);g.lineTo(X0+(px+3*n.wy+1)/2*S,Y0+(1-(py-3*n.wx))/2*S);g.stroke()}
+g.restore();g.strokeStyle='#C9C0AE';g.lineWidth=2;g.strokeRect(X0,Y0,S,S);
+var x2=X0+S+40;
+txt('N = '+N,x2,110,INK,36,'left',700);
+txt(N+' 條折痕',x2,170,TX,28);
+txt('切出 '+regions+' 塊',x2,218,OR,30,'left',700);
+txt('理論最多 '+(1+N+N*(N-1)/2)+' 塊',x2,262,TX,24);
+txt('每一塊都是',x2,350,TX,26);txt('一片平的斜面',x2,388,TX,26);
+txt('顏色 = 斜面朝向',x2,470,'#8A7F6B',24);txt('越深 = 越陡',x2,506,'#8A7F6B',24);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">深度學習的直覺 · 20</p>
+<aside>右圖是從正上方看一層網路的輸出。黑線是折痕，每一塊顏色代表那片斜面朝哪個方向傾斜、多陡。N 條直線在平面上最多切出 1 + N + N(N−1)/2 塊，大約 N²/2；在 d 維空間，N 個超平面最多切出 C(N,0) + C(N,1) + … + C(N,d) 塊。塊數看起來很多，但這些塊不能自由安排：每條折痕都是無限長的直線，會一路切穿整個空間。所以一層網路很難只在某個小地方做出細節，這就是下一頁的主題。</aside>
+</section>

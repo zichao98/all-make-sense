@@ -1,0 +1,37 @@
+<section id="barron" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">11 · 用傅立葉估神經元數</p>
+<h2 style="font-family:'Noto Serif TC', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">頻率越高，需要的神經元越多</h2>
+<div style="display:flex;gap:40px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#DCE7F3;padding:28px;border-radius:16px">
+<p style="font-size:28px;font-weight:700;color:#1F4E80">Barron 定理（1993）</p>
+<p style="font-size:26px;line-height:1.5;color:#17212B">把 f 做傅立葉轉換得到頻譜 f̂(ω)，計算</p>
+<img src="/_blob/77c18498f6a1fdabdd4141ba16f49823" alt="C_f = ∫ |ω| |f̂(ω)| dω" style="width:321px;height:80px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#17212B">則存在一個 N 個神經元的一層網路滿足（r 是輸入範圍的半徑）</p>
+<img src="/_blob/3d0545a634b0a5e4d051821d085a888d" alt="‖f − f_N‖² ≤ (2r C_f)² / N" style="width:370px;height:82px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;font-weight:700;color:#1F4E80">這個上界跟輸入維度無關。</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">這個積分量的是「高頻成分有多重」：頻譜集中在低頻，少數神經元就夠；高頻多，就要多很多。</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">sin(πx) · 1 個波</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">17</p>
+<p style="font-size:24px;color:#4A5563">個神經元</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">sin(5πx) · 5 個波</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">85</p>
+<p style="font-size:24px;color:#4A5563">個神經元</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#15202B;padding:24px 28px;border-radius:16px">
+<p style="font-size:28px;font-weight:700;color:#7FB2E8">眼估法：數「波」</p>
+<p style="font-size:26px;line-height:1.5;color:#E6E1D6">先把函數拆成頻率，找出振幅還不小的最高頻率。在 [−1, 1] 上每多一個完整的波，誤差 1% 大約要多 17 個神經元。</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">深度學習的直覺 · 16　　神經元數為誤差 1%、一層 ReLU、轉折點放在最佳位置的值。</p>
+<aside>Barron 的結果用的是 sigmoid 類的 activation，但對 ReLU 也有類似版本。重點是方向：傅立葉頻譜越往高頻延伸，函數越「抖」，就需要越多神經元。這跟前面的彎曲預算是同一件事的兩種說法：sin(kπx) 的二階導數是 k²π² 倍，開根號後彎曲預算正好跟 k 成正比，所以頻率乘 5，神經元也乘 5。注意 Barron 的誤差是平均平方誤差，而且與維度無關——這是神經網路能處理高維資料的一個理論理由。</aside>
+</section>

@@ -1,0 +1,39 @@
+/* 投影片格式的預設樣式：每張 <section> 是 1920×1080 的畫布，所有樣式都寫在 inline style。 */
+.slides > section {
+  position: absolute; left: 0; top: 0; box-sizing: border-box;
+  width: 1920px; height: 1080px; overflow: hidden;
+  display: flex; flex-direction: column;
+  font-size: 32px; line-height: 1.4;
+  background: #fff; color: #111;
+  font-kerning: normal; -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.slides section * { box-sizing: border-box; margin: 0; }
+/* 沒寫 display 的 div 是直向 flex；寫了 display:flex 就照 CSS 預設（橫向） */
+.slides section div { min-width: 0; }
+.slides section div:not([style*="display"]) { display: flex; flex-direction: column; }
+.slides section h1 { font-size: 96px; font-weight: 600; line-height: 1.1; }
+.slides section h2 { font-size: 64px; font-weight: 600; line-height: 1.15; }
+.slides section h3 { font-size: 44px; font-weight: 600; line-height: 1.2; }
+.slides section p, .slides section li { font-size: inherit; }
+.slides section ul, .slides section ol { padding-left: 1.2em; }
+.slides section table { border-collapse: collapse; width: 100%; }
+.slides section th, .slides section td { padding: .35em .6em; border-bottom: 1px solid rgba(0,0,0,.14); text-align: left; vertical-align: top; }
+.slides section th { font-weight: 700; }
+.slides section img, .slides section svg { display: block; flex: none; }
+.slides section aside { display: none; }
+.slides section hr { border: 0; border-top: 2px solid currentColor; }
+.slides section a { color: inherit; }
+.slides iframe.x-embed { border: 0; background: transparent; position: absolute; display: block; }
+
+/* <x-shape> */
+.slides x-shape { display: block; flex: none; }
+.slides x-shape[kind="rounded"] { border-radius: 16px; }
+.slides x-shape[kind="ellipse"] { border-radius: 50%; }
+.slides x-shape[kind="diamond"] { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.slides x-shape[kind="arrow-right"] { clip-path: polygon(0 30%, 60% 30%, 60% 0, 100% 50%, 60% 100%, 60% 70%, 0 70%); }
+.slides x-shape[kind="arrow-left"] { clip-path: polygon(100% 30%, 40% 30%, 40% 0, 0 50%, 40% 100%, 40% 70%, 100% 70%); }
+.slides x-shape[kind="arrow-up"] { clip-path: polygon(30% 100%, 30% 40%, 0 40%, 50% 0, 100% 40%, 70% 40%, 70% 100%); }
+.slides x-shape[kind="arrow-down"] { clip-path: polygon(30% 0, 30% 60%, 0 60%, 50% 100%, 100% 60%, 70% 60%, 70% 0); }
+.slides x-shape[kind="line"] { height: 0 !important; border-top: 2px solid currentColor; background: none !important; }
+.slides x-icon { display: inline-block; width: 48px; height: 48px; }
