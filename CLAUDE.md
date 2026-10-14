@@ -12,7 +12,7 @@
 4. 寫 `decks/<slug>/meta.json`：`title`、`subtitle`、`description`、`date`（YYYY-MM-DD）、`tags`、`artifact`（原本的 artifact 網址，之後同步用）。首頁按 `date` 新到舊排序。
 5. `node build.mjs`。輸出有「找不到素材」警告就要補檔；`STRICT=1 node build.mjs` 會在有警告時失敗。
 6. 用 `.claude/launch.json` 的 preview 在 http://localhost:8788 看過首頁與幾頁有動畫、公式、表格的投影片。
-7. commit 並 push 到 `main`，Cloudflare Workers Builds 會自動部署。
+7. commit 並 push 到 `main`，然後部署（見下方）。
 
 ## 播放器怎麼對應 Slides 格式
 
@@ -24,6 +24,9 @@
 
 ## 部署
 
+- 網站：https://learning-decks.zichaoleng55.workers.dev（Worker 名稱 `learning-decks`，帳號 zichaoleng55@gmail.com）。
 - `wrangler.jsonc`：只有 assets 的 Worker，`assets.directory` 是 `./dist`。
-- Cloudflare Workers Builds 連到 GitHub repo `zichao98/learning-decks`：build command `npm run build`，deploy command `npx wrangler deploy`。
+- 從使用者這台電腦部署：`node build.mjs && env -u CLOUDFLARE_API_TOKEN npx -y wrangler@4 deploy`。環境裡有一個舊的 `CLOUDFLARE_API_TOKEN` 權限不足（403），會蓋過使用者的 `wrangler login`，所以部署時要把它拿掉。
+- 目前還沒有接 GitHub 自動部署；使用者若在 Cloudflare 後台把這個 Worker 連到 repo（Settings › Builds），之後 push 就會自動部署，build command 用 `npm run build`。
+- 部署後用 curl 或瀏覽器確認首頁、`/<slug>/` 和一個素材檔都回 200。
 - 沒有任何 npm 相依套件，`dist/` 不進 git。

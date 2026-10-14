@@ -2,6 +2,8 @@
 
 跟 Claude 一起做的互動式學習簡報合集。每份簡報都是 1920×1080 的投影片，裡面的動畫直接在瀏覽器裡跑。
 
+網站：https://learning-decks.zichaoleng55.workers.dev
+
 ## 看簡報
 
 部署後打開網站首頁，點任一份簡報：
@@ -41,4 +43,8 @@ python -m http.server 8788 --directory dist
 
 ## 部署
 
-推到 GitHub 的 `main` 之後，Cloudflare 會自動跑 `npm run build` 和 `npx wrangler deploy`。
+```bash
+npm run deploy
+```
+
+會先 build 再用 wrangler 上傳到 Cloudflare Workers（需要先 `npx wrangler login`）。
