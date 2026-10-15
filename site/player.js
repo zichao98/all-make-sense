@@ -8,8 +8,11 @@
   var cur = -1;
 
   function fit() {
-    var w = window.innerWidth, h = window.innerHeight, s = Math.min(w / 1920, h / 1080);
-    deck.style.transform = 'translate(' + (w - 1920 * s) / 2 + 'px,' + (h - 1080 * s) / 2 + 'px) scale(' + s + ')';
+    var w = window.innerWidth, h = window.innerHeight;
+    var compact = h <= 600, top = compact ? 44 : 68, bottom = compact ? 52 : 82;
+    var available = Math.max(1, h - top - bottom);
+    var s = Math.min(Math.max(1, w - (compact ? 24 : 48)) / 1920, available / 1080);
+    deck.style.transform = 'translate(' + (w - 1920 * s) / 2 + 'px,' + (top + (available - 1080 * s) / 2) + 'px) scale(' + s + ')';
   }
 
   // 動畫只在目前這頁執行；離開就卸載，回來時從頭播放
@@ -20,8 +23,10 @@
   }
 
   slides.forEach(function (s, i) {
-    var seg = document.createElement('span');
-    seg.title = String(i + 1);
+    var seg = document.createElement('button');
+    seg.type = 'button';
+    seg.title = 'Slide ' + (i + 1);
+    seg.setAttribute('aria-label', 'Go to slide ' + (i + 1));
     seg.addEventListener('click', function (e) { e.stopPropagation(); go(i); });
     progress.appendChild(seg);
   });
@@ -34,9 +39,11 @@
     slides[cur].classList.add('active');
     setEmbeds(slides[cur], true);
     count.textContent = (cur + 1) + ' / ' + slides.length;
-    Array.prototype.forEach.call(progress.children, function (seg, i) { seg.classList.toggle('done', i <= cur); });
+    document.getElementById('prev').disabled = cur === 0;
+    document.getElementById('next').disabled = cur === slides.length - 1;
+    Array.prototype.forEach.call(progress.children, function (seg, i) { seg.classList.toggle('done', i <= cur); if (i === cur) seg.setAttribute('aria-current', 'step'); else seg.removeAttribute('aria-current'); });
     var aside = slides[cur].querySelector('aside');
-    notes.textContent = aside ? aside.textContent.trim() : '（這頁沒有備註）';
+    notes.textContent = aside ? aside.textContent.trim() : 'No speaker notes for this slide.';
     if (history.replaceState) history.replaceState(null, '', '#' + (cur + 1));
   }
 
@@ -59,6 +66,7 @@
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     var k = e.key;
+    if ((k === 'Enter' || k === ' ') && e.target.closest('button,a,input,textarea,select')) return;
     if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === ' ' || k === 'Enter') { go(cur + 1); e.preventDefault(); }
     else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') { go(cur - 1); e.preventDefault(); }
     else if (k === 'Home') go(0);
@@ -87,7 +95,7 @@
   function wake() {
     document.body.classList.remove('idle');
     clearTimeout(timer);
-    timer = setTimeout(function () { document.body.classList.add('idle'); }, 2500);
+    timer = setTimeout(function () { if (!document.querySelector('.ui:focus-within') && notes.hidden) document.body.classList.add('idle'); }, 2500);
   }
   ['mousemove', 'touchstart', 'keydown'].forEach(function (ev) { document.addEventListener(ev, wake, { passive: true }); });
 

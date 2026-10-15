@@ -34,7 +34,7 @@ function transformSlide(html, assetIndex, deckSlug) {
     const kb = Buffer.byteLength(inner) / 1024;
     if (kb > 16) warn(`${deckSlug}: 有一個 x-embed ${kb.toFixed(1)} KB，超過 16 KB（Claude Slides 的上限）`);
     inner = /<head>/i.test(inner) ? inner.replace(/<head>/i, '<head>' + HIDPI) : HIDPI + inner;
-    return `<iframe class="x-embed"${attrs} sandbox="allow-scripts" title="動畫" data-srcdoc="${esc(inner)}"></iframe>`;
+    return `<iframe class="x-embed"${attrs} sandbox="allow-scripts" title="Animation" tabindex="-1" data-srcdoc="${esc(inner)}"></iframe>`;
   });
   return html.trim();
 }
@@ -89,33 +89,35 @@ function loadDeck(slug) {
 }
 
 function deckPage(d) {
+  const uiTitle = d.slug === 'deep-learning-intuition' ? 'Deep Learning Intuition · Chinese edition' : d.slug === '_template' ? 'The slide toolkit' : d.title;
   const { links, rules } = fontTags(d.deck.faces);
   return `<!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>${esc(d.title)}</title>
+<title>${esc(uiTitle)} — All Make Sense</title>
 <meta name="description" content="${esc(d.description)}">
 <link rel="icon" href="../site/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 ${links.join('\n')}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;500;600;700&display=swap">
 ${rules.length ? `<style>${rules.join('')}</style>` : ''}
 <link rel="stylesheet" href="../site/slide.css">
 <link rel="stylesheet" href="../site/player.css">
 </head>
 <body>
-<main class="stage" id="stage"><div class="slides deck" id="deck">
+<main class="stage" id="stage"><div class="slides deck" id="deck" lang="${/[\u4e00-\u9fff]/.test(d.title) ? 'zh-Hant' : 'en'}">
 ${d.slides.map((s) => s.html).join('\n')}
 </div></main>
-<header class="ui top" id="uiTop"><a class="back" href="../">← 所有簡報</a><span class="title">${esc(d.title)}</span></header>
-<nav class="ui bottom" id="uiBottom" aria-label="簡報控制">
-<button id="prev" aria-label="上一頁">‹</button><span id="count">1 / ${d.slides.length}</span><button id="next" aria-label="下一頁">›</button>
-<button id="notesBtn" aria-pressed="false">備註</button><button id="fsBtn">全螢幕</button>
+<header class="ui top" id="uiTop"><a class="back" href="../">← Collection</a><span class="title">${esc(uiTitle)}</span></header>
+<nav class="ui bottom" id="uiBottom" aria-label="Presentation controls">
+<button id="prev" aria-label="Previous slide" title="Previous slide (←)">‹</button><span id="count">1 / ${d.slides.length}</span><button id="next" aria-label="Next slide" title="Next slide (→)">›</button>
+<button id="notesBtn" aria-pressed="false" title="Speaker notes (N)">Notes</button><button id="fsBtn" title="Fullscreen (F)">Fullscreen</button>
 </nav>
 <div class="progress" id="progress"></div>
-<aside class="notes" id="notes" hidden></aside>
-<div class="rotate-hint">轉成橫向看更清楚</div>
+<aside class="notes" id="notes" aria-label="Speaker notes" hidden></aside>
+<div class="rotate-hint">Rotate your device for the full picture.</div>
 <script src="../site/player.js"></script>
 </body>
 </html>
@@ -126,31 +128,66 @@ function indexPage(decks) {
   const faces = {};
   for (const d of decks) Object.assign(faces, d.deck.faces || {});
   const { links } = fontTags(faces);
-  const cards = decks.map((d) => `<a class="card" href="${d.slug}/">
-<div class="thumb"><div class="slides mini">${d.cover.html.replace(/src="assets\//g, `src="${d.slug}/assets/`)}</div></div>
+  // Prefer the English edition while keeping each original edition accessible.
+  const catalog = decks.filter((d) => !decks.some((other) => other.slug === d.slug + '-en'));
+  const cards = catalog.map((d, i) => {
+    const original = d.slug.endsWith('-en') ? decks.find((other) => other.slug === d.slug.slice(0, -3)) : null;
+    const template = d.slug === '_template';
+    const title = template ? 'The slide toolkit' : d.title;
+    const subtitle = template ? 'Layouts, formulas, and live animations' : d.subtitle;
+    const description = template ? 'Explore the building blocks behind every lesson, from visual explanations to animations that do the math.' : d.description;
+    const tags = template ? ['Design', 'Templates'] : d.tags;
+    return `<article class="card${i === 0 ? ' featured' : ''}">
+<a class="cover-link" href="${d.slug}/" aria-label="Open ${esc(title)}">
+<div class="thumb"><div class="slides mini" aria-hidden="true">${d.cover.html.replace(/src="assets\//g, `src="${d.slug}/assets/`)}</div></div>
+<span class="cover-action">Explore the lesson <span aria-hidden="true">↗</span></span>
+</a>
 <div class="info">
-<h2>${esc(d.title)}</h2>
-${d.subtitle ? `<p class="sub">${esc(d.subtitle)}</p>` : ''}
-${d.description ? `<p class="desc">${esc(d.description)}</p>` : ''}
-<p class="meta">${[d.date, d.slides.length + ' 頁', ...d.tags].filter(Boolean).map(esc).join(' · ')}</p>
-</div></a>`).join('\n');
+<div class="card-kicker"><span>LESSON ${String(i + 1).padStart(2, '0')}</span><span>${d.slides.length} slides</span></div>
+<h3><a href="${d.slug}/">${esc(title)}</a></h3>
+${subtitle ? `<p class="sub">${esc(subtitle)}</p>` : ''}
+${description ? `<p class="desc">${esc(description)}</p>` : ''}
+<div class="tags">${tags.map((tag) => `<span>${esc(tag)}</span>`).join('')}</div>
+<div class="editions"><a class="read-link" href="${d.slug}/">Start exploring <span aria-hidden="true">↗</span></a>${original ? `<a class="edition-link" href="${original.slug}/" lang="en">Chinese edition ↗</a>` : ''}</div>
+</div></article>`;
+  }).join('\n');
   return `<!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>學習簡報</title>
+<meta name="description" content="Visual lessons for curious minds. Explore deep learning, mathematics, and the ideas behind them through interactive presentations.">
+<meta name="theme-color" content="#F7F5F0">
+<title>All Make Sense — Visual lessons for curious minds</title>
 <link rel="icon" href="site/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 ${links.join('\n')}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="site/slide.css">
 <link rel="stylesheet" href="site/index.css">
 </head>
 <body>
-<header class="head"><h1>學習簡報</h1><p>${decks.length} 份簡報 · 點進去用方向鍵、點擊或滑動翻頁</p></header>
-<main class="grid">
-${cards}
+<a class="skip-link" href="#collection">Skip to the collection</a>
+<header class="site-header wrap">
+<a class="brand" href="./" aria-label="All Make Sense home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>ALL MAKE SENSE<span class="brand-dot">.</span></a>
+<nav aria-label="Main navigation"><a href="#collection">The collection</a><a href="#guide">How to explore <span aria-hidden="true">↗</span></a></nav>
+</header>
+<main>
+<section class="hero wrap" aria-labelledby="hero-title">
+<p class="eyebrow"><span></span> VISUAL LESSONS FOR CURIOUS MINDS</p>
+<h1 id="hero-title">Make the complex<br><em>make sense.</em></h1>
+<div class="hero-bottom"><p>Ideas become clearer when you can see them.<br> Explore lessons that move, connect, and bring the intuition to life.</p><a class="hero-link" href="#collection">Find your next insight <span aria-hidden="true">↓</span></a></div>
+</section>
+<section class="collection wrap" id="collection" aria-labelledby="collection-title">
+<div class="section-heading"><div><p class="eyebrow">THE COLLECTION</p><h2 id="collection-title">A closer look.</h2></div><p>${catalog.length} ${catalog.length === 1 ? 'lesson' : 'lessons'} <span>/</span> Made to be explored</p></div>
+<div class="grid">${cards}</div>
+</section>
+<section class="guide wrap" id="guide" aria-labelledby="guide-title">
+<div class="guide-intro"><p class="eyebrow">SET YOUR OWN PACE</p><h2 id="guide-title">Less scrolling.<br>More understanding.</h2></div>
+<div class="guide-items"><div><span class="guide-number">01</span><h3>Follow the idea</h3><p>Use the arrow keys, tap, or swipe to move through each lesson.</p></div><div><span class="guide-number">02</span><h3>Watch it unfold</h3><p>Let the animations play. They're working through the idea in real time.</p></div><div><span class="guide-number">03</span><h3>Go a little deeper</h3><p>Open Notes for the explanation behind each slide. Press F for fullscreen.</p></div></div>
+</section>
 </main>
+<footer class="site-footer wrap"><a class="brand" href="./">ALL MAKE SENSE<span class="brand-dot">.</span></a><p>Small lessons. Lasting intuition.</p><a href="#hero-title">Back to top ↑</a></footer>
 <script src="site/index.js"></script>
 </body>
 </html>
