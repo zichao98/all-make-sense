@@ -36,4 +36,4 @@
 - [ ] `git add -A && git commit && git push`
 - [ ] `node build.mjs && npx wrangler deploy`（在使用者的電腦上要用 `env -u CLOUDFLARE_API_TOKEN`）
 - [ ] 線上網址的首頁、`/<slug>/`、一個 `assets/` 檔案都回 200
-- [ ] 把網址 `https://learning-decks.zichaoleng55.workers.dev/<slug>/` 給使用者
+- [ ] 把網址 `https://all-make-sense.zichaoleng55.workers.dev/<slug>/` 給使用者

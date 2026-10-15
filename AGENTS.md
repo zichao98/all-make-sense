@@ -2,7 +2,7 @@
 
 這個 repo 是一套做互動式學習簡報的流程，給任何 AI agent（Claude、Codex、Cursor、Gemini…）照著做。
 做出來的簡報要跟 `decks/deep-learning-intuition/` 一模一樣的風格和品質。
-網站：https://learning-decks.zichaoleng55.workers.dev
+網站：https://all-make-sense.zichaoleng55.workers.dev
 
 **開工前，依序讀完這幾份：**
 
@@ -71,7 +71,7 @@ tools/                         tex2svg.mjs、new-deck.mjs
 
 ## 部署
 
-- Cloudflare Workers（只有靜態檔），名稱 `learning-decks`，設定在 `wrangler.jsonc`。
+- Cloudflare Workers（只有靜態檔），名稱 `all-make-sense`，設定在 `wrangler.jsonc`。
 - 指令：`node build.mjs && npx wrangler deploy`（需要先 `npx wrangler login`）。
 - 在使用者這台 Windows 電腦上，環境變數裡有一個舊的 `CLOUDFLARE_API_TOKEN`，權限不夠（403），會蓋過 `wrangler login`。部署時用 `env -u CLOUDFLARE_API_TOKEN npx -y wrangler@4 deploy`。
 - 部署後確認首頁、`/<slug>/`、以及一個 `assets/` 檔案都回 200。

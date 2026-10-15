@@ -1,4 +1,4 @@
-# learning-decks（給 Claude）
+# all-make-sense（給 Claude）
 
 **先讀 `AGENTS.md`**：做簡報的完整流程、規則和文件都在那裡，所有 AI agent 共用。這份只補充 Claude 專屬的事。
 

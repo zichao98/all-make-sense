@@ -2,7 +2,7 @@
 
 跟 Claude 一起做的互動式學習簡報合集。每份簡報都是 1920×1080 的投影片，裡面的動畫直接在瀏覽器裡跑。
 
-網站：https://learning-decks.zichaoleng55.workers.dev
+網站：https://all-make-sense.zichaoleng55.workers.dev
 
 ## 看簡報
 

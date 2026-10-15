@@ -2,7 +2,7 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "learning-decks",
+      "name": "all-make-sense",
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8788", "--directory", "dist"],
       "port": 8788
