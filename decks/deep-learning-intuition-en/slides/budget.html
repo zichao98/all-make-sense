@@ -1,0 +1,59 @@
+<section id="budget" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">05 · A quick estimate</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Curvature budget B: count neurons</h2>
+<div style="display:flex;gap:24px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:start;gap:6px;background:#F4DCC8;padding:20px 28px;border-radius:14px">
+<img src="/_blob/86d0d407e2d53fb7ec61f56f619c5563" alt="N ≈ B / √(8ε)" style="width:171px;height:91px;object-fit:contain">
+<p style="font-size:24px;color:#8A3E12">ε is the allowed maximum error</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:start;gap:6px;background:#ECE6DA;padding:20px 28px;border-radius:14px">
+<img src="/_blob/448f6179b88ecd51861dcf25fb1dc4b2" alt="B = ∫ from −1 to 1 of √|f''(x)| dx" style="width:309px;height:86px;object-fit:contain">
+<p style="font-size:24px;color:#4A5563">Total bending over the interval</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:start;gap:6px;background:#ECE6DA;padding:20px 28px;border-radius:14px">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+<img src="/_blob/4a501eceda5e8ba26dfeafabdc34016c" alt="ε becomes ε/10; N becomes 3.2N" style="width:342px;height:37px;object-fit:contain">
+</div>
+<p style="font-size:24px;color:#4A5563">10× more precision needs about ×3.2 neurons</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;flex-direction:row;align-items:center;background:#E7E0D2;padding:8px 16px">
+<p style="width:34%;font-size:24px;font-weight:700;color:#17212B">Function (x from −1 to 1)</p>
+<p style="width:18%;font-size:24px;font-weight:700;text-align:right;color:#17212B">Curvature budget B</p>
+<p style="width:16%;font-size:24px;font-weight:700;text-align:right;color:#17212B">ε = 0.1</p>
+<p style="width:16%;font-size:24px;font-weight:700;text-align:right;color:#17212B">ε = 0.01</p>
+<p style="width:16%;font-size:24px;font-weight:700;text-align:right;color:#17212B">ε = 0.001</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/568b4f44a8c5f444bf8ce848917c9f04" alt="e^x" style="width:29px;height:23px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">2.1</p><p style="width:16%;font-size:26px;text-align:right">3</p><p style="width:16%;font-size:26px;text-align:right">8</p><p style="width:16%;font-size:26px;text-align:right">24</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/3409400a131db5cc854332e16d6d7c51" alt="x²" style="width:31px;height:27px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">2.8</p><p style="width:16%;font-size:26px;text-align:right">4</p><p style="width:16%;font-size:26px;text-align:right">10</p><p style="width:16%;font-size:26px;text-align:right">32</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;background:#F4DCC8;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/cb23e25058aa92805f7bcce5828db802" alt="x⁵" style="width:31px;height:27px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">3.6</p><p style="width:16%;font-size:26px;text-align:right">5</p><p style="width:16%;font-size:26px;text-align:right">13</p><p style="width:16%;font-size:26px;text-align:right">41</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/19b68b3b3c2ca6342ed6e2c90c97f5a7" alt="sin(πx)" style="width:95px;height:30px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">4.8</p><p style="width:16%;font-size:26px;text-align:right">6</p><p style="width:16%;font-size:26px;text-align:right">17</p><p style="width:16%;font-size:26px;text-align:right">54</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/8695295f7344cbaf927e0e6b7c27a64f" alt="T₅(x) = 16x⁵ − 20x³ + 5x" style="width:338px;height:35px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">11.4</p><p style="width:16%;font-size:26px;text-align:right">13</p><p style="width:16%;font-size:26px;text-align:right">41</p><p style="width:16%;font-size:26px;text-align:right">128</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center"><img src="/_blob/166aaa6c0faf288af6a3114bc3d41092" alt="sin(5πx)" style="width:110px;height:30px;object-fit:contain"></div>
+<p style="width:18%;font-size:26px;text-align:right">24.0</p><p style="width:16%;font-size:26px;text-align:right">27</p><p style="width:16%;font-size:26px;text-align:right">85</p><p style="width:16%;font-size:26px;text-align:right">268</p>
+</div>
+<div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5">
+<div style="width:34%;display:flex;flex-direction:row;align-items:center;gap:16px"><img src="/_blob/f83f3c8b6a8a259a01481e1aa8a41ae7" alt="|x|" style="width:34px;height:30px;object-fit:contain"><p style="font-size:24px;color:#6A727C">Just one sharp corner</p></div>
+<p style="width:18%;font-size:26px;text-align:right">—</p><p style="width:16%;font-size:26px;text-align:right">2</p><p style="width:16%;font-size:26px;text-align:right">2</p><p style="width:16%;font-size:26px;text-align:right">2</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Deep Learning Intuition · 07 · Counts assume optimally placed kinks (= segments): a theoretical lower-limit guide.</p>
+<aside>Here's the idea behind the formula. Give every segment the same error allowance; its length h is then inversely proportional to √|f″|. Adding them up gives N ≈ B/√(8ε). Think of B as the curve's curvature budget: more bending, or more bends, means a larger B. x² and x⁵ are about equally hard. T₅ is also fifth-degree, but needs over three times as many neurons because it swings up and down four times. |x| needs just 2 neurons for an exact fit because it is already piecewise linear. These functions take values around −1 to 1, so ε = 0.01 is roughly a 1% error.</aside>
+</section>

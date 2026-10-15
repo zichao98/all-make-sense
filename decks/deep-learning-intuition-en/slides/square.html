@@ -1,0 +1,52 @@
+<section id="square" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">08 · Squares and products with depth</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">For x², depth does the heavy lifting</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;align-items:start;background:#ECE6DA;padding:22px 28px;border-radius:12px">
+<img src="/_blob/33a44c6ebf3d56e8f3f6cbe413ada4f2" alt="x² ≈ x − Σ g_s(x) / 4^s" style="width:337px;height:78px;object-fit:contain">
+</div>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">gₛ applies the previous tent g s times. Each layer divides error by 4. Once we can square, we can multiply, then build any polynomial:</p>
+<img src="/_blob/cc572040a63816f6abe2a1b6bab715c3" alt="xy = ½[(x+y)² − x² − y²]，x⁵ = x·x²·x²" style="width:592px;height:38px;object-fit:contain">
+<table style="font-size:26px;color:#17212B;font-family:'Inter', Arial, sans-serif">
+<tr style="background:#E7E0D2"><th style="width:34%;text-align:left">Error below</th><th style="width:28%;text-align:right">One layer</th><th style="width:38%;text-align:right">Deep (≈ neurons)</th></tr>
+<tr><td>0.01</td><td style="text-align:right">5</td><td style="text-align:right">3 layers · 9</td></tr>
+<tr><td>0.0001</td><td style="text-align:right">50</td><td style="text-align:right">6 layers · 18</td></tr>
+<tr style="background:#F4DCC8"><td>0.000001</td><td style="text-align:right">500</td><td style="text-align:right">9 layers · 27</td></tr>
+</table>
+<div style="display:flex;flex-direction:row;align-items:center;gap:16px">
+<p style="font-size:26px;font-weight:700;color:#B5531C">One layer</p>
+<img src="/_blob/da1e73890cf91a78a85f2a97d71a0726" alt="N ∝ ε^(−1/2)" style="width:141px;height:31px;object-fit:contain">
+<div style="width:32px"></div>
+<p style="font-size:26px;font-weight:700;color:#B5531C">Deep</p>
+<img src="/_blob/c9c268aaffbe1226be364dabafcbde59" alt="N ∝ log(1/ε)" style="width:184px;height:32px;object-fit:contain">
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function relu(z){return z>0?z:0}
+function T(x){return 2*relu(x)-4*relu(x-0.5)}
+function fm(x,m){var y=x,z=x,q=1;for(var s=1;m>=s;s++){z=T(z);q*=4;y-=z/q}return y}
+var M=6,E=[];for(var m=0;M>m;m++){var e=0;for(var i=0;4096>=i;i++){var x=i/4096,d=Math.abs(fm(x,m)-x*x);if(d>e)e=d}E.push(e)}
+var t0=performance.now();
+function line(f,col,lw,dash,x0,y0,w,h){g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;512>=i;i++){var x=i/512,px=x0+x*w,py=y0+h-f(x)*h;i?g.lineTo(px,py):g.moveTo(px,py)}g.stroke();g.setLineDash([])}
+function draw(){var t=(performance.now()-t0)/1000,m=Math.floor(t/2.2)%M,x0=60,y0=80,w=W-120,h=320;g.clearRect(0,0,W,H);
+g.strokeStyle=GR;g.lineWidth=2;g.strokeRect(x0-14,y0-14,w+28,h+28);
+line(function(x){return x*x},BL,4,[12,10],x0,y0,w,h);
+line(function(x){return fm(x,m)},OR,5,[],x0,y0,w,h);
+txt('Layers: m = '+m+'',40,48,INK,30,'left',700);
+txt('Orange = network; blue dashes = x²',W-40,48,TX,24,'right');
+var bw=(W-80)/M,base=H-44;
+for(var k=0;M>k;k++){var bh=110*(M-k)/M,bx=40+k*bw+14;g.fillStyle=k==m?OR:'#E4DDCF';g.fillRect(bx,base-bh,bw-28,bh);
+txt(E[k]>=0.001?E[k].toFixed(4):E[k].toFixed(5),bx+(bw-28)/2,base-bh-10,k==m?OR:TX,24,'center',k==m?700:400);
+txt('m='+k,bx+(bw-28)/2,base+30,TX,24,'center')}
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Deep Learning Intuition · 12</p>
+<aside>This is Yarotsky's 2017 construction. The bars show the maximum error after each added layer: 0.25, 0.0625, 0.0156… It divides by 4 each time. Deep-network neuron counts in the table assume about 3 neurons per layer. Notice that at ε = 0.01, a single layer is actually cheaper. As the precision requirement rises, depth saves more. So for smooth functions at high precision, depth is the key.</aside>
+</section>

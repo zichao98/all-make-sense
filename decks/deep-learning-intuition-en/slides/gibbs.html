@@ -1,0 +1,47 @@
+<section id="gibbs" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">10 · Head to head on x⁵</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Same neuron count. Which fits better?</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<p style="font-size:26px;line-height:1.5;color:#6A727C">Top: Fourier with K sin terms. Bottom: ReLU with K neurons.</p>
+<div style="display:flex;flex-direction:column;gap:14px">
+<p style="font-size:28px;line-height:1.5;color:#4A5563"> <b><span style="color:#1F4E80">Fourier expects repetition:</span></b> x⁵ goes from 1 at +1 back to −1 at −1, creating a hidden jump</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"> <b><span style="color:#1F4E80">The jump won't disappear:</span></b> maximum error stays near 1 at the ends (Gibbs phenomenon)</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"> <b><span style="color:#B5531C">ReLU needs no period:</span></b> it adds kinks where they're needed</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#7FB2E8">Match the basis to the shape</p>
+<p style="font-size:24px;line-height:1.5;color:#E6E1D6">For periodic waves, like sound, sin is efficient. For boundaries and sharp corners, ReLU can be a better fit.</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B';
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function frame(p){g.setLineDash([]);g.strokeStyle=GR;g.lineWidth=2;g.strokeRect(p.x0,p.y0,p.w,p.h);g.strokeStyle='#C9C0AE';g.beginPath();g.moveTo(p.x0,p.Y(0));g.lineTo(p.x0+p.w,p.Y(0));g.stroke()}
+function plot(p,f,col,lw,dash){g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;600>=i;i++){var x=p.a+(p.b-p.a)*i/600,y=f(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function f5(x){return x*x*x*x*x}
+var KM=64,B=[0],k,i;
+for(k=1;KM>=k;k++){var s=0;for(i=0;4000>i;i++){var x=-1+(i+0.5)/2000;s+=f5(x)*Math.sin(k*Math.PI*x)/2000}B.push(s)}
+function four(K){return function(x){var y=0;for(var k=1;K>=k;k++)y+=B[k]*Math.sin(k*Math.PI*x);return y}}
+function relu(K){var Kn=[],j;for(j=0;K>=j;j++){var v=-1+2*j/K;Kn.push((v>0?1:-1)*Math.pow(Math.abs(v),0.4))}
+return function(x){var j=0;while(Kn.length-2>j)if(x>Kn[j+1])j++;else break;var u=(x-Kn[j])/(Kn[j+1]-Kn[j]);return f5(Kn[j])+u*(f5(Kn[j+1])-f5(Kn[j]))}}
+function errs(f){var m=0,s=0,n=0;for(var i=0;1000>=i;i++){var x=-1+i/500,d=Math.abs(f(x)-f5(x));if(d>m)m=d;s+=d*d;n++}return[m,Math.sqrt(s/n)]}
+var Ks=[1,2,4,8,16,32,64],C={};
+Ks.forEach(function(K){var a=four(K),b=relu(K);C[K]=[a,b,errs(a),errs(b)]});
+var t0=performance.now();
+function panel(y0,f,e,lab,col){var p=P(40,y0,W-80,258,-1,1,-1.3,1.3);frame(p);plot(p,f5,'#7A828C',3,[10,8]);plot(p,f,col,5);
+txt(lab,p.x0+20,y0+38,INK,26,'left',700);
+txt('Max '+e[0].toFixed(2)+' · Mean '+e[1].toFixed(3),p.x0+p.w-20,y0+p.h-20,col==BL?'#1F4E80':'#B5531C',26,'right',700)}
+function draw(){var t=(performance.now()-t0)/1000,K=Ks[Math.floor(t/2.4)%Ks.length],c=C[K];g.clearRect(0,0,W,H);
+txt('K = '+K,40,40,INK,30,'left',700);txt('Gray dashes = x⁵',W-40,40,TX,24,'right');
+panel(60,c[0],c[2],'Fourier sin terms: '+K+'',BL);panel(344,c[1],c[3],'ReLU neurons: '+K+'',OR);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Deep Learning Intuition · 15</p>
+<aside>Fourier series assume periodicity. x⁵ is 1 at the right endpoint and −1 at the left. Repeating it creates a jump of height 2 at the seam. Ripples persist near the endpoints (the Gibbs phenomenon), and maximum error won't fall away; only average error gradually shrinks. ReLU can place its kinks where needed without assuming a periodic extension, so it avoids this problem. Conversely, Fourier fits a many-wave signal like sin(20πx) exactly with one term, while ReLU needs hundreds of neurons. Choose a basis that suits the shape.</aside>
+</section>

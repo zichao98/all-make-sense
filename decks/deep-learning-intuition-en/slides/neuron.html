@@ -1,0 +1,47 @@
+<section id="neuron" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">01 · One neuron</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">One ReLU neuron = one kink</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;align-items:start;background:#ECE6DA;padding:30px 32px;border-radius:12px">
+<img src="/_blob/be92695458dee755278d12bf604b3b34" alt="y = max(0, w x + b)" style="width:363px;height:42px;object-fit:contain">
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:28px;line-height:1.5;color:#4A5563"> <b><span style="color:#B5531C">One side is 0:</span></b> where the input to ReLU is negative, the output is 0</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"> <b><span style="color:#B5531C">One side is a line:</span></b> its slope is w</p>
+<div style="display:flex;align-items:center;gap:12px">
+<p style="font-size:28px;line-height:1.5;font-weight:700;color:#B5531C">Kink</p>
+<img src="/_blob/623d6c39dc3db692a292d9c5fc205c5f" alt="x = −b/w" style="width:123px;height:67px;object-fit:contain">
+<p style="flex:1;font-size:28px;line-height:1.5;color:#4A5563">b sets the position; w sets the slope and direction</p>
+</div>
+</div>
+<p style="font-size:26px;line-height:1.5;color:#6A727C">The output weight a scales the kink up or down, or flips it upside down.</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B';
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function frame(p){g.setLineDash([]);g.strokeStyle=GR;g.lineWidth=2;g.strokeRect(p.x0,p.y0,p.w,p.h);g.strokeStyle='#C9C0AE';g.beginPath();g.moveTo(p.x0,p.Y(0));g.lineTo(p.x0+p.w,p.Y(0));g.moveTo(p.X(0),p.y0);g.lineTo(p.X(0),p.y0+p.h);g.stroke()}
+function plot(p,f,col,lw,dash){g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;400>=i;i++){var x=p.a+(p.b-p.a)*i/400,y=f(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function relu(z){return z>0?z:0}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=/[一-鿿]/.test(ch)?'700 '+sz+'px '+F:(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v){return v.toFixed(2).replace('-','−')}
+var t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000;g.clearRect(0,0,W,H);
+var sg=Math.floor(t/7)%2?-1:1,w=sg*(1+0.5*Math.sin(t*0.9)),b=0.9*Math.sin(t*0.6),k=-b/w;
+var p=P(40,40,W-80,H-164,-2,2,-0.5,3.5);frame(p);
+g.strokeStyle='rgba(224,120,47,0.35)';g.lineWidth=2;g.setLineDash([8,8]);g.beginPath();g.moveTo(p.X(k),p.y0);g.lineTo(p.X(k),p.y0+p.h);g.stroke();g.setLineDash([]);
+plot(p,function(x){return relu(w*x+b)},OR,7);
+g.fillStyle=OR;g.beginPath();g.arc(p.X(k),p.Y(0),11,0,7);g.fill();
+txt('Kink',p.X(k),p.Y(0)+40,OR,26,'center',700);
+mt('w = '+fm(w)+'      b = '+fm(b),40,H-76,TX,30);
+mt('Kink: x = −b / w = '+fm(k),40,H-30,OR,30);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Deep Learning Intuition · 02</p>
+<aside>The animation on the right varies w and b. Watch the kink move with −b/w. Every few seconds, w changes sign and the sloping side switches over. The key idea: a ReLU neuron always draws just one kink. Its only special features are where that kink sits and how steep the line is.</aside>
+</section>

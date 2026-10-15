@@ -1,0 +1,11 @@
+{
+  "title": "Deep Learning Intuition",
+  "subtitle": "Neurons, ReLU, and Fourier",
+  "description": "Look at a function and get a feel for how many neurons it needs: ReLU segments, curvature budgets, depth, Fourier, and the jump to two and three dimensions.",
+  "date": "2026-10-14",
+  "tags": [
+    "Deep learning",
+    "Math intuition"
+  ],
+  "artifact": "https://claude.ai/artifact/KfijR3GxmLjJREVa3PS5PN"
+}

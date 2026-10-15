@@ -1,0 +1,32 @@
+<section id="bridge" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">17 · Bring higher dimensions back to 1D</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Many dimensions, many 1D problems</h2>
+<div style="display:flex;flex-direction:row;align-items:stretch;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2D6CB0">Step one</p>
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Split into Fourier waves</h3>
+<img src="/_blob/570618952ccdd5e59028e0842cd13968" alt="f(x) = Σ A_k sin(k·x + φ_k)" style="width:380px;height:65px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Express a function as plane waves with different directions and frequencies.</p>
+</div>
+<x-shape kind="arrow-right" style="width:56px;height:28px;align-self:center;background:#C9C0AE"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#2D6CB0">Step two</p>
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Look along one direction</h3>
+<img src="/_blob/3f93303851d51c9094a8c003c2b45683" alt="t = k·x" style="width:124px;height:27px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Along k, a plane wave is just an ordinary 1D wave, sin(t + φ).</p>
+</div>
+<x-shape kind="arrow-right" style="width:56px;height:28px;align-self:center;background:#C9C0AE"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F4DCC8;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#8A3E12">Step three</p>
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Trace it with straight lines</h3>
+<img src="/_blob/6ae79410e7840280c0c059cc914e2e68" alt="sin(t + φ) ≈ Σ a_j ReLU(t − t_j)" style="width:390px;height:64px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#4A5563">All these neurons have w = k; only b differs. Our 1D intuition still works.</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#15202B;padding:28px 32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:700;color:#F0995E">Neurons ≈ important plane waves × kinks per wave</h3>
+<p style="font-size:26px;line-height:1.5;color:#E6E1D6">That's the idea behind Barron's proof: even in many dimensions, few important waves can mean few neurons. A noise-like function with every direction and frequency is expensive for any method.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Deep Learning Intuition · 23</p>
+<aside>This connects the whole story. Split a high-dimensional function into Fourier plane waves. Each wave varies along just one direction k, so projecting to t = k·x turns it into a 1D wave. Trace that wave with ReLU segments: all neurons have w equal to k, with different biases placing their kinks at different locations. To estimate neurons in high dimensions, ask: how many important directions and frequencies are there, and how many kinks does each need? Barron's 1993 proof followed a related route: plane waves to 1D sigmoid steps, then random sampling, yielding an error bound independent of dimension.</aside>
+</section>

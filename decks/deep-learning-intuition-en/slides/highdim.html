@@ -1,0 +1,40 @@
+<section id="highdim" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">18 · The limits of 1D intuition</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">In high dimensions, grids explode</h2>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">Split each dimension into 10 segments (about 1% error for x²). The full grid needs 10^d cells:</p>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px 28px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">1 dimension</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">10</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px 28px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">2 dimensions</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">100</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px 28px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">3 dimensions</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">1,000</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#F4DCC8;padding:24px 28px;border-radius:16px">
+<p style="font-size:26px;color:#8A3E12">28×28 image: 784 dimensions</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#8A3E12">10⁷⁸⁴</p>
+</div>
+</div>
+<p style="font-size:28px;font-weight:700;color:#17212B">So why does deep learning work on images?</p>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Data occupies a tiny slice</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Cat photos fill only a tiny part of pixel space. Their effective dimension is much lower.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Functions have layers too</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Pixels → edges → shapes → objects. Depth is good at this kind of composition.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">A smooth enough spectrum</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Barron's bound is independent of dimension. Limited high-frequency content keeps the task manageable.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Deep Learning Intuition · 24 · 1D formulas build intuition. Real network sizes still need experiments.</p>
+<aside>The earlier formulas assume a 1D input. Tiling d-dimensional space with small piecewise linear regions takes roughly (1/√ε)^d cells: the curse of dimensionality. Deep learning succeeds when the data and target function have structure, such as a low-dimensional manifold, composition, or a smooth spectrum. That's also why depth, which supports composition, can matter more than width.</aside>
+</section>

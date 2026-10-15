@@ -1,0 +1,26 @@
+<section id="cover" data-transition="fade" style="background:#15202B;color:#F3EEE3;font-family:'Inter', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:start;gap:32px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;color:#F0995E">For anyone new to deep learning</p>
+<h1 style="font-family:'Source Serif 4', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F3EEE3">Deep Learning Intuition</h1>
+<p style="font-size:44px;line-height:1.4;color:#B9C4CF">Look at a function. Get a feel for how many neurons it needs.</p>
+<p style="font-size:26px;color:#8C9AA8;letter-spacing:2px">ReLU · Piecewise lines · Curvature budget · Depth · Fourier</p>
+<x-embed style="position:absolute;left:128px;top:640px;width:1664px;height:300px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+function f(x){return 0.5+0.28*Math.sin(3*Math.PI*x)+0.12*Math.sin(11*x)}
+function X(x){return 20+x*(W-40)}function Y(y){return H-20-y*(H-40)}
+var t0=performance.now(),Ns=[2,3,4,6,8,12,16,24,32];
+function draw(){var t=(performance.now()-t0)/1000,k=Math.floor(t/1.4)%(Ns.length+2),N=Ns[Math.min(k,Ns.length-1)],i,x;
+g.clearRect(0,0,W,H);
+g.strokeStyle='rgba(127,178,232,0.75)';g.lineWidth=3;g.setLineDash([10,10]);g.beginPath();
+for(i=0;400>=i;i++){x=i/400;i?g.lineTo(X(x),Y(f(x))):g.moveTo(X(x),Y(f(x)))}g.stroke();g.setLineDash([]);
+g.strokeStyle='#F0995E';g.lineWidth=5;g.beginPath();
+for(i=0;N>=i;i++){x=i/N;i?g.lineTo(X(x),Y(f(x))):g.moveTo(X(x),Y(f(x)))}g.stroke();
+g.fillStyle='#F0995E';for(i=1;N>i;i++){x=i/N;g.beginPath();g.arc(X(x),Y(f(x)),6,0,7);g.fill()}
+g.fillStyle='#8C9AA8';g.font='26px "Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif';g.textAlign='right';
+g.fillText('Kinks: '+(N-1),W-24,36);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<aside>Let's start with three questions. What does a ReLU neuron actually look like? How can you look at a function, say a fifth-degree polynomial, and estimate how many neurons it needs? And how are Fourier series related to neurons? The animation below is the central picture of this deck: more and more straight segments tracing a curve.</aside>
+</section>

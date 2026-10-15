@@ -1,0 +1,37 @@
+<section id="barron" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">11 · Estimate neurons with Fourier</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Higher frequency needs more neurons</h2>
+<div style="display:flex;gap:40px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#DCE7F3;padding:28px;border-radius:16px">
+<p style="font-size:28px;font-weight:700;color:#1F4E80">Barron's theorem (1993)</p>
+<p style="font-size:26px;line-height:1.5;color:#17212B">Take the Fourier transform f̂(ω) of f and compute</p>
+<img src="/_blob/77c18498f6a1fdabdd4141ba16f49823" alt="C_f = ∫ |ω| |f̂(ω)| dω" style="width:321px;height:80px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#17212B">A one-hidden-layer network with N neurons exists such that (r is the input radius)</p>
+<img src="/_blob/3d0545a634b0a5e4d051821d085a888d" alt="‖f − f_N‖² ≤ (2r C_f)² / N" style="width:370px;height:82px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;font-weight:700;color:#1F4E80">This upper bound is independent of input dimension.</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">The integral weighs high-frequency content. Mostly low frequencies? Few neurons. Lots of high frequencies? Many more.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">sin(πx) · 1 wave</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">17</p>
+<p style="font-size:24px;color:#4A5563">neurons</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px;border-radius:16px">
+<p style="font-size:26px;color:#4A5563">sin(5πx) · 5 waves</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:64px;font-weight:600;line-height:1.1;color:#17212B">85</p>
+<p style="font-size:24px;color:#4A5563">neurons</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#15202B;padding:24px 28px;border-radius:16px">
+<p style="font-size:28px;font-weight:700;color:#7FB2E8">Eyeball it: count waves</p>
+<p style="font-size:26px;line-height:1.5;color:#E6E1D6">Find the highest frequency with a sizeable amplitude. On [−1, 1], each full wave needs about 17 neurons for 1% error.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Deep Learning Intuition · 16 · Counts assume 1% error, one ReLU layer, and optimally placed kinks.</p>
+<aside>Barron's result uses sigmoid-like activations; related versions exist for ReLU. The key direction is the same: more high-frequency content means more wiggles and more neurons. This is another view of the curvature budget. The second derivative of sin(kπx) carries a factor k²π²; taking its square root makes the budget proportional to k. So 5 times the frequency needs 5 times the neurons. Barron's error is mean squared error, and the bound is independent of dimension: one theoretical reason networks can handle high-dimensional data.</aside>
+</section>

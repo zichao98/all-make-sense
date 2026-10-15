@@ -1,0 +1,28 @@
+<section id="errlaw" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:952px;top:296px;width:840px;height:600px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">03 · The error rule</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">How far does a line miss a curve?</h2>
+<div style="width:760px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:32px;background:#ECE6DA;padding:20px 32px;border-radius:12px">
+<img src="/_blob/384d86de6e2ba69ee82d6c262b9f9a2b" alt="Maximum error ≈ h² |f''| / 8" style="width:284px;height:100px;object-fit:contain">
+<p style="font-size:26px;line-height:1.4;color:#4A5563">ε is the segment's<br>maximum error</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:28px;line-height:1.5;color:#4A5563"> <b><span style="color:#B5531C">Halve h; error drops to 1/4:</span></b> twice the segments, one quarter of the error</p>
+<div style="display:flex;align-items:center;gap:12px">
+<img src="/_blob/a71d89502843e2fe52cdab8bd34a2c40" alt="|f''|" style="width:53px;height:34px;object-fit:contain">
+<p style="flex:1;font-size:28px;line-height:1.5;color:#4A5563"> <b><span style="color:#B5531C">measures curvature:</span></b> a straight stretch has 0 curvature and needs no kink</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"> <b><span style="color:#B5531C">So:</span></b> put more kinks where the curve bends more</p>
+</div>
+<p style="font-size:26px;line-height:1.5;color:#6A727C">f″ is the second derivative. A short stretch looks like a parabola; the formula gives the gap from its chord (via a Taylor expansion).</p>
+</div>
+<svg aria-label="A curved arc and its chord; their maximum gap is the error. The segment length h is marked below." width="840" height="560" viewBox="0 0 840 560" style="position:absolute;left:952px;top:316px;width:840px;height:560px"><path d="M80 470 Q420 -176 760 470" fill="none" stroke="#2D6CB0" stroke-width="6"/><line x1="80" y1="470" x2="760" y2="470" stroke="#E0782F" stroke-width="7"/><circle cx="80" cy="470" r="11" fill="#E0782F"/><circle cx="760" cy="470" r="11" fill="#E0782F"/><line x1="420" y1="160" x2="420" y2="456" stroke="#17212B" stroke-width="3" stroke-dasharray="10 8"/><path d="M408 172 L420 150 L432 172 Z" fill="#17212B"/><path d="M408 446 L420 468 L432 446 Z" fill="#17212B"/><line x1="80" y1="512" x2="760" y2="512" stroke="#7A828C" stroke-width="3"/><line x1="80" y1="498" x2="80" y2="526" stroke="#7A828C" stroke-width="3"/><line x1="760" y1="498" x2="760" y2="526" stroke="#7A828C" stroke-width="3"/></svg>
+<p style="position:absolute;left:1552px;top:420px;width:220px;font-size:28px;font-weight:700;color:#2D6CB0">Curve f(x)</p>
+<p style="position:absolute;left:1392px;top:700px;width:300px;font-size:28px;font-weight:700;color:#B5531C">A segment handled by one neuron</p>
+<p style="position:absolute;left:1057px;top:588px;width:300px;font-size:26px;line-height:1.4;text-align:right;color:#17212B">Maximum error</p>
+<img src="/_blob/275eaafc345d6174d2233e264c4f7973" alt="≈ h² |f''| / 8" style="position:absolute;left:1219px;top:632px;width:138px;height:73px;object-fit:contain">
+<p style="position:absolute;left:1222px;top:842px;width:300px;font-size:26px;text-align:center;color:#4A5563">h (segment length)</p>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Deep Learning Intuition · 05</p>
+<aside>Picture a straight segment whose ends sit on the curve. The curve bows away in the middle. The gap depends on the segment length h and the curvature f''. Length enters as a square: twice as many segments means one quarter of the error. That's why the error of a 1D, one-hidden-layer ReLU network scales roughly like 1/N².</aside>
+</section>
