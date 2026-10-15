@@ -29,7 +29,7 @@ function transformSlide(html, assetIndex, deckSlug) {
   }
   // <x-embed>…</x-embed> → 沙盒 iframe（srcdoc 由播放器在切到該頁時才載入）
   // 投影片整張會被縮放，canvas 用 2 倍解析度畫才不會糊
-  const HIDPI = '<script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 2}})}catch(e){}</script>';
+  const HIDPI = '<script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 2}})}catch(e){}addEventListener("load",function(){function resize(){dispatchEvent(new Event("resize"))}requestAnimationFrame(resize);if(window.ResizeObserver)new ResizeObserver(resize).observe(document.documentElement)})</script>';
   html = html.replace(/<x-embed([^>]*)>([\s\S]*?)<\/x-embed>/g, (m, attrs, inner) => {
     const kb = Buffer.byteLength(inner) / 1024;
     if (kb > 16) warn(`${deckSlug}: 有一個 x-embed ${kb.toFixed(1)} KB，超過 16 KB（Claude Slides 的上限）`);
@@ -110,14 +110,15 @@ ${rules.length ? `<style>${rules.join('')}</style>` : ''}
 <main class="stage" id="stage"><div class="slides deck" id="deck" lang="${/[\u4e00-\u9fff]/.test(d.title) ? 'zh-Hant' : 'en'}">
 ${d.slides.map((s) => s.html).join('\n')}
 </div></main>
-<header class="ui top" id="uiTop"><a class="back" href="../">← Collection</a><span class="title">${esc(uiTitle)}</span></header>
+<main id="reader" class="reader" hidden aria-label="Reading view"></main>
+<header class="ui top" id="uiTop"><a class="back" href="../">← Collection</a><span class="title">${esc(uiTitle)}</span><div class="view-tools" role="group" aria-label="Reading and zoom controls"><button id="readBtn" aria-pressed="false" title="Reading view (R)">Read</button><button id="zoomOut" aria-label="Zoom out" title="Zoom out (−)">−</button><button id="zoomFit" title="Fit the whole slide (0)">Fit</button><button id="zoomIn" aria-label="Zoom in" title="Zoom in (+)">+</button></div></header>
 <nav class="ui bottom" id="uiBottom" aria-label="Presentation controls">
 <button id="prev" aria-label="Previous slide" title="Previous slide (←)">‹</button><span id="count">1 / ${d.slides.length}</span><button id="next" aria-label="Next slide" title="Next slide (→)">›</button>
 <button id="notesBtn" aria-pressed="false" title="Speaker notes (N)">Notes</button><button id="fsBtn" title="Fullscreen (F)">Fullscreen</button>
 </nav>
 <div class="progress" id="progress"></div>
 <aside class="notes" id="notes" aria-label="Speaker notes" hidden></aside>
-<div class="rotate-hint">Rotate your device for the full picture.</div>
+<div class="rotate-hint">Pinch or double-tap to zoom. Try Read for larger text.</div>
 <script src="../site/player.js"></script>
 </body>
 </html>
