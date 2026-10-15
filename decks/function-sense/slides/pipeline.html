@@ -1,0 +1,41 @@
+<section id="pipeline" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px"><div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div><p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">16 · Composition</p><h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">g ∘ f: run f first, then feed it to g</h2><div style="width:688px;display:flex;flex-direction:column;gap:28px"><div style="display:flex;flex-direction:column;align-items:start;gap:10px;background:#ECE6DA;padding:28px 30px;border-radius:12px"><img src="assets/comp.svg" alt="(g ∘ f)(x) = g(f(x))" style="width:350px;height:48px;object-fit:contain"></div><div style="display:flex;flex-direction:column;gap:12px"><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Right to left:</span></b> in g ∘ f, the machine next to x runs first</p><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Order matters:</span></b> add 1 then double is not double then add 1</p></div><div style="display:flex;flex-direction:column;gap:12px;background:#F4DCC8;padding:22px 28px;border-radius:14px"><img src="assets/comp_order.svg" alt="2(x + 1) ≠ 2x + 1" style="width:247px;height:32px;object-fit:contain"><p style="font-size:26px;line-height:1.5;color:#8A3E12">Same two machines, different results.</p></div><p style="font-size:26px;line-height:1.5;color:#6A727C">You have met one special chain already: a function followed by its inverse brings every point back to where it started.</p></div><x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Helvetica Neue",Arial,sans-serif',MF='"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B',MU='#7A828C',AX='#C9C0AE';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col;g.font=(wt||400)+' '+sz+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mf(ch,up,sz){return (up?'':(/[a-zA-Z]/.test(ch)?'italic ':''))+(sz+2)+'px '+MF}
+function mt(s,x,y,col,sz,al){var i,ch,up=0,w=0,q=[];for(i=0;s.length>i;i++){ch=s[i];if(ch=='['){up=1}else if(ch==']'){up=0}else{q.push([ch,mf(ch,up,sz)])}}
+for(i=0;q.length>i;i++){g.font=q[i][1];w+=g.measureText(q[i][0]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';
+for(i=0;q.length>i;i++){g.font=q[i][1];g.fillText(q[i][0],x,y);x+=g.measureText(q[i][0]).width}}
+function fm(v,k){return v.toFixed(k==null?2:k).replace('-','−')}
+function cl(u){return u>1?1:(u>0?u:0)}
+function ez(u){u=cl(u);return u*u*(3-2*u)}
+function L(a,b,u){return a+(b-a)*u}
+function hc(i,n){return 'hsl('+(22+190*i/(n-1))+',58%,47%)'}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function plot(p,fn,col,lw,dash,a,b){a=a==null?p.a:a;b=b==null?p.b:b;g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;400>=i;i++){var x=a+(b-a)*i/400,y=fn(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function seg(x1,y1,x2,y2,col,lw,dash){g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([])}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,7);g.fill()}
+function arrow(x1,y1,x2,y2,col,lw,hs){seg(x1,y1,x2,y2,col,lw);var a=Math.atan2(y2-y1,x2-x1);g.fillStyle=col;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-hs*Math.cos(a-0.4),y2-hs*Math.sin(a-0.4));g.lineTo(x2-hs*Math.cos(a+0.4),y2-hs*Math.sin(a+0.4));g.closePath();g.fill()}
+function sg(v){return String(v).replace('-','−')}
+var t0=performance.now();
+var EX=[{f:function(x){return x+1},g:function(u){return 2*u},m:'f(x) = x + 1      g(u) = 2u',n:'Add 1, then double: 2(x + 1)'},
+{f:function(x){return 2*x},g:function(u){return u+1},m:'f(x) = 2x      g(u) = u + 1',n:'Double, then add 1: 2x + 1. Different!'},
+{f:function(x){return Math.pow(2,x)},g:function(u){return Math.log(u)/Math.LN2},m:'f(x) = 2ˣ      g(u) = [log]₂ u',n:'Exp, then log: every point lands where it started'}];
+var XS=[-2,-1,0,1,2],YS=[80,230,380],LB=['x','f(x)','g(f(x))'];
+function X(v){return 190+(v+5)/12*(W-220)}
+function draw(){var t=(performance.now()-t0)/1000,T=7.5,k=Math.floor(t/T)%3,s=t%T,E=EX[k],i,j;g.clearRect(0,0,W,H);
+for(j=0;3>j;j++){var y=YS[j];mt(LB[j],20,y+9,MU,28);seg(X(-5)-10,y,W-20,y,AX,3);for(i=-5;7>=i;i++){seg(X(i),y-(i%2?5:10),X(i),y+(i%2?5:10),AX,2);if(i%2==0)txt(sg(i),X(i),y+40,MU,24,'center')}}
+for(i=0;XS.length>i;i++){var x=XS[i],u=E.f(x),v=E.g(u),c=hc(i,5),q1=ez((s-0.3-i*0.25)/0.9),q2=ez((s-2.4-i*0.25)/0.9);
+dot(X(x),YS[0],9,c);
+if(q1>0){g.globalAlpha=0.85;arrow(X(x),YS[0]+50,L(X(x),X(u),q1),L(YS[0]+50,YS[1]-14,q1),c,3,13);g.globalAlpha=1}
+if(q1>=1)dot(X(u),YS[1],9,c);
+if(q2>0){g.globalAlpha=0.85;arrow(X(u),YS[1]+50,L(X(u),X(v),q2),L(YS[1]+50,YS[2]-14,q2),c,3,13);g.globalAlpha=1}
+if(q2>=1)dot(X(v),YS[2],9,c)}
+mt(E.m,40,H-96,INK,30);g.globalAlpha=cl((s-3.8)/0.5);txt(E.n,40,H-50,OR,26,'left',700);g.globalAlpha=1;
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed><p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Function Sense · 21</p><aside>Composition chains two mappings: every input x travels to f(x) on the middle line, and then on to g(f(x)) on the bottom line. The notation g circle f is read right to left, because the machine written next to x acts first, just like in g(f(x)). The animation shows three chains. Add 1 and then double sends x to 2(x + 1). Swapping the order, double and then add 1, sends x to 2x + 1, a different function, so composition is not commutative. Finally, 2 to the x followed by log base 2: the points spread out on the middle line and then return exactly to where they began. A function followed by its inverse is the identity map.</aside>
+</section>

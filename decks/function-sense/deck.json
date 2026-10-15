@@ -27,6 +27,11 @@
     "affine",
     "bend",
     "zoom",
+    "compose",
+    "pipeline",
+    "chainfam",
+    "matcomp",
+    "chainrule",
     "kinds",
     "onto",
     "linetest",
@@ -57,10 +62,14 @@
       "start": "bend"
     },
     "s6": {
+      "description": "Composition: chaining maps, order, families, matrix products, and the chain rule",
+      "start": "compose"
+    },
+    "s7": {
       "description": "Kinds of mappings: one-to-one, onto, bijective, inverses, and matrices",
       "start": "kinds"
     },
-    "s7": {
+    "s8": {
       "description": "Limits of these intuitions and a one-page takeaway",
       "start": "limits"
     }

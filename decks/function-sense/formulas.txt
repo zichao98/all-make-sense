@@ -50,3 +50,16 @@ u_comp       #F0995E   34   f^{-1}\big(f(x)\big) = x
 m_sq         #17212B   30   A: \mathbb{R}^2 \to \mathbb{R}^2
 m_tall       #17212B   30   A: \mathbb{R}^2 \to \mathbb{R}^3
 m_wide       #8A3E12   30   A: \mathbb{R}^3 \to \mathbb{R}^2
+comp         #17212B   40   (g \circ f)(x) = g\big(f(x)\big)
+comp_order   #8A3E12   32   2(x+1) \neq 2x + 1
+ch_lin       #17212B   30   a(cx+d)+b = (ac)\,x + (ad+b)
+ch_pow       #17212B   30   \left(x^{n}\right)^{m} = x^{nm}
+ch_exp       #17212B   30   2^{ax+b} = 2^{b}\left(2^{a}\right)^{x}
+ch_log       #17212B   30   \log_{10}\!\left(x^{n}\right) = n\log_{10} x
+ch_id        #8A3E12   30   \log_{2}\!\left(2^{x}\right) = x
+matprod      #17212B   40   (BA)\,\mathbf{x} = B\,(A\mathbf{x})
+detprod      #B5531C   32   \det(BA) = \det B \cdot \det A
+oned         #8A3E12   32   a\,(c\,x) = (ac)\,x
+chainrule    #17212B   36   (g \circ f)'(x) = g'\big(f(x)\big)\cdot f'(x)
+chain_ex     #17212B   30   x \;\mapsto\; x^{2} \;\mapsto\; \left(x^{2}\right)^{2} = x^{4}
+chain_num    #17212B   30   2.4 \times 2.88 = 6.912 = 4 \cdot 1.2^{3}

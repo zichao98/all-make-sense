@@ -253,5 +253,70 @@
     "width": 164,
     "height": 27,
     "tex": "A: \\mathbb{R}^3 \\to \\mathbb{R}^2"
+  },
+  "comp": {
+    "width": 350,
+    "height": 48,
+    "tex": "(g \\circ f)(x) = g\\big(f(x)\\big)"
+  },
+  "comp_order": {
+    "width": 247,
+    "height": 32,
+    "tex": "2(x+1) \\neq 2x + 1"
+  },
+  "ch_lin": {
+    "width": 427,
+    "height": 30,
+    "tex": "a(cx+d)+b = (ac)\\,x + (ad+b)"
+  },
+  "ch_pow": {
+    "width": 168,
+    "height": 32,
+    "tex": "\\left(x^{n}\\right)^{m} = x^{nm}"
+  },
+  "ch_exp": {
+    "width": 200,
+    "height": 35,
+    "tex": "2^{ax+b} = 2^{b}\\left(2^{a}\\right)^{x}"
+  },
+  "ch_log": {
+    "width": 265,
+    "height": 31,
+    "tex": "\\log_{10}\\!\\left(x^{n}\\right) = n\\log_{10} x"
+  },
+  "ch_id": {
+    "width": 162,
+    "height": 30,
+    "tex": "\\log_{2}\\!\\left(2^{x}\\right) = x"
+  },
+  "matprod": {
+    "width": 299,
+    "height": 40,
+    "tex": "(BA)\\,\\mathbf{x} = B\\,(A\\mathbf{x})"
+  },
+  "detprod": {
+    "width": 332,
+    "height": 32,
+    "tex": "\\det(BA) = \\det B \\cdot \\det A"
+  },
+  "oned": {
+    "width": 207,
+    "height": 32,
+    "tex": "a\\,(c\\,x) = (ac)\\,x"
+  },
+  "chainrule": {
+    "width": 441,
+    "height": 44,
+    "tex": "(g \\circ f)'(x) = g'\\big(f(x)\\big)\\cdot f'(x)"
+  },
+  "chain_ex": {
+    "width": 316,
+    "height": 43,
+    "tex": "x \\;\\mapsto\\; x^{2} \\;\\mapsto\\; \\left(x^{2}\\right)^{2} = x^{4}"
+  },
+  "chain_num": {
+    "width": 365,
+    "height": 29,
+    "tex": "2.4 \\times 2.88 = 6.912 = 4 \\cdot 1.2^{3}"
   }
 }
