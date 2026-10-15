@@ -27,6 +27,11 @@
     "affine",
     "bend",
     "zoom",
+    "kinds",
+    "onto",
+    "linetest",
+    "undo",
+    "matkinds",
     "limits",
     "takeaway"
   ],
@@ -48,8 +53,16 @@
       "start": "mapping"
     },
     "s5": {
-      "description": "Nonlinear maps are linear up close; limits and a one-page takeaway",
+      "description": "Nonlinear maps bend the grid but are linear up close",
       "start": "bend"
+    },
+    "s6": {
+      "description": "Kinds of mappings: one-to-one, onto, bijective, inverses, and matrices",
+      "start": "kinds"
+    },
+    "s7": {
+      "description": "Limits of these intuitions and a one-page takeaway",
+      "start": "limits"
     }
   },
   "faces": {

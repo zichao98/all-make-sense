@@ -41,3 +41,12 @@ t_sq         #17212B   30   x^{2}
 t_ax         #17212B   34   f(x) = a\,x
 t_axb        #8A3E12   34   f(x) = a\,x + b
 affine2d_d   #F0995E   34   \mathbf{x} \longmapsto A\mathbf{x} + \mathbf{b}
+t_cube       #17212B   30   x^{3}
+t_cubic      #17212B   30   x^{3} - 3x
+u_sq         #17212B   30   y = x^{2},\ x \ge 0 \;\Longleftrightarrow\; x = \sqrt{y}
+u_exp        #17212B   30   y = 2^{x} \;\Longleftrightarrow\; x = \log_{2} y
+u_mat        #8A3E12   30   \mathbf{y} = A\mathbf{x} \;\Longleftrightarrow\; \mathbf{x} = A^{-1}\mathbf{y}
+u_comp       #F0995E   34   f^{-1}\big(f(x)\big) = x
+m_sq         #17212B   30   A: \mathbb{R}^2 \to \mathbb{R}^2
+m_tall       #17212B   30   A: \mathbb{R}^2 \to \mathbb{R}^3
+m_wide       #8A3E12   30   A: \mathbb{R}^3 \to \mathbb{R}^2

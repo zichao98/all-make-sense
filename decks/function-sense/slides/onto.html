@@ -1,0 +1,49 @@
+<section id="onto" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px"><div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div><p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">16 · One-to-one and onto</p><h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Collisions and misses sort every mapping</h2><div style="width:688px;display:flex;flex-direction:column;gap:28px"><div style="display:flex;flex-direction:column;gap:14px"><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">One-to-one (injective):</span></b> different inputs always give different outputs. No collisions.</p><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Onto (surjective):</span></b> every output in the target set gets hit. Nothing missed.</p><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Both (bijective):</span></b> a perfect pairing between inputs and outputs.</p></div><div style="display:flex;flex-direction:column;gap:8px;background:#F4DCC8;padding:22px 28px;border-radius:14px"><p style="font-size:26px;line-height:1.5;color:#8A3E12">Only a bijection can be run backwards: each output points back to exactly one input.</p></div><p style="font-size:26px;line-height:1.5;color:#6A727C">“Onto” depends on the target you name: 2ˣ is onto the positive numbers, but not onto all real numbers.</p></div><x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Helvetica Neue",Arial,sans-serif',MF='"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B',MU='#7A828C',AX='#C9C0AE';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col;g.font=(wt||400)+' '+sz+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mf(ch,up,sz){return (up?'':(/[a-zA-Z]/.test(ch)?'italic ':''))+(sz+2)+'px '+MF}
+function mt(s,x,y,col,sz,al){var i,ch,up=0,w=0,q=[];for(i=0;s.length>i;i++){ch=s[i];if(ch=='['){up=1}else if(ch==']'){up=0}else{q.push([ch,mf(ch,up,sz)])}}
+for(i=0;q.length>i;i++){g.font=q[i][1];w+=g.measureText(q[i][0]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';
+for(i=0;q.length>i;i++){g.font=q[i][1];g.fillText(q[i][0],x,y);x+=g.measureText(q[i][0]).width}}
+function fm(v,k){return v.toFixed(k==null?2:k).replace('-','−')}
+function cl(u){return u>1?1:(u>0?u:0)}
+function ez(u){u=cl(u);return u*u*(3-2*u)}
+function L(a,b,u){return a+(b-a)*u}
+function hc(i,n){return 'hsl('+(22+190*i/(n-1))+',58%,47%)'}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function plot(p,fn,col,lw,dash,a,b){a=a==null?p.a:a;b=b==null?p.b:b;g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;400>=i;i++){var x=a+(b-a)*i/400,y=fn(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function seg(x1,y1,x2,y2,col,lw,dash){g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([])}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,7);g.fill()}
+function arrow(x1,y1,x2,y2,col,lw,hs){seg(x1,y1,x2,y2,col,lw);var a=Math.atan2(y2-y1,x2-x1);g.fillStyle=col;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-hs*Math.cos(a-0.4),y2-hs*Math.sin(a-0.4));g.lineTo(x2-hs*Math.cos(a+0.4),y2-hs*Math.sin(a+0.4));g.closePath();g.fill()}
+function sg(v){return String(v).replace('-','−')}
+var t0=performance.now();
+var CS=[{a:4,b:4,m:[0,0,2,2],n:'Neither',d:'Two pairs collide, and two outputs are missed'},
+{a:3,b:4,m:[0,1,3],n:'One-to-one, not onto',d:'No collisions, but one output is missed'},
+{a:4,b:3,m:[0,1,1,2],n:'Onto, not one-to-one',d:'Every output is hit, but two inputs collide'},
+{a:4,b:4,m:[1,3,0,2],n:'One-to-one and onto',d:'A perfect pairing, nothing collides or is missed'}];
+function ell(x,y,rx,ry){g.beginPath();g.ellipse(x,y,rx,ry,0,0,7);g.fillStyle='#F6F1E7';g.fill();g.strokeStyle=AX;g.lineWidth=2;g.stroke()}
+function draw(){var t=(performance.now()-t0)/1000,T=7,k=Math.floor(t/T)%4,s=t%T,C=CS[k],i,j,lx=W*0.27,rx=W*0.66,cy=250;
+function Ay(i){return cy+(i-(C.a-1)/2)*95}function By(j){return cy+(j-(C.b-1)/2)*95}
+g.clearRect(0,0,W,H);ell(lx,cy,120,205);ell(rx,cy,120,205);
+txt('inputs',lx,34,MU,24,'center',700);txt('outputs',rx,34,MU,24,'center',700);
+var cnt=[];for(j=0;C.b>j;j++)cnt.push(0);
+var back=k==3?ez((s-3.8)/1.2):0;
+for(i=0;C.a>i;i++){j=C.m[i];var q=ez((s-0.3-i*0.4)/0.9),x1=lx,y1=Ay(i),x2=rx,y2=By(j),dx=x2-x1,dy=y2-y1,d=Math.sqrt(dx*dx+dy*dy),ux=dx/d*18,uy=dy/d*18;
+if(q>=1)cnt[j]++;
+if(back>0){arrow(x2-ux,y2-uy,L(x2-ux,x1+ux,back),L(y2-uy,y1+uy,back),BL,3,14)}else if(q>0){arrow(x1+ux,y1+uy,L(x1+ux,x2-ux,q),L(y1+uy,y2-uy,q),hc(i,4),3,14)}
+dot(x1,y1,11,hc(i,4))}
+var hl=cl((s-2.6)/0.4);
+for(j=0;C.b>j;j++){dot(rx,By(j),11,'#5A6470');if(hl>0){g.globalAlpha=hl;
+if(cnt[j]>1){g.strokeStyle=OR;g.lineWidth=3;g.beginPath();g.arc(rx,By(j),20,0,7);g.stroke();txt('collision',rx+30,By(j)+8,OR,24,'left',700)}
+if(cnt[j]==0){g.strokeStyle=BL;g.lineWidth=3;g.setLineDash([5,5]);g.beginPath();g.arc(rx,By(j),20,0,7);g.stroke();g.setLineDash([]);txt('missed',rx+30,By(j)+8,BL,24,'left',700)}
+g.globalAlpha=1}}
+txt(C.n,40,H-96,INK,30,'left',700);
+txt(back>0?'Run every arrow backwards: that is the inverse':C.d,40,H-50,back>0?BL:OR,26,'left',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed><p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Function Sense · 21</p><aside>The animation shows the four possible combinations with small sets so you can count the arrows. Each case has the same rule as any function: every input on the left sends out exactly one arrow. What changes is what happens on the right. A collision, circled in orange, is an output with two or more arrows landing on it; that breaks one-to-one. A miss, circled in blue, is an output nobody lands on; that breaks onto. In the last case every output gets exactly one arrow, so you can reverse all of them and get another function: the inverse. One subtlety: whether a map is onto depends on which set you call the outputs. 2 to the x never produces 0 or negative numbers, so it is onto the positive numbers but not onto all real numbers.</aside>
+</section>
