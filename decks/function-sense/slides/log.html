@@ -1,0 +1,41 @@
+<section id="log" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px"><div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div><p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">07 · Logarithms</p><h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Logs: ×10 in, +1 out. They count steps</h2><div style="width:688px;display:flex;flex-direction:column;gap:24px"><div style="display:flex;flex-direction:row;gap:16px"><div style="display:flex;flex-direction:column;align-items:start;gap:10px;background:#ECE6DA;padding:28px 30px;border-radius:12px"><img src="assets/log.svg" alt="f(x) = log base 10 of x" style="width:254px;height:43px;object-fit:contain"></div><div style="display:flex;flex-direction:column;justify-content:center;background:#F4DCC8;padding:28px 30px;border-radius:12px"><img src="assets/log_rule.svg" alt="f(10x) = f(x) + 1" style="width:299px;height:38px;object-fit:contain"></div></div><p style="font-size:28px;line-height:1.5;color:#4A5563">Log asks: how many ×10 steps does it take to get from 1 to x?</p><div style="display:flex;flex-direction:column"><div style="display:flex;flex-direction:row;align-items:center;padding:8px 0;border-bottom:1px solid #DDD5C5"><p style="width:230px;font-size:26px;font-weight:700;color:#17212B">1,000 → 3</p><p style="flex:1;font-size:26px;color:#4A5563">three zeros</p></div><div style="display:flex;flex-direction:row;align-items:center;padding:8px 0;border-bottom:1px solid #DDD5C5"><p style="width:230px;font-size:26px;font-weight:700;color:#17212B">1,000,000 → 6</p><p style="flex:1;font-size:26px;color:#4A5563">six zeros</p></div><div style="display:flex;flex-direction:row;align-items:center;padding:8px 0;border-bottom:1px solid #DDD5C5"><p style="width:230px;font-size:26px;font-weight:700;color:#17212B">2 → 0.30</p><p style="flex:1;font-size:26px;color:#4A5563">not even one full step</p></div><div style="display:flex;flex-direction:row;align-items:center;padding:8px 0;border-bottom:1px solid #DDD5C5"><p style="width:230px;font-size:26px;font-weight:700;color:#17212B">Base 2</p><p style="flex:1;font-size:26px;color:#4A5563">1 billion → about 30: halve it 30 times to reach 1</p></div></div><p style="font-size:26px;line-height:1.5;color:#6A727C">Logs squeeze big numbers: going from 100 to 1,000 moves the log only from 2 to 3.</p></div><x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Helvetica Neue",Arial,sans-serif',MF='"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B',MU='#7A828C',AX='#C9C0AE';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col;g.font=(wt||400)+' '+sz+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mf(ch,up,sz){return (up?'':(/[a-zA-Z]/.test(ch)?'italic ':''))+(sz+2)+'px '+MF}
+function mt(s,x,y,col,sz,al){var i,ch,up=0,w=0,q=[];for(i=0;s.length>i;i++){ch=s[i];if(ch=='['){up=1}else if(ch==']'){up=0}else{q.push([ch,mf(ch,up,sz)])}}
+for(i=0;q.length>i;i++){g.font=q[i][1];w+=g.measureText(q[i][0]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';
+for(i=0;q.length>i;i++){g.font=q[i][1];g.fillText(q[i][0],x,y);x+=g.measureText(q[i][0]).width}}
+function fm(v,k){return v.toFixed(k==null?2:k).replace('-','−')}
+function cl(u){return u>1?1:(u>0?u:0)}
+function ez(u){u=cl(u);return u*u*(3-2*u)}
+function L(a,b,u){return a+(b-a)*u}
+function hc(i,n){return 'hsl('+(22+190*i/(n-1))+',58%,47%)'}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function plot(p,fn,col,lw,dash,a,b){a=a==null?p.a:a;b=b==null?p.b:b;g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;400>=i;i++){var x=a+(b-a)*i/400,y=fn(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function seg(x1,y1,x2,y2,col,lw,dash){g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([])}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,7);g.fill()}
+function arrow(x1,y1,x2,y2,col,lw,hs){seg(x1,y1,x2,y2,col,lw);var a=Math.atan2(y2-y1,x2-x1);g.fillStyle=col;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-hs*Math.cos(a-0.4),y2-hs*Math.sin(a-0.4));g.lineTo(x2-hs*Math.cos(a+0.4),y2-hs*Math.sin(a+0.4));g.closePath();g.fill()}
+function sg(v){return String(v).replace('-','−')}
+var t0=performance.now();
+var MK=[1,10,100,1000];
+function X1(v){return 170+v/1000*(W-220)}
+function X2(v){return 170+v/3*(W-220)}
+function draw(){var t=(performance.now()-t0)/1000,s=t%11,v=1+999*cl((s-0.5)/8),lv=Math.log(v)/Math.LN10,i,y1=110,y2=330;g.clearRect(0,0,W,H);
+mt('x',20,y1+8,MU,26);seg(150,y1,W-30,y1,AX,3);
+for(i=0;10>=i;i++){seg(X1(i*100),y1-6,X1(i*100),y1+6,AX,2);if(i%2==0)txt(String(i*100),X1(i*100),y1+40,MU,24,'center')}
+mt('[log]₁₀ x',20,y2+8,MU,26);seg(150,y2,W-30,y2,AX,3);
+for(i=0;3>=i;i++){seg(X2(i),y2-11,X2(i),y2+11,AX,2);txt(String(i),X2(i),y2+44,MU,24,'center')}
+g.globalAlpha=0.85;seg(X1(1),y1-20,X1(10),y1-20,BL,8);seg(X2(0),y2-24,X2(1),y2-24,BL,8);seg(X1(100),y1-20,X1(1000),y1-20,OR,8);seg(X2(2),y2-24,X2(3),y2-24,OR,8);g.globalAlpha=1;
+for(i=0;4>i;i++){g.globalAlpha=0.45;seg(X1(MK[i]),y1+52,X2(i),y2-10,MU,2);g.globalAlpha=1}
+dot(X1(v),y1,10,INK);dot(X2(lv),y2,10,INK);g.globalAlpha=0.35;seg(X1(v),y1+52,X2(lv),y2-12,INK,2,[5,6]);g.globalAlpha=1;
+mt('x = '+Math.round(v),40,H-150,INK,30);mt('[log]₁₀ x = '+lv.toFixed(2),300,H-150,INK,30);
+txt('x from 1 to 10 (blue): log goes 0 → 1',40,H-96,BL,26,'left',700);
+txt('x from 100 to 1000 (orange): log also goes just +1',40,H-50,OR,26,'left',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed><p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Function Sense · 10</p><aside>A logarithm is the reverse fingerprint of an exponential: it turns multiplying into adding. Multiply x by 10 and log base 10 of x goes up by exactly 1. So log base 10 roughly counts digits: 1,000 has log 3, a million has log 6. With base 2 it counts halvings or doublings: log base 2 of a billion is about 29.9, so you can halve a billion about 30 times before reaching 1. That is why binary search through a billion sorted items takes about 30 steps. In the animation the top ruler is ordinary x from 0 to 1000, the bottom is log x. The blue stretch from 1 to 10 is tiny on top but gets a full unit below. The orange stretch from 100 to 1000 is huge on top but also gets just one unit. As the black dot moves at constant speed on top, the log dot races at first and then crawls.</aside>
+</section>

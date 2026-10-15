@@ -1,0 +1,43 @@
+// name        color     size  LaTeX
+def          #17212B   42   f:\; x \;\longmapsto\; f(x)
+lin          #17212B   42   f(x) = a\,x + b
+lin_step     #B5531C   32   f(x+1) = f(x) + a
+pow          #17212B   42   f(x) = x^{n}
+pow_rule     #8A3E12   38   f(2x) = 2^{n}\, f(x)
+exp          #17212B   42   f(x) = 2^{x}
+exp_rule     #8A3E12   38   f(x+1) = 2\, f(x)
+log          #17212B   42   f(x) = \log_{10} x
+log_rule     #8A3E12   38   f(10x) = f(x) + 1
+inv1         #17212B   40   \log_{2}\!\left(2^{x}\right) = x
+inv2         #17212B   40   2^{\log_{2} x} = x
+t_lin        #17212B   30   a\,x + b
+t_pow        #17212B   30   x^{n}
+t_exp        #17212B   30   2^{x}
+t_log        #17212B   30   \log_{10} x
+r_lin        #17212B   30   x + 1 \;\longmapsto\; y + a
+r_pow        #17212B   30   x \cdot 2 \;\longmapsto\; y \cdot 2^{n}
+r_exp        #17212B   30   x + 1 \;\longmapsto\; y \cdot 2
+r_log        #17212B   30   x \cdot 10 \;\longmapsto\; y + 1
+c_log        #17212B   36   \log_{10} x
+c_sq         #17212B   36   x^{2}
+c_exp        #8A3E12   36   2^{x}
+c_big        #8A3E12   28   2^{100} \approx 1.27 \times 10^{30}
+race         #17212B   34   x^{10} > 2^{x} \quad \text{for } 1.08 < x < 58.8
+fXY          #17212B   42   f: X \to Y
+matrix       #17212B   40   A\mathbf{x} = \begin{pmatrix} a & b \\ c & d \end{pmatrix}\begin{pmatrix} x \\ y \end{pmatrix}
+cols         #17212B   40   A\mathbf{x} = x\begin{pmatrix} a \\ c \end{pmatrix} + y\begin{pmatrix} b \\ d \end{pmatrix}
+det          #B5531C   32   \det A = ad - bc
+onebyone     #8A3E12   38   a\,x = \begin{pmatrix} a \end{pmatrix}\begin{pmatrix} x \end{pmatrix}
+add          #17212B   34   f(x + y) = f(x) + f(y)
+scale        #17212B   34   f(c\,x) = c\,f(x)
+zero         #17212B   34   f(0) = 0
+affine0      #8A3E12   34   a \cdot 0 + b = b
+affine2d     #17212B   34   \mathbf{x} \longmapsto A\mathbf{x} + \mathbf{b}
+tangent      #17212B   40   f(x_0 + h) \approx f(x_0) + f'(x_0)\, h
+sq           #17212B   36   (1 + h)^2 = 1 + 2h + h^2
+jac          #8A3E12   36   \mathbf{f}(\mathbf{x}_0 + \mathbf{h}) \approx \mathbf{f}(\mathbf{x}_0) + J\,\mathbf{h}
+t_4x         #17212B   30   4x
+t_sq         #17212B   30   x^{2}
+t_ax         #17212B   34   f(x) = a\,x
+t_axb        #8A3E12   34   f(x) = a\,x + b
+affine2d_d   #F0995E   34   \mathbf{x} \longmapsto A\mathbf{x} + \mathbf{b}

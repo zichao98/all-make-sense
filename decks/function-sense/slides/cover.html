@@ -1,0 +1,42 @@
+<section id="cover" data-transition="fade" style="background:#15202B;color:#F3EEE3;font-family:'Inter', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:start;gap:32px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;color:#F0995E">For anyone who never quite “got” graphs</p>
+<h1 style="font-family:'Source Serif 4', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F3EEE3">Function Sense</h1>
+<p style="font-size:44px;line-height:1.4;color:#B9C4CF">Stop memorizing shapes. Learn what a function does when x changes.</p>
+<p style="font-size:26px;color:#8C9AA8;letter-spacing:2px">Mapping · Lines · Powers · Exponentials · Logs · Matrices</p>
+<x-embed style="position:absolute;left:128px;top:640px;width:1664px;height:300px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Helvetica Neue",Arial,sans-serif',MF='"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B',MU='#7A828C',AX='#C9C0AE';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col;g.font=(wt||400)+' '+sz+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mf(ch,up,sz){return (up?'':(/[a-zA-Z]/.test(ch)?'italic ':''))+(sz+2)+'px '+MF}
+function mt(s,x,y,col,sz,al){var i,ch,up=0,w=0,q=[];for(i=0;s.length>i;i++){ch=s[i];if(ch=='['){up=1}else if(ch==']'){up=0}else{q.push([ch,mf(ch,up,sz)])}}
+for(i=0;q.length>i;i++){g.font=q[i][1];w+=g.measureText(q[i][0]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';
+for(i=0;q.length>i;i++){g.font=q[i][1];g.fillText(q[i][0],x,y);x+=g.measureText(q[i][0]).width}}
+function fm(v,k){return v.toFixed(k==null?2:k).replace('-','−')}
+function cl(u){return u>1?1:(u>0?u:0)}
+function ez(u){u=cl(u);return u*u*(3-2*u)}
+function L(a,b,u){return a+(b-a)*u}
+function hc(i,n){return 'hsl('+(22+190*i/(n-1))+',58%,47%)'}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function plot(p,fn,col,lw,dash,a,b){a=a==null?p.a:a;b=b==null?p.b:b;g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;400>=i;i++){var x=a+(b-a)*i/400,y=fn(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function seg(x1,y1,x2,y2,col,lw,dash){g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([])}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,7);g.fill()}
+function arrow(x1,y1,x2,y2,col,lw,hs){seg(x1,y1,x2,y2,col,lw);var a=Math.atan2(y2-y1,x2-x1);g.fillStyle=col;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-hs*Math.cos(a-0.4),y2-hs*Math.sin(a-0.4));g.lineTo(x2-hs*Math.cos(a+0.4),y2-hs*Math.sin(a+0.4));g.closePath();g.fill()}
+function sg(v){return String(v).replace('-','−')}
+var t0=performance.now();
+var FS=[['power',function(x){return x*x}],['root',Math.sqrt],['exponential',function(x){return (Math.pow(2,5*x)-1)/31}],['logarithm',function(x){return Math.log(1+15*x)/Math.log(16)}],['line',function(x){return x}]];
+function X(v){return 230+v*(W-270)}
+function draw(){var t=(performance.now()-t0)/1000,j,y1=46,y2=254;g.clearRect(0,0,W,H);
+seg(230,y1,W-40,y1,'#3A4A5C',3);seg(230,y2,W-40,y2,'#3A4A5C',3);
+txt('input x',20,y1+9,'#8C9AA8',26);txt('output f(x)',20,y2+9,'#8C9AA8',26);
+var k=Math.floor(t/4)%FS.length;txt(FS[k][0],20,158,'#F0995E',26,'left',700);
+var j0=Math.max(0,Math.floor((t-1.8)/0.05)),j1=Math.floor(t/0.05);
+for(j=j0;j1>=j;j++){var b=j*0.05,u=(t-b)/1.6;if(u>1)continue;if(0>u)continue;var x=(j*0.6180339)%1,fn=FS[Math.floor(b/4)%FS.length][1],e=ez(u),xa=X(x),xb=X(fn(x)),xe=L(xa,xb,e),ye=L(y1,y2,e);
+g.globalAlpha=0.22;seg(xa,y1,xe,ye,'#F0995E',2);g.globalAlpha=1;dot(xe,ye,5,'#F0995E')}
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<aside>Three questions drive this deck. What is a function, really, and what does “mapping” mean? How can I look at x squared, 2 to the x, or log x and immediately feel what it does? And how does the linear-algebra idea of a matrix as a mapping connect to the functions from school? The animation is the picture we will keep using: dots on an input line flow to their places on an output line. Each family of functions sends them in its own recognizable pattern.</aside>
+</section>

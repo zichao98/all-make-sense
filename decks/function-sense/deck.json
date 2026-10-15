@@ -1,0 +1,70 @@
+{
+  "v": 4,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-15T00:00:00Z"
+  },
+  "lists": "css",
+  "title": "Function Sense: Mappings, Powers, Exponentials and Logs",
+  "cover": "cover",
+  "order": [
+    "cover",
+    "machine",
+    "graph",
+    "question",
+    "line",
+    "uneven",
+    "families",
+    "powers",
+    "exp",
+    "log",
+    "inverse",
+    "fingerprints",
+    "race",
+    "mapping",
+    "names",
+    "matrix",
+    "affine",
+    "bend",
+    "zoom",
+    "limits",
+    "takeaway"
+  ],
+  "sections": {
+    "s1": {
+      "description": "What a function is: a mapping, and a graph as the same mapping drawn flat",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "Lines stretch the number line evenly; curves stretch it unevenly",
+      "start": "line"
+    },
+    "s3": {
+      "description": "Four families and their add/multiply fingerprints, inverses, and growth race",
+      "start": "families"
+    },
+    "s4": {
+      "description": "Function = mapping: matrices as functions on vectors, linear vs affine",
+      "start": "mapping"
+    },
+    "s5": {
+      "description": "Nonlinear maps are linear up close; limits and a one-page takeaway",
+      "start": "bend"
+    }
+  },
+  "faces": {
+    "inter": {
+      "family": "Inter",
+      "href": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+    },
+    "source-serif-4": {
+      "family": "Source Serif 4",
+      "href": "https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&display=swap"
+    },
+    "jetbrains-mono": {
+      "family": "JetBrains Mono",
+      "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"
+    }
+  },
+  "designSystems": []
+}

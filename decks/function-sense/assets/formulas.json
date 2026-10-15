@@ -1,0 +1,212 @@
+{
+  "def": {
+    "width": 290,
+    "height": 42,
+    "tex": "f:\\; x \\;\\longmapsto\\; f(x)"
+  },
+  "lin": {
+    "width": 259,
+    "height": 42,
+    "tex": "f(x) = a\\,x + b"
+  },
+  "lin_step": {
+    "width": 276,
+    "height": 32,
+    "tex": "f(x+1) = f(x) + a"
+  },
+  "pow": {
+    "width": 182,
+    "height": 42,
+    "tex": "f(x) = x^{n}"
+  },
+  "pow_rule": {
+    "width": 259,
+    "height": 38,
+    "tex": "f(2x) = 2^{n}\\, f(x)"
+  },
+  "exp": {
+    "width": 178,
+    "height": 42,
+    "tex": "f(x) = 2^{x}"
+  },
+  "exp_rule": {
+    "width": 286,
+    "height": 38,
+    "tex": "f(x+1) = 2\\, f(x)"
+  },
+  "log": {
+    "width": 254,
+    "height": 43,
+    "tex": "f(x) = \\log_{10} x"
+  },
+  "log_rule": {
+    "width": 299,
+    "height": 38,
+    "tex": "f(10x) = f(x) + 1"
+  },
+  "inv1": {
+    "width": 216,
+    "height": 40,
+    "tex": "\\log_{2}\\!\\left(2^{x}\\right) = x"
+  },
+  "inv2": {
+    "width": 169,
+    "height": 40,
+    "tex": "2^{\\log_{2} x} = x"
+  },
+  "t_lin": {
+    "width": 88,
+    "height": 24,
+    "tex": "a\\,x + b"
+  },
+  "t_pow": {
+    "width": 33,
+    "height": 23,
+    "tex": "x^{n}"
+  },
+  "t_exp": {
+    "width": 30,
+    "height": 22,
+    "tex": "2^{x}"
+  },
+  "t_log": {
+    "width": 85,
+    "height": 29,
+    "tex": "\\log_{10} x"
+  },
+  "r_lin": {
+    "width": 219,
+    "height": 27,
+    "tex": "x + 1 \\;\\longmapsto\\; y + a"
+  },
+  "r_pow": {
+    "width": 203,
+    "height": 28,
+    "tex": "x \\cdot 2 \\;\\longmapsto\\; y \\cdot 2^{n}"
+  },
+  "r_exp": {
+    "width": 203,
+    "height": 27,
+    "tex": "x + 1 \\;\\longmapsto\\; y \\cdot 2"
+  },
+  "r_log": {
+    "width": 218,
+    "height": 27,
+    "tex": "x \\cdot 10 \\;\\longmapsto\\; y + 1"
+  },
+  "c_log": {
+    "width": 102,
+    "height": 35,
+    "tex": "\\log_{10} x"
+  },
+  "c_sq": {
+    "width": 37,
+    "height": 33,
+    "tex": "x^{2}"
+  },
+  "c_exp": {
+    "width": 36,
+    "height": 27,
+    "tex": "2^{x}"
+  },
+  "c_big": {
+    "width": 218,
+    "height": 26,
+    "tex": "2^{100} \\approx 1.27 \\times 10^{30}"
+  },
+  "race": {
+    "width": 440,
+    "height": 32,
+    "tex": "x^{10} > 2^{x} \\quad \\text{for } 1.08 < x < 58.8"
+  },
+  "fXY": {
+    "width": 192,
+    "height": 39,
+    "tex": "f: X \\to Y"
+  },
+  "matrix": {
+    "width": 337,
+    "height": 96,
+    "tex": "A\\mathbf{x} = \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}\\begin{pmatrix} x \\\\ y \\end{pmatrix}"
+  },
+  "cols": {
+    "width": 373,
+    "height": 96,
+    "tex": "A\\mathbf{x} = x\\begin{pmatrix} a \\\\ c \\end{pmatrix} + y\\begin{pmatrix} b \\\\ d \\end{pmatrix}"
+  },
+  "det": {
+    "width": 217,
+    "height": 26,
+    "tex": "\\det A = ad - bc"
+  },
+  "onebyone": {
+    "width": 207,
+    "height": 38,
+    "tex": "a\\,x = \\begin{pmatrix} a \\end{pmatrix}\\begin{pmatrix} x \\end{pmatrix}"
+  },
+  "add": {
+    "width": 337,
+    "height": 34,
+    "tex": "f(x + y) = f(x) + f(y)"
+  },
+  "scale": {
+    "width": 216,
+    "height": 34,
+    "tex": "f(c\\,x) = c\\,f(x)"
+  },
+  "zero": {
+    "width": 125,
+    "height": 34,
+    "tex": "f(0) = 0"
+  },
+  "affine0": {
+    "width": 176,
+    "height": 27,
+    "tex": "a \\cdot 0 + b = b"
+  },
+  "affine2d": {
+    "width": 205,
+    "height": 28,
+    "tex": "\\mathbf{x} \\longmapsto A\\mathbf{x} + \\mathbf{b}"
+  },
+  "tangent": {
+    "width": 498,
+    "height": 43,
+    "tex": "f(x_0 + h) \\approx f(x_0) + f'(x_0)\\, h"
+  },
+  "sq": {
+    "width": 356,
+    "height": 41,
+    "tex": "(1 + h)^2 = 1 + 2h + h^2"
+  },
+  "jac": {
+    "width": 375,
+    "height": 36,
+    "tex": "\\mathbf{f}(\\mathbf{x}_0 + \\mathbf{h}) \\approx \\mathbf{f}(\\mathbf{x}_0) + J\\,\\mathbf{h}"
+  },
+  "t_4x": {
+    "width": 33,
+    "height": 21,
+    "tex": "4x"
+  },
+  "t_sq": {
+    "width": 31,
+    "height": 27,
+    "tex": "x^{2}"
+  },
+  "t_ax": {
+    "width": 154,
+    "height": 34,
+    "tex": "f(x) = a\\,x"
+  },
+  "t_axb": {
+    "width": 210,
+    "height": 34,
+    "tex": "f(x) = a\\,x + b"
+  },
+  "affine2d_d": {
+    "width": 205,
+    "height": 28,
+    "tex": "\\mathbf{x} \\longmapsto A\\mathbf{x} + \\mathbf{b}"
+  }
+}

@@ -1,0 +1,41 @@
+<section id="bend" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px"><div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div><p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">14 · Nonlinear maps</p><h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Nonlinear maps bend the grid</h2><div style="width:688px;display:flex;flex-direction:column;gap:28px"><p style="font-size:28px;line-height:1.5;color:#4A5563">A nonlinear map also sends every point somewhere, but now the grid lines curve.</p><div style="display:flex;flex-direction:column;gap:12px"><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Linear map:</span></b> the same stretch everywhere, one matrix for the whole plane</p><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Nonlinear map:</span></b> a different stretch at every spot</p></div><div style="display:flex;flex-direction:column;gap:8px;background:#F4DCC8;padding:22px 28px;border-radius:14px"><p style="font-size:26px;line-height:1.5;color:#8A3E12">Zoom into one small patch (the orange box) and the bending fades away. Up close, the map acts like a matrix.</p></div><p style="font-size:26px;line-height:1.5;color:#6A727C">This is the 2D version of the next slide. The matrix you see up close is called the Jacobian.</p></div><x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Helvetica Neue",Arial,sans-serif',MF='"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B',MU='#7A828C',AX='#C9C0AE';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col;g.font=(wt||400)+' '+sz+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mf(ch,up,sz){return (up?'':(/[a-zA-Z]/.test(ch)?'italic ':''))+(sz+2)+'px '+MF}
+function mt(s,x,y,col,sz,al){var i,ch,up=0,w=0,q=[];for(i=0;s.length>i;i++){ch=s[i];if(ch=='['){up=1}else if(ch==']'){up=0}else{q.push([ch,mf(ch,up,sz)])}}
+for(i=0;q.length>i;i++){g.font=q[i][1];w+=g.measureText(q[i][0]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';
+for(i=0;q.length>i;i++){g.font=q[i][1];g.fillText(q[i][0],x,y);x+=g.measureText(q[i][0]).width}}
+function fm(v,k){return v.toFixed(k==null?2:k).replace('-','−')}
+function cl(u){return u>1?1:(u>0?u:0)}
+function ez(u){u=cl(u);return u*u*(3-2*u)}
+function L(a,b,u){return a+(b-a)*u}
+function hc(i,n){return 'hsl('+(22+190*i/(n-1))+',58%,47%)'}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function plot(p,fn,col,lw,dash,a,b){a=a==null?p.a:a;b=b==null?p.b:b;g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;400>=i;i++){var x=a+(b-a)*i/400,y=fn(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function seg(x1,y1,x2,y2,col,lw,dash){g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([])}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,7);g.fill()}
+function arrow(x1,y1,x2,y2,col,lw,hs){seg(x1,y1,x2,y2,col,lw);var a=Math.atan2(y2-y1,x2-x1);g.fillStyle=col;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-hs*Math.cos(a-0.4),y2-hs*Math.sin(a-0.4));g.lineTo(x2-hs*Math.cos(a+0.4),y2-hs*Math.sin(a+0.4));g.closePath();g.fill()}
+function sg(v){return String(v).replace('-','−')}
+var t0=performance.now();
+function fmap(x,y,u){return [x+u*0.35*Math.sin(1.3*y),y+u*0.35*Math.sin(1.3*x)]}
+var p0=[1,0.8];
+function draw(){var t=(performance.now()-t0)/1000,s=t%10,u=s>8?1-ez((s-8)/1.5):ez((s-0.8)/2),i,j,v,S=68,cx=280,cy=250,Z=680,ix=730,iy=190;
+function M(x,y){var r=fmap(x,y,u);return [cx+S*r[0],cy-S*r[1]]}
+function I(x,y){var r=fmap(x,y,u),o=fmap(p0[0],p0[1],u);return [ix+Z*(r[0]-o[0]),iy-Z*(r[1]-o[1])]}
+g.clearRect(0,0,W,H);g.save();g.beginPath();g.rect(20,10,530,H-176);g.clip();
+for(i=-6;6>=i;i++){var a=i/2;g.strokeStyle=i?AX:'#8F8676';g.lineWidth=i?1.5:2.5;g.beginPath();for(j=0;60>=j;j++){v=M(a,-3.5+7*j/60);j?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1])}g.stroke();g.beginPath();for(j=0;60>=j;j++){v=M(-3.5+7*j/60,a);j?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1])}g.stroke()}
+var h=150/Z;g.strokeStyle=OR;g.lineWidth=3;g.beginPath();for(j=0;4>j;j++){for(i=0;10>=i;i++){var q=[[-1,-1],[1,-1],[1,1],[-1,1],[-1,-1]],x=p0[0]+h*L(q[j][0],q[j+1][0],i/10),y=p0[1]+h*L(q[j][1],q[j+1][1],i/10);v=M(x,y);(i+j)?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1])}}g.stroke();g.restore();
+g.fillStyle='#FFFDF8';g.fillRect(ix-150,iy-150,300,300);g.save();g.beginPath();g.rect(ix-150,iy-150,300,300);g.clip();
+for(i=-5;5>=i;i++){var b=i*0.05;g.strokeStyle=AX;g.lineWidth=2;g.beginPath();for(j=0;20>=j;j++){v=I(p0[0]+b,p0[1]-0.3+0.6*j/20);j?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1])}g.stroke();g.beginPath();for(j=0;20>=j;j++){v=I(p0[0]-0.3+0.6*j/20,p0[1]+b);j?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1])}g.stroke()}
+g.restore();g.strokeStyle=OR;g.lineWidth=3;g.strokeRect(ix-150,iy-150,300,300);
+txt('the orange box, zoomed ×10',ix,iy+190,OR,24,'center',700);txt('lines look straight again',ix,iy+224,TX,24,'center');
+txt(u>0.5?'Nonlinear map: the grid lines bend':'The plain grid, before the map',40,H-104,INK,28,'left',700);
+txt('Up close, each small patch is just stretched like a matrix',40,H-56,OR,26,'left',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed><p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Function Sense · 18　　Map shown: x moves by 0.35 sin(1.3y), y moves by 0.35 sin(1.3x).</p><aside>This is the two-dimensional version of Part One’s “curves stretch unevenly”. The map in the animation pushes each point a little sideways and a little up, by an amount that depends on where it is, so the grid lines bend. But look at the inset: it shows the small orange box magnified ten times, and there the grid lines are nearly straight and evenly spaced again. In other words, a smooth nonlinear map looks like a matrix when you zoom in far enough. That local matrix is called the Jacobian. It is different at every point, which is exactly what makes the map nonlinear overall.</aside>
+</section>

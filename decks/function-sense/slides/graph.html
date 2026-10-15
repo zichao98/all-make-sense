@@ -1,0 +1,46 @@
+<section id="graph" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px"><div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div><p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">02 · Reading a graph</p><h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">A graph is the same mapping, drawn flat</h2><div style="width:688px;display:flex;flex-direction:column;gap:28px"><p style="font-size:28px;line-height:1.5;color:#4A5563">Take the arrow picture and stand the output line upright.</p><div style="display:flex;flex-direction:column;gap:12px"><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Floor:</span></b> inputs run along the x-axis</p><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Wall:</span></b> outputs run up the y-axis</p><p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Dot:</span></b> each arrow becomes one point (x, f(x))</p></div><div style="display:flex;flex-direction:column;gap:8px;background:#F4DCC8;padding:22px 28px;border-radius:14px"><p style="font-size:26px;line-height:1.5;color:#8A3E12">To read a graph, pick an x, walk up to the curve, and read off the height. That height is f(x).</p></div><p style="font-size:26px;line-height:1.5;color:#6A727C"><b>Steep</b> means a small step in x moves the output a lot. <b>Flat</b> means the output barely moves.</p></div><x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Helvetica Neue",Arial,sans-serif',MF='"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif',OR='#E0782F',BL='#2D6CB0',TX='#4A5563',GR='#E4DDCF',INK='#17212B',MU='#7A828C',AX='#C9C0AE';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col;g.font=(wt||400)+' '+sz+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mf(ch,up,sz){return (up?'':(/[a-zA-Z]/.test(ch)?'italic ':''))+(sz+2)+'px '+MF}
+function mt(s,x,y,col,sz,al){var i,ch,up=0,w=0,q=[];for(i=0;s.length>i;i++){ch=s[i];if(ch=='['){up=1}else if(ch==']'){up=0}else{q.push([ch,mf(ch,up,sz)])}}
+for(i=0;q.length>i;i++){g.font=q[i][1];w+=g.measureText(q[i][0]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';
+for(i=0;q.length>i;i++){g.font=q[i][1];g.fillText(q[i][0],x,y);x+=g.measureText(q[i][0]).width}}
+function fm(v,k){return v.toFixed(k==null?2:k).replace('-','−')}
+function cl(u){return u>1?1:(u>0?u:0)}
+function ez(u){u=cl(u);return u*u*(3-2*u)}
+function L(a,b,u){return a+(b-a)*u}
+function hc(i,n){return 'hsl('+(22+190*i/(n-1))+',58%,47%)'}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,a:a,b:b,c:c,d:d,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function plot(p,fn,col,lw,dash,a,b){a=a==null?p.a:a;b=b==null?p.b:b;g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();for(var i=0;400>=i;i++){var x=a+(b-a)*i/400,y=fn(x);i?g.lineTo(p.X(x),p.Y(y)):g.moveTo(p.X(x),p.Y(y))}g.stroke();g.restore()}
+function seg(x1,y1,x2,y2,col,lw,dash){g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([])}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,7);g.fill()}
+function arrow(x1,y1,x2,y2,col,lw,hs){seg(x1,y1,x2,y2,col,lw);var a=Math.atan2(y2-y1,x2-x1);g.fillStyle=col;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-hs*Math.cos(a-0.4),y2-hs*Math.sin(a-0.4));g.lineTo(x2-hs*Math.cos(a+0.4),y2-hs*Math.sin(a+0.4));g.closePath();g.fill()}
+function sg(v){return String(v).replace('-','−')}
+var t0=performance.now();
+var XS=[],i;for(i=-4;4>=i;i++)XS.push(i/2);
+function f(x){return x*x}
+function draw(){var t=(performance.now()-t0)/1000,s=t%13,u,cu;
+if(s>11){u=1-ez((s-11)/1.6);cu=1-ez((s-11)/0.6)}else{u=ez((s-2.5)/3);cu=ez((s-6)/2.5)}
+var p=P(110,30,W-160,H-180,-2.4,2.4,-0.6,4.6),yIn=L(70,p.Y(0),u),yOut=H-160;
+function OP(v){return [L(p.x0+(v+0.6)/5.2*p.w,p.X(0),u),L(yOut,p.Y(v),u)]}
+g.clearRect(0,0,W,H);
+seg(p.x0,yIn,p.x0+p.w,yIn,AX,3);
+for(i=-2;2>=i;i++){seg(p.X(i),yIn-8,p.X(i),yIn+8,AX,2);txt(sg(i),p.X(i)+(i?0:L(0,-16,u)),yIn+L(-18,36,u),MU,24,'center')}
+var a0=OP(-0.6),a1=OP(4.6);seg(a0[0],a0[1],a1[0],a1[1],AX,3);
+for(i=0;4>=i;i++){var q=OP(i),dx=L(0,8,u),dy=L(8,0,u);seg(q[0]-dx,q[1]-dy,q[0]+dx,q[1]+dy,AX,2);if(i)txt(String(i),q[0]+L(0,-18,u),q[1]+L(36,8,u),MU,24,u>0.5?'right':'center')}
+mt('x',L(p.x0-44,p.x0+p.w-4,u),L(yIn+10,p.Y(0)-16,u),TX,30);mt('f(x)',L(20,p.X(0)+16,u),L(yOut+10,p.y0+24,u),TX,30);
+for(i=0;XS.length>i;i++){var x=XS[i],y=f(x),c=hc(i,XS.length),o=OP(y),bx=L(o[0],p.X(x),u),by=L(o[1],p.Y(y),u);
+g.globalAlpha=0.55;seg(p.X(x),yIn,bx,by,c,2.5);g.globalAlpha=cl((u-0.7)/0.3)*0.6;seg(p.X(0),p.Y(y),bx,by,c,2,[5,6]);g.globalAlpha=1;
+dot(p.X(x),yIn,6,c);dot(bx,by,9,c)}
+if(cu>0)plot(p,f,OR,5,null,-2.2,-2.2+4.4*cu);
+mt('f(x) = x²',40,H-92,INK,32);
+var m=u>0.98?'Graph: each arrow became one dot (x, f(x))':(u>0.02?'Stand the output line upright…':'Mapping: an arrow from each x to f(x)');
+txt(m,40,H-40,OR,28,'left',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed><p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Function Sense · 03</p><aside>This slide connects the two pictures you have probably seen separately. Start with the mapping view: inputs on one line, outputs on another, arrows between them. Now slide the input line down to become the floor, and rotate the output line so it stands up as the wall. Every arrow from x to f(x) collapses into a single dot sitting above x at height f(x). Join all the dots and you get the curve. So a graph is not a mysterious shape; it is a table of input–output pairs, drawn as dots. Steepness is the most useful thing to read: steep means sensitive, flat means insensitive.</aside>
+</section>
