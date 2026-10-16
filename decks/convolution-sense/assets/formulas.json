@@ -1,0 +1,87 @@
+{
+  "dense": {
+    "width": 286,
+    "height": 40,
+    "tex": "\\mathrm{ReLU}(\\mathbf{w}\\cdot\\mathbf{x} + b)"
+  },
+  "conv1d": {
+    "width": 501,
+    "height": 114,
+    "tex": "y_j = \\mathrm{ReLU}\\Big(\\sum_{m=0}^{k-1} w_m\\, x_{j+m} + b\\Big)"
+  },
+  "oval": {
+    "width": 181,
+    "height": 25,
+    "tex": "o = i - k + 1"
+  },
+  "secdiff": {
+    "width": 311,
+    "height": 39,
+    "tex": "x_{j} - 2\\,x_{j+1} + x_{j+2}"
+  },
+  "spike": {
+    "width": 86,
+    "height": 24,
+    "tex": "\\Delta a \\cdot h"
+  },
+  "rebuild": {
+    "width": 595,
+    "height": 75,
+    "tex": "\\sum_i a_i\\,\\mathrm{ReLU}(x - k_i) = \\Big(\\sum_i a_i\\,\\delta_{k_i}\\Big) * \\mathrm{ReLU}"
+  },
+  "patch": {
+    "width": 288,
+    "height": 40,
+    "tex": "\\mathrm{ReLU}(\\mathbf{w}\\cdot\\mathbf{p} + b)"
+  },
+  "ycx": {
+    "width": 142,
+    "height": 36,
+    "tex": "\\mathbf{y} = \\mathbf{C}\\,\\mathbf{x}"
+  },
+  "krule": {
+    "width": 100,
+    "height": 33,
+    "tex": "k^2\\, m\\, n"
+  },
+  "opad": {
+    "width": 329,
+    "height": 38,
+    "tex": "o = (i - k) + 2p + 1"
+  },
+  "ogen": {
+    "width": 360,
+    "height": 92,
+    "tex": "o = \\left\\lfloor \\frac{i + 2p - k}{s} \\right\\rfloor + 1"
+  },
+  "opool": {
+    "width": 275,
+    "height": 92,
+    "tex": "o = \\left\\lfloor \\frac{i - k}{s} \\right\\rfloor + 1"
+  },
+  "maxrelu": {
+    "width": 430,
+    "height": 34,
+    "tex": "\\max(a, b) = a + \\mathrm{ReLU}(b - a)"
+  },
+  "dil": {
+    "width": 348,
+    "height": 48,
+    "tex": "\\hat{k} = k + (k-1)(d-1)"
+  },
+  "tc1": {
+    "width": 237,
+    "height": 37,
+    "tex": "o' = i' + (k - 1)"
+  },
+  "tc2": {
+    "width": 335,
+    "height": 37,
+    "tex": "o' = s\\,(i' - 1) + k - 2p"
+  },
+  "ogendark": {
+    "width": 322,
+    "height": 82,
+    "tex": "o = \\left\\lfloor \\frac{i + 2p - k}{s} \\right\\rfloor + 1"
+  }
+}

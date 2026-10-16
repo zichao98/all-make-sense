@@ -1,0 +1,11 @@
+{
+  "title": "Convolution Sense",
+  "subtitle": "From kinks to kernels",
+  "description": "How the ReLU kink grows into convolution: one small neuron slid everywhere, (1, −2, 1) turning kinks into spikes, convolution as a tied matrix, and the arithmetic of padding, stride, pooling, dilation and transposed convolution.",
+  "date": "2026-10-16",
+  "tags": [
+    "Deep learning",
+    "Math intuition",
+    "Convolution"
+  ]
+}

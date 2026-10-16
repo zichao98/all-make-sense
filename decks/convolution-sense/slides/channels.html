@@ -1,0 +1,29 @@
+<section id="channels" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">09 · Many kernels, many channels</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Many kernels give many channels</h2>
+<div style="display:flex;flex-direction:row;align-items:stretch;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#B5531C">Step 1</p>
+<h3 style="font-size:30px;font-weight:700;color:#17212B">One kernel, one map</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Slide a 3×3 kernel over the image and you get one feature map: one pattern, checked everywhere.</p>
+</div>
+<x-shape kind="arrow-right" style="width:56px;height:28px;align-self:center;background:#C9C0AE"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#B5531C">Step 2</p>
+<h3 style="font-size:30px;font-weight:700;color:#17212B">n kernels, n maps</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Each kernel learns its own pattern. The stack of n maps is the next layer's input, with n channels.</p>
+</div>
+<x-shape kind="arrow-right" style="width:56px;height:28px;align-self:center;background:#C9C0AE"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F4DCC8;padding:28px;border-radius:16px">
+<p style="font-size:24px;font-weight:700;color:#8A3E12">Step 3</p>
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Kernels span all channels</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">With m input maps, each kernel is m × k × k. The paper's 2 → 3 map example uses 3 × 2 × 3 × 3 = 54 weights.</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#15202B;padding:28px 32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:700;color:#F0995E">At one position, a conv layer is a dense layer on the patch</h3>
+<p style="font-size:26px;line-height:1.5;color:#E6E1D6">n neurons, each folding the m·k·k numbers under the window. Then the same n neurons run at every other position.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 12</p>
+<aside>One kernel finds one kind of pattern. A real layer uses many, say n kernels, and produces n feature maps, often called channels. The next layer then sees an input with n channels. A kernel there is no longer a flat 3×3 square: it is a small block, m × k × k, covering every input channel at once. Dumoulin and Visin show 2 input maps turned into 3 output maps with a 3 × 2 × 3 × 3 collection of kernels, which is 54 weights. At one position, the layer takes the m·k·k numbers under the window and applies n ordinary neurons: a dense layer with n folds in an m·k²-dimensional patch space. Convolution then reuses those same n neurons at every position.</aside>
+</section>

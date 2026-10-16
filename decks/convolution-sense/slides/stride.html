@@ -1,0 +1,42 @@
+<section id="stride" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">11 · Stride</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Stride skips; the floor drops leftovers</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#F4DCC8;padding:20px 32px;border-radius:12px">
+<img src="assets/ogen.svg" alt="o = floor((i + 2p − k) / s) + 1" style="width:360px;height:92px;object-fit:contain">
+<p style="flex:1;font-size:24px;line-height:1.4;color:#8A3E12">The general rule: any i, k, s, p</p>
+</div>
+<div style="display:flex;flex-direction:column"><div style="display:flex;flex-direction:row;align-items:center;background:#E7E0D2;padding:8px 16px"><p style="width:40%;font-size:24px;font-weight:700;color:#17212B">Case (s = 2)</p><p style="width:15%;font-size:24px;font-weight:700;text-align:right;color:#17212B">i</p><p style="width:15%;font-size:24px;font-weight:700;text-align:right;color:#17212B">k</p><p style="width:15%;font-size:24px;font-weight:700;text-align:right;color:#17212B">p</p><p style="width:15%;font-size:24px;font-weight:700;text-align:right;color:#17212B">o</p></div><div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5"><p style="width:40%;font-size:26px;color:#17212B">No padding</p><p style="width:15%;font-size:26px;text-align:right;color:#17212B">5</p><p style="width:15%;font-size:26px;text-align:right;color:#17212B">3</p><p style="width:15%;font-size:26px;text-align:right;color:#17212B">0</p><p style="width:15%;font-size:26px;font-weight:700;text-align:right;color:#17212B">2</p></div><div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5"><p style="width:40%;font-size:26px;color:#17212B">Padding 1</p><p style="width:15%;font-size:26px;text-align:right;color:#17212B">5</p><p style="width:15%;font-size:26px;text-align:right;color:#17212B">3</p><p style="width:15%;font-size:26px;text-align:right;color:#17212B">1</p><p style="width:15%;font-size:26px;font-weight:700;text-align:right;color:#17212B">3</p></div><div style="display:flex;flex-direction:row;align-items:center;padding:6px 16px;border-bottom:1px solid #DDD5C5"><p style="width:40%;font-size:26px;color:#17212B">One more pixel</p><p style="width:15%;font-size:26px;text-align:right;color:#17212B">6</p><p style="width:15%;font-size:26px;text-align:right;color:#17212B">3</p><p style="width:15%;font-size:26px;text-align:right;color:#17212B">1</p><p style="width:15%;font-size:26px;font-weight:700;text-align:right;color:#17212B">3</p></div></div>
+<p style="font-size:26px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Stride s</span></b> = slide by 1, then keep every s-th output: built-in subsampling.</p>
+<p style="font-size:24px;line-height:1.5;color:#6A727C">Inputs 5 and 6 both give 3 outputs. That ambiguity returns for transposed convolutions.</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+var CASES=[{"i": 5, "k": 3, "s": 2, "p": 0, "z": 0, "t": "Stride 2, no padding", "m": "i = 5,  k = 3,  s = 2,  p = 0", "f": "o = ⌊(5 + 0 − 3) / 2⌋ + 1 = 2", "out": "Output 2×2", "note": "Jumps of 2: the kernel lands at 0 and 2."}, {"i": 5, "k": 3, "s": 2, "p": 1, "z": 0, "t": "Stride 2, padding 1", "m": "i = 5,  k = 3,  s = 2,  p = 1", "f": "o = ⌊(5 + 2 − 3) / 2⌋ + 1 = 3", "out": "Output 3×3", "note": "Padding lets the jumps reach both edges."}, {"i": 6, "k": 3, "s": 2, "p": 1, "z": 0, "t": "Stride 2, padding 1, one more pixel", "m": "i = 6,  k = 3,  s = 2,  p = 1", "f": "o = ⌊(6 + 2 − 3) / 2⌋ + 1 = 3", "out": "Output 3×3", "note": "Gray: never covered. The floor drops the leftover."}],DUR=6.6,SW=4.6,t0=performance.now();
+function dash(x,y,s,col){g.setLineDash([5,4]);g.strokeStyle=col;g.lineWidth=1.5;g.strokeRect(x+3,y+3,s-6,s-6);g.setLineDash([])}
+function draw(){var t=(performance.now()-t0)/1000,ci=Math.floor(t/DUR)%CASES.length,u=t%DUR,cs=CASES[ci];
+var n=cs.i+(cs.i-1)*cs.z,T=n+2*cs.p,o=Math.floor((T-cs.k)/cs.s)+1,S=Math.min(64,Math.floor(400/T)),last=(o-1)*cs.s+cs.k-1;
+var XA=40,YA=118,XB=XA+T*S+64,YB=YA+(T*S-o*S)/2,np=o*o,st=Math.min(Math.floor(u/(SW/np)),np),cur=Math.min(st,np-1),pr=Math.floor(cur/o),pc=cur%o,r,c;
+g.clearRect(0,0,W,H);
+txt(cs.t,XA,48,INK,28,'left',700);mt(cs.m,XA,88,TX,24);
+for(r=0;T>r;r++)for(c=0;T>c;c++){var x=XA+c*S,y=YA+r*S,rr=r-cs.p,cc=c-cs.p,ins=0,real=0;
+if(rr>=0)if(n>rr)if(cc>=0)if(n>cc){ins=1;if(rr%(cs.z+1)==0)if(cc%(cs.z+1)==0)real=1}
+if(real){g.fillStyle='#DCE7F3';g.fillRect(x+1,y+1,S-2,S-2)}else dash(x,y,S,ins?'#7FA6CF':'#C9C0AE');
+if(r>last||c>last){g.fillStyle='rgba(138,129,112,0.35)';g.fillRect(x+1,y+1,S-2,S-2)}}
+if(np>st){g.fillStyle='rgba(224,120,47,0.16)';g.fillRect(XA+pc*cs.s*S,YA+pr*cs.s*S,cs.k*S,cs.k*S);g.strokeStyle=OR;g.lineWidth=4;g.strokeRect(XA+pc*cs.s*S,YA+pr*cs.s*S,cs.k*S,cs.k*S)}
+txt(cs.out,XB,YB-16,'#B5531C',24,'left',700);
+for(r=0;o>r;r++)for(c=0;o>c;c++){var k=r*o+c;g.fillStyle=st>k?'#F4DCC8':'#F3EFE6';g.fillRect(XB+c*S+1,YB+r*S+1,S-2,S-2)}
+if(np>st){g.strokeStyle=OR;g.lineWidth=4;g.strokeRect(XB+pc*S,YB+pr*S,S,S)}
+mt(cs.f,XA,H-74,INK,28);txt(cs.note,XA,H-28,TX,24);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 15</p>
+<aside>Stride s means the kernel jumps s cells instead of 1. Counting positions again: from the left edge the kernel can take the floor of (i + 2p − k)/s steps before it would run past the right edge, plus the starting position. That gives o = floor((i + 2p − k)/s) + 1, the general rule in the guide; every earlier formula is a special case. The floor matters. With i = 5, k = 3, s = 2, p = 1, the padded input is 7 wide and the kernel fits at 0, 2 and 4: 3 outputs. With i = 6 the padded input is 8 wide, but a fourth jump would overhang, so the output is still 3, and the last padded row and column are never covered. They are gray in the animation. The guide notes that stride can also be read as subsampling: compute every stride-1 output, then keep one in s. Because inputs 5 and 6 map to the same output size, going backwards is ambiguous. That will matter for transposed convolutions.</aside>
+</section>

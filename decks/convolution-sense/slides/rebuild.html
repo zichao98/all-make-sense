@@ -1,0 +1,50 @@
+<section id="rebuild" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">04 · Run it backwards</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Spikes convolved with a ramp rebuild the line</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;align-items:start;background:#ECE6DA;padding:24px 32px;border-radius:12px">
+<img src="assets/rebuild.svg" alt="Σ a_i ReLU(x − k_i) = (Σ a_i δ at k_i) ∗ ReLU" style="width:595px;height:75px;object-fit:contain">
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Spikes:</span></b> where each kink sits and how hard it bends. <b><span style="color:#B5531C">Ramp:</span></b> one shared ReLU shape.</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">Every neuron is the same ramp, shifted and scaled. Sliding one shape to many places is a convolution.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#F0995E">A conv layer swaps what is learned</p>
+<p style="font-size:24px;line-height:1.5;color:#E6E1D6">ReLU layer: fixed shape, learned positions. Conv layer: fixed positions (every grid point), learned shape.</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function fm(v){return String(v).replace('-','−')}
+var KN=[4,9,13.5,17],A=[0.6,-1.1,0.9,-0.7],L=20,i,q;
+function part(x,n,last){var s=0;for(q=0;n>q;q++){var z=x-KN[q];if(z>0)s+=A[q]*z*(q==n-1?last:1)}return s}
+var lo=0,hi=0;for(i=0;400>=i;i++){var v=part(i/400*L,4,1);if(lo>v)lo=v;if(v>hi)hi=v}
+var PX0=70,PW=800,PY0=70,PH=220,BY=470,BS=70;
+function X(x){return PX0+x/L*PW}
+function Y(y){return PY0+PH-(y-lo)/(hi-lo)*PH}
+function curve(fn,col,lw,dash){g.save();g.beginPath();g.rect(PX0-6,PY0-14,PW+12,PH+28);g.clip();g.strokeStyle=col;g.lineWidth=lw;g.setLineDash(dash);g.beginPath();for(i=0;400>=i;i++){var x=i/400*L;i?g.lineTo(X(x),Y(fn(x))):g.moveTo(X(x),Y(fn(x)))}g.stroke();g.setLineDash([]);g.restore()}
+var t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%10,st=Math.min(Math.floor(t/1.8),4),u=Math.min((t-st*1.8)/1.2,1),n=st==4?4:st+1,last=st==4?1:u*u*(3-2*u);
+g.clearRect(0,0,W,H);
+txt('= the ReLU line',40,46,INK,26,'left',700);
+curve(function(x){return part(x,4,1)},'#9DB6D3',3,[10,8]);
+if(4>st){var kk=KN[st],aa=A[st];curve(function(x){var z=x-kk;return part(x,st,1)+(z>0?aa*z:0)},'rgba(224,120,47,0.35)',2,[6,6])}
+curve(function(x){return part(x,n,last)},OR,5,[]);
+txt('∗ one shared ramp',40,352,'#B5531C',26,'left',700);
+g.strokeStyle=OR;g.lineWidth=4;g.beginPath();g.moveTo(290,352);g.lineTo(330,352);g.lineTo(380,322);g.stroke();
+txt('Spikes: where and how much',520,352,TX,24,'left');
+g.strokeStyle='#C9C0AE';g.lineWidth=2;g.beginPath();g.moveTo(PX0,BY);g.lineTo(PX0+PW,BY);g.stroke();
+for(i=0;KN.length>i;i++){var h=A[i]*BS/1.1,on=n>i;g.fillStyle=on?OR:'#E8DFD2';g.fillRect(X(KN[i])-9,h>0?BY-h:BY,18,Math.abs(h));
+txt(fm(A[i]),X(KN[i]),h>0?BY-h-12:BY-h+30,on?'#B5531C':'#A39A88',24,'center',700);
+if(st==i){g.strokeStyle=OR;g.lineWidth=3;g.strokeRect(X(KN[i])-16,Math.min(BY-h,BY)-6,32,Math.abs(h)+12)}}
+txt(st==4?'4 spikes, 1 ramp: the whole network.':'Adding neuron '+(st+1)+': a ramp at x = '+KN[st]+', height '+fm(A[st]),40,H-30,INK,26,'left',600);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 06</p>
+<aside>Now run the previous slide backwards. Take the 4 spikes, at positions 4, 9, 13.5 and 17 with heights 0.6, −1.1, 0.9 and −0.7. Put a copy of one ramp shape, ReLU(x), at each spike, scaled by its height, and add them up. The result is exactly the blue line we started from. Written as a formula, the sum of a_i times ReLU(x − k_i) equals the spike train convolved with ReLU. So a one-layer ReLU network in 1D is already a convolution: one fixed shape slid to learned places. One honest caveat: a neuron with a negative weight w faces left. ReLU(k − x) equals ReLU(x − k) minus (x − k), so it is the same ramp plus a straight line, and the picture still holds with one extra line added. A convolutional layer turns this around. Positions are no longer learned, because the kernel sits at every grid point. Instead the shape, the kernel weights, is what training adjusts.</aside>
+</section>

@@ -1,0 +1,49 @@
+<section id="recap" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">01 · Where we left off</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">A dense neuron watches one fixed spot</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;align-items:start;background:#ECE6DA;padding:28px 32px;border-radius:12px">
+<img src="assets/dense.svg" alt="ReLU(w·x + b)" style="width:286px;height:40px;object-fit:contain">
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">One neuron = one fold. On a 28×28 image, x has 784 numbers, so w has 784 weights: one hyperplane in 784 dimensions.</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">The catch:</span></b> each weight is tied to one pixel. The neuron learns “a ring <i>right here</i>”, not “a ring”.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#F0995E">Move the pattern and it goes dark</p>
+<p style="font-size:24px;line-height:1.5;color:#E6E1D6">A dense layer would need a separate neuron for every place the ring might appear.</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+var N=28,Q=7,P=[],cnt=0,r,c,a,b;
+for(r=0;Q>r;r++){P.push([]);for(c=0;Q>c;c++){var d=Math.sqrt((r-3)*(r-3)+(c-3)*(c-3)),v=0.65>Math.abs(d-2.6)?1:0;P[r].push(v);cnt+=v}}
+var R0=10,C0=10,S=10,XA=40,XB=350,Y0=84;
+function img(sh){var I=[];for(r=0;N>r;r++){I.push([]);for(c=0;N>c;c++){var pr=r-R0,pc=c-C0-sh,v=0;if(pr>=0)if(Q>pr)if(pc>=0)if(Q>pc)v=P[pr][pc];I[r].push(v)}}return I}
+function resp(I,rr,cc){var s=0;for(a=0;Q>a;a++)for(b=0;Q>b;b++)s+=P[a][b]*I[rr+a][cc+b];s=s-0.5*cnt;return s>0?s/(0.5*cnt):0}
+function bar(x,v,lab,col){var h=260*v;g.fillStyle='#EFE9DD';g.fillRect(x,Y0,64,260);g.fillStyle=col;g.fillRect(x,Y0+260-h,64,h);
+txt(v.toFixed(2),x+32,Y0-12,col==OR?'#B5531C':INK,26,'center',700);txt(lab,x+32,Y0+296,TX,24,'center')}
+var t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,sh=Math.round(8*Math.sin(t*0.7)),I=img(sh),best=0,br=0,bc=0;
+for(r=0;N-Q>=r;r++)for(c=0;N-Q>=c;c++){var v=resp(I,r,c);if(v>best){best=v;br=r;bc=c}}
+var dv=resp(I,R0,C0);
+g.clearRect(0,0,W,H);
+txt('Input',XA,64,INK,26,'left',700);txt('Dense weights w',XB,64,INK,26,'left',700);
+for(r=0;N>r;r++)for(c=0;N>c;c++){g.fillStyle=I[r][c]?INK:'#EFE9DD';g.fillRect(XA+c*S,Y0+r*S,S-1,S-1);
+var w=0;if(r>=R0)if(R0+Q>r)if(c>=C0)if(C0+Q>c)w=P[r-R0][c-C0];g.fillStyle=w?OR:'#EFE9DD';g.fillRect(XB+c*S,Y0+r*S,S-1,S-1)}
+g.setLineDash([6,5]);g.strokeStyle='#8A8170';g.lineWidth=2.5;g.strokeRect(XA+C0*S-2,Y0+R0*S-2,Q*S+3,Q*S+3);g.setLineDash([]);
+if(best>0){g.strokeStyle=OR;g.lineWidth=3;g.strokeRect(XA+bc*S-4,Y0+br*S-4,Q*S+7,Q*S+7)}
+bar(680,dv,'Dense','#8A8170');bar(790,best,'Conv',OR);
+txt('Shift = '+(sh>0?'+':'')+String(sh).replace('-','−')+' px',XA,440,INK,30,'left',700);
+g.setLineDash([6,5]);g.strokeStyle='#8A8170';g.lineWidth=2.5;g.strokeRect(XA,470,30,22);g.setLineDash([]);txt('where the dense neuron looks',XA+44,490,TX,24);
+g.strokeStyle=OR;g.lineWidth=3;g.strokeRect(XA,512,30,22);txt('where the same small kernel fires best',XA+44,532,TX,24);
+txt('Bars: response, scaled so a perfect match = 1.',XA,H-26,TX,24);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 02</p>
+<aside>Recall the earlier deck: one ReLU neuron computes ReLU(w·x + b), a fold along the hyperplane w·x + b = 0. For an image, x is every pixel, so each weight is welded to one pixel position. In the animation, the dense neuron's weights (orange, middle) were set to match a ring at the center. Its response is ReLU of the overlap minus half the ring's size, scaled so a perfect match gives 1. When the ring sits exactly there, it fires at 1. Shift the ring a few pixels and the overlap falls below half, so the output drops to 0. The orange bar uses the same 7×7 ring as a small kernel, checked at every position, and keeps the best response. Wherever the ring goes, some position matches it perfectly, so that bar stays at 1. That small, shared, everywhere-checked neuron is a convolution.</aside>
+</section>

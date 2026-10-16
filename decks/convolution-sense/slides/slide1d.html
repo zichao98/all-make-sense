@@ -1,0 +1,47 @@
+<section id="slide1d" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">02 · Convolution in 1D</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Slide one small neuron along the input</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;align-items:start;background:#ECE6DA;padding:24px 32px;border-radius:12px">
+<img src="assets/conv1d.svg" alt="y_j = ReLU(Σ over m from 0 to k−1 of w_m x_(j+m) + b)" style="width:501px;height:114px;object-fit:contain">
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Kernel:</span></b> k = 3 weights, here (−1, 0, 1). Every output reuses the same three.</p>
+<div style="display:flex;flex-direction:row;align-items:center;gap:14px">
+<p style="font-size:28px;font-weight:700;color:#B5531C">Positions:</p>
+<img src="assets/oval.svg" alt="o = i − k + 1" style="width:181px;height:25px;object-fit:contain">
+<p style="font-size:28px;color:#4A5563">9 − 3 + 1 = 7 outputs</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">This kernel subtracts each value from the one two steps ahead. It lights up where the signal rises.</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function fm(v){return String(v).replace('-','−')}
+function box(x,y,s,fill,lab,col,wt){g.fillStyle=fill;g.fillRect(x+2,y,s-4,s);txt(lab,x+s/2,y+s/2+10,col,28,'center',wt||600)}
+var X=[0,1,2,3,3,3,2,1,0],Wk=[-1,0,1],K=3,O=X.length-K+1,S=76,X0=120,i,m;
+var SUM=[],RL=[];for(i=0;O>i;i++){var s=0;for(m=0;K>m;m++)s+=Wk[m]*X[i+m];SUM.push(s);RL.push(s>0?s:0)}
+var Y1=170,Y2=330,Y3=430,t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%11,n=Math.floor(t/1.2),j=Math.min(n,O-1),done=Math.min(n+1,O);
+g.clearRect(0,0,W,H);
+txt('x',X0-24,Y1+48,INK,28,'right',700);txt('sum',X0-24,Y2+48,INK,26,'right',700);txt('ReLU',X0-24,Y3+48,'#B5531C',26,'right',700);
+for(i=0;X.length>i;i++){g.fillStyle='#BFD2E8';g.fillRect(X0+i*S+18,Y1-8-X[i]*22,S-36,X[i]*22);box(X0+i*S,Y1,S,'#DCE7F3',String(X[i]),'#1F4E80')}
+for(i=0;O>i;i++){var cx=X0+(i+1)*S;
+if(done>i){box(cx,Y2,S,'#ECE6DA',fm(SUM[i]),INK);box(cx,Y3,S,RL[i]>0?'#F4DCC8':'#F3EFE6',String(RL[i]),RL[i]>0?'#8A3E12':'#A39A88')}
+else{g.strokeStyle='#E2DCCF';g.lineWidth=2;g.strokeRect(cx+2,Y2,S-4,S);g.strokeRect(cx+2,Y3,S-4,S)}}
+if(O>n){var wx=X0+j*S;g.strokeStyle=OR;g.lineWidth=4;g.strokeRect(wx,Y1-2,K*S,S+4);
+for(m=0;K>m;m++)txt(fm(Wk[m]),wx+m*S+S/2,Y1+S+34,'#B5531C',26,'center',700);
+g.strokeStyle=OR;g.lineWidth=4;g.strokeRect(X0+(j+1)*S,Y2-2,S,S+4);
+var str='';for(m=0;K>m;m++){str+=(m?' + ':'')+(0>Wk[m]?'('+fm(Wk[m])+')':fm(Wk[m]))+'·'+X[j+m]}
+txt(str+' = '+fm(SUM[j]),40,H-80,INK,28,'left',600)}
+else txt('Same 3 weights at all 7 positions.',40,H-80,INK,28,'left',600);
+txt('Rising: positive. Flat: 0. Falling: negative, then ReLU clips it.',40,H-32,TX,24);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 04</p>
+<aside>Start in one dimension. The input is 9 numbers that rise from 0 to 3, stay flat, then fall back. The kernel has k = 3 weights, (−1, 0, 1). At each position the neuron multiplies the 3 numbers under the window by the 3 weights, adds them up, and applies ReLU. Then the window moves one step right. That is the whole operation. Machine learning libraries compute this “cross-correlation” form, without flipping the kernel, and still call it convolution. Count the positions: the window fits at 9 − 3 + 1 = 7 places, so there are 7 outputs. The sums are 2, 2, 1, 0, −1, −2, −2; after ReLU they are 2, 2, 1, 0, 0, 0, 0. The kernel works as a slope detector: positive where the input rises and clipped to zero elsewhere. Each output is still one ordinary neuron with one fold. It just looks through a 3-wide window, and all 7 copies share the same weights.</aside>
+</section>

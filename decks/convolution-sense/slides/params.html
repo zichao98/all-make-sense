@@ -1,0 +1,40 @@
+<section id="params" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">07 · Why sharing matters</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Shared weights don't grow with the image</h2>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px">
+<p style="font-size:32px;font-weight:700;color:#17212B">Dense layer</p>
+<p style="font-size:26px;color:#4A5563">28×28 image → 28×28 map</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:56px;font-weight:600;line-height:1.1;color:#17212B">614,656</p>
+<p style="font-size:24px;color:#4A5563">784 × 784 weights</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px">
+<p style="font-size:32px;font-weight:700;color:#17212B">One 3×3 kernel</p>
+<p style="font-size:26px;color:#4A5563">Same image, same-size map</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:56px;font-weight:600;line-height:1.1;color:#17212B">9</p>
+<p style="font-size:24px;color:#4A5563">3 × 3 weights, used everywhere</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#F4DCC8;padding:28px;border-radius:16px">
+<p style="font-size:32px;font-weight:700;color:#8A3E12">A real first layer</p>
+<p style="font-size:26px;color:#8A3E12">224×224 RGB → 64 maps</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:56px;font-weight:600;line-height:1.1;color:#8A3E12">1,728</p>
+<p style="font-size:24px;color:#8A3E12">3 × 3 × 3 × 64 weights</p>
+<p style="font-size:24px;color:#8A3E12">A dense layer: about 4.8 × 10¹¹</p>
+</div>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#ECE6DA;padding:24px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#17212B">The kernel sets the cost, not the image</p>
+<p style="font-size:26px;line-height:1.4;color:#4A5563">A bigger image only adds positions. That costs compute time, not weights.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#15202B;padding:24px 28px;border-radius:14px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:16px">
+<p style="font-size:28px;font-weight:700;color:#F0995E">Weights in a conv layer:</p>
+<img src="assets/krule.svg" alt="k² m n" style="width:100px;height:33px;object-fit:contain">
+</div>
+<p style="font-size:26px;line-height:1.4;color:#E6E1D6">k = kernel size, m = input maps, n = output maps. Add n biases.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Convolution Sense · 10　　Weights only. Biases add one per output unit (dense) or one per output map (conv).</p>
+<aside>Here is why sharing matters in practice. A dense layer from a 28×28 image to a 28×28 output connects every input pixel to every output unit: 784 × 784 = 614,656 weights. A single 3×3 kernel producing a same-size map with padding has 9 weights. Take a typical first layer: a 224×224 colour image, 3 channels, mapped to 64 feature maps with 3×3 kernels. That is 3 × 3 × 3 × 64 = 1,728 weights. A dense layer between the same shapes would need 150,528 × 3,211,264, about 4.8 × 10¹¹ weights. The general count for a convolutional layer is k² m n, plus n biases, and the image size does not appear in it. A larger image means more positions, which costs computation but adds no weights.</aside>
+</section>

@@ -1,0 +1,24 @@
+<section id="limits" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">15 · Limits</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Where these intuitions bend</h2>
+<div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Convolution or correlation?</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Libraries skip the kernel flip that signal processing uses. With learned kernels it makes no difference, so everyone says convolution.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Shift-proof only in the middle</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">Padding treats borders differently, and stride or pooling only line up every s pixels. A 1-pixel shift can change the output.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Clean spikes need clean lines</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">(1, −2, 1) also amplifies noise. Real signals give small spikes everywhere, not only at kinks.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#17212B">Can see ≠ does use</h3>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">The receptive field lists the inputs that can matter. A trained network may lean on its center far more than its edges.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Convolution Sense · 19　　Size rules from Dumoulin &amp; Visin (2016); every other number was computed for this deck.</p>
+<aside>Four honest caveats. First, deep learning libraries compute cross-correlation: they slide the kernel without flipping it. Dumoulin and Visin note that the two are interchangeable when the kernel is learned, so the field just says convolution. Second, sharing weights makes a convolution respond the same way to a shifted pattern only away from the borders and only for shifts that line up with the stride. Padding, stride and pooling all break perfect shift-equivariance. Third, the kink-detecting kernel is exact for clean piecewise-linear samples. Second differences amplify noise, so real data gives small spikes everywhere and you need smoothing or a threshold. Fourth, the receptive field says which inputs could affect an output. How much each one actually matters depends on the trained weights and is usually concentrated toward the center. Treat it as an upper bound.</aside>
+</section>

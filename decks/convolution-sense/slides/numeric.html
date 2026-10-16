@@ -1,0 +1,57 @@
+<section id="numeric" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">05 · The worked example</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">A 3×3 kernel slides over a 5×5 input</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:32px">
+<div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:4px;width:212px;background:#F4DCC8;padding:8px;border-radius:12px">
+<p style="height:62px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;font-weight:600;line-height:62px;text-align:center;color:#8A3E12">0</p>
+<p style="height:62px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;font-weight:600;line-height:62px;text-align:center;color:#8A3E12">1</p>
+<p style="height:62px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;font-weight:600;line-height:62px;text-align:center;color:#8A3E12">2</p>
+<p style="height:62px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;font-weight:600;line-height:62px;text-align:center;color:#8A3E12">2</p>
+<p style="height:62px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;font-weight:600;line-height:62px;text-align:center;color:#8A3E12">2</p>
+<p style="height:62px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;font-weight:600;line-height:62px;text-align:center;color:#8A3E12">0</p>
+<p style="height:62px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;font-weight:600;line-height:62px;text-align:center;color:#8A3E12">0</p>
+<p style="height:62px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;font-weight:600;line-height:62px;text-align:center;color:#8A3E12">1</p>
+<p style="height:62px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:30px;font-weight:600;line-height:62px;text-align:center;color:#8A3E12">2</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:30px;font-weight:700;color:#17212B">Kernel w</p>
+<p style="font-size:26px;line-height:1.5;color:#4A5563">9 weights, used at every position.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">At each spot:</span></b> multiply the 9 overlapping pairs and add them up.</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Positions per axis:</span></b> 5 − 3 + 1 = 3, so the output is 3×3.</p>
+<p style="font-size:24px;line-height:1.5;color:#6A727C">Input, kernel and outputs are the numerical example in Dumoulin &amp; Visin (2016), “A guide to convolution arithmetic for deep learning”.</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+var I=[[3,3,2,1,0],[0,0,1,3,1],[3,1,2,2,3],[2,0,0,2,2],[2,0,0,0,1]],KW=[[0,1,2],[2,2,0],[0,1,2]],O=[],r,c,a,b;
+for(r=0;3>r;r++){O.push([]);for(c=0;3>c;c++){var s=0;for(a=0;3>a;a++)for(b=0;3>b;b++)s+=I[r+a][c+b]*KW[a][b];O[r].push(s)}}
+var S=80,XA=40,YA=96,XB=580,YB=176,t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%15,n=Math.floor(t/1.4),k=Math.min(n,8),pr=Math.floor(k/3),pc=k%3,act=9>n;
+g.clearRect(0,0,W,H);
+txt('Input 5×5',XA,70,INK,26,'left',700);txt('Output 3×3',XB,150,'#B5531C',26,'left',700);
+for(r=0;5>r;r++)for(c=0;5>c;c++){var inw=0;if(act)if(r>=pr)if(pr+3>r)if(c>=pc)if(pc+3>c)inw=1;
+g.fillStyle=inw?'#F4DCC8':'#DCE7F3';g.fillRect(XA+c*S+2,YA+r*S+2,S-4,S-4);
+txt(String(I[r][c]),XA+c*S+(inw?30:S/2),YA+r*S+(inw?40:50),inw?INK:'#1F4E80',30,'center',600);
+if(inw)txt(String(KW[r-pr][c-pc]),XA+c*S+S-16,YA+r*S+S-12,'#B5531C',24,'center',700)}
+for(r=0;3>r;r++)for(c=0;3>c;c++){var kk=r*3+c,sh=act?k>=kk:1;
+g.fillStyle=sh?'#F4DCC8':'#F3EFE6';g.fillRect(XB+c*S+2,YB+r*S+2,S-4,S-4);
+if(sh)txt(String(O[r][c]),XB+c*S+S/2,YB+r*S+52,'#8A3E12',30,'center',700)}
+if(act){g.strokeStyle=OR;g.lineWidth=4;g.strokeRect(XA+pc*S,YA+pr*S,3*S,3*S);g.strokeRect(XB+pc*S,YB+pr*S,S,S);
+g.strokeStyle='rgba(224,120,47,0.4)';g.lineWidth=2;g.beginPath();g.moveTo(XA+(pc+3)*S,YA+pr*S);g.lineTo(XB+pc*S,YB+pr*S);g.moveTo(XA+(pc+3)*S,YA+(pr+3)*S);g.lineTo(XB+pc*S,YB+(pr+1)*S);g.stroke();
+var str='';for(a=0;3>a;a++)for(b=0;3>b;b++)str+=(a+b?' + ':'')+KW[a][b]+'·'+I[pr+a][pc+b];
+txt(str+' = '+O[pr][pc],XA,H-40,INK,24,'left',600)}
+else txt('Every output used the same 9 weights.',XA,H-40,INK,26,'left',600);
+txt('small orange digits = kernel weights',XA,H-84,'#B5531C',24);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 08</p>
+<aside>This is the example from Figure 1.1 of Dumoulin and Visin's guide, with the same numbers. The 5×5 input is blue; the 3×3 kernel with weights 0 1 2 / 2 2 0 / 0 1 2 is the shaded window, and its weights are the small orange digits. At the first position the 9 products add up to 12. The window then moves one step right, giving 12 again and then 17, and so on down the rows. The full output is 12 12 17 / 10 17 19 / 9 6 14. I recomputed all nine values to check them. Along each axis the window fits in 5 − 3 + 1 = 3 places, so the output is 3×3. Apply a bias and ReLU and each output is one neuron. All 9 of them share the same 9 weights.</aside>
+</section>

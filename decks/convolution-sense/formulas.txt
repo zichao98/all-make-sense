@@ -1,0 +1,18 @@
+// name        color     size  LaTeX
+dense        #17212B   40   \mathrm{ReLU}(\mathbf{w}\cdot\mathbf{x} + b)
+conv1d       #17212B   38   y_j = \mathrm{ReLU}\Big(\sum_{m=0}^{k-1} w_m\, x_{j+m} + b\Big)
+oval         #B5531C   32   o = i - k + 1
+secdiff      #17212B   40   x_{j} - 2\,x_{j+1} + x_{j+2}
+spike        #B5531C   32   \Delta a \cdot h
+rebuild      #17212B   32   \sum_i a_i\,\mathrm{ReLU}(x - k_i) = \Big(\sum_i a_i\,\delta_{k_i}\Big) * \mathrm{ReLU}
+patch        #17212B   40   \mathrm{ReLU}(\mathbf{w}\cdot\mathbf{p} + b)
+ycx          #17212B   40   \mathbf{y} = \mathbf{C}\,\mathbf{x}
+krule        #F0995E   36   k^2\, m\, n
+opad         #8A3E12   38   o = (i - k) + 2p + 1
+ogen         #8A3E12   38   o = \left\lfloor \frac{i + 2p - k}{s} \right\rfloor + 1
+opool        #17212B   38   o = \left\lfloor \frac{i - k}{s} \right\rfloor + 1
+maxrelu      #17212B   34   \max(a, b) = a + \mathrm{ReLU}(b - a)
+dil          #17212B   36   \hat{k} = k + (k-1)(d-1)
+tc1          #17212B   34   o' = i' + (k - 1)
+tc2          #17212B   34   o' = s\,(i' - 1) + k - 2p
+ogendark     #F0995E   34   o = \left\lfloor \frac{i + 2p - k}{s} \right\rfloor + 1
