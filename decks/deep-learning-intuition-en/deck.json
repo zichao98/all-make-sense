@@ -29,6 +29,7 @@
     "ridge2d",
     "creases",
     "bump",
+    "hyperplane",
     "planewave",
     "bridge",
     "highdim",
@@ -56,7 +57,7 @@
       "start": "fourier"
     },
     "s6": {
-      "description": "Two and three dimensions: crease lines, crease planes, and Fourier plane waves",
+      "description": "Two and three dimensions: crease lines, crease planes, classifier boundaries, and Fourier plane waves",
       "start": "dims"
     },
     "s7": {

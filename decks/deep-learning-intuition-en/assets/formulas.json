@@ -1,0 +1,12 @@
+{
+  "hp-crease": {
+    "width": 192,
+    "height": 27,
+    "tex": "\\mathbf{w}\\cdot\\mathbf{x} + b = 0"
+  },
+  "hp-sign": {
+    "width": 209,
+    "height": 34,
+    "tex": "\\operatorname{sign}(\\mathbf{v}\\cdot\\mathbf{h} + c)"
+  }
+}
