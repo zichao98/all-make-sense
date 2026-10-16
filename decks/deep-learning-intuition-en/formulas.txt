@@ -1,0 +1,4 @@
+// Formulas added in this repo (the older slides use /_blob/ assets copied from the Claude artifact).
+// name        color     size  LaTeX
+hp-crease      #17212B   34    \mathbf{w}\cdot\mathbf{x} + b = 0
+hp-sign        #17212B   34    \operatorname{sign}(\mathbf{v}\cdot\mathbf{h} + c)

@@ -1,6 +1,6 @@
 <section id="planewave" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
 <div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
-<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">16 · Fourier in 2D</p>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#2D6CB0">17 · Fourier in 2D</p>
 <h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Fourier in 2D: plane waves</h2>
 <div style="width:688px;display:flex;flex-direction:column;gap:22px">
 <div style="display:flex;flex-direction:column;align-items:start;background:#DCE7F3;padding:28px 32px;border-radius:12px">
@@ -48,6 +48,6 @@ txt('Across it, nothing changes; crests are straight lines.',40,H-30,TX,26);
 requestAnimationFrame(draw)}
 draw();
 </script></body></html></x-embed>
-<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Deep Learning Intuition · 22</p>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Deep Learning Intuition · 23</p>
 <aside>In 1D, Fourier uses sin(kx); in 2D, it uses sin(k₁x₁ + k₂x₂ + φ), a plane wave. Its crests are parallel straight lines, much like ReLU creases. Compare them: w sets a neuron's crease direction; k sets a wave's direction and frequency. b and φ both shift position. Both are ridge functions: they vary along one direction and stay constant perpendicular to it. Again, Fourier fixes k on an integer grid, while a neuron can learn w freely. Each 8×8 2D cosine basis pattern in JPEG has the form cos(ux)·cos(vy), which is a sum of two plane waves.</aside>
 </section>

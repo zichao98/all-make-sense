@@ -1,0 +1,91 @@
+<section id="hyperplane" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">16 · Classifying with hyperplanes</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Kinks and boundaries are hyperplanes</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:14px">
+<p style="font-size:28px;color:#4A5563"><b><span style="color:#B5531C">① Each neuron</span></b> folds on</p>
+<img src="assets/hp-crease.svg" alt="w·x + b = 0" style="width:192px;height:27px;object-fit:contain">
+</div>
+<p style="font-size:24px;line-height:1.5;color:#6A727C">A point in 1D, a line in 2D, a hyperplane in d dimensions.</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">② Each facet</span></b> is flat: a piece of a hyperplane. A piecewise line is these pieces glued at the folds.</p>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:14px">
+<p style="font-size:28px;color:#4A5563"><b><span style="color:#B5531C">③ The class</span></b> is</p>
+<img src="assets/hp-sign.svg" alt="sign(v·h + c)" style="width:209px;height:34px;object-fit:contain">
+</div>
+<p style="font-size:24px;line-height:1.5;color:#6A727C">One more hyperplane, but in the space of hidden outputs h.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#F0995E">Seen from x, that cut bends</p>
+<p style="font-size:24px;line-height:1.5;color:#E6E1D6">Inside a facet, h is linear in x, so the boundary is straight there. It can only turn where it crosses a crease.</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#A39A88';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+var R2=0.42,P=[],i,j,k,rd=rng(7);
+for(i=0;160>i;i++){var x=rd()*2-1,y=rd()*2-1;P.push([x,y,R2>x*x+y*y?1:0])}
+var RUNS=[[3,2],[6,1],[12,2]],ri=-1,N,TH,Ma,Va,T,acc,t1;
+function init(){ri=(ri+1)%RUNS.length;N=RUNS[ri][0];var r=rng(RUNS[ri][1]),n=4*N+1;
+TH=new Float64Array(n);Ma=new Float64Array(n);Va=new Float64Array(n);T=0;acc=0;
+for(k=0;N>k;k++){var a=r()*6.283;TH[k]=Math.cos(a);TH[N+k]=Math.sin(a);TH[2*N+k]=(r()*2-1)*0.5;TH[3*N+k]=r()*2-1}
+t1=performance.now()}
+function step(){var n=4*N+1,G=new Float64Array(n),ok=0,h=[];T++;
+for(i=0;P.length>i;i++){var p=P[i],z=TH[4*N];
+for(k=0;N>k;k++){var a=TH[k]*p[0]+TH[N+k]*p[1]+TH[2*N+k];h[k]=a>0?a:0;z+=TH[3*N+k]*h[k]}
+if((z>0)==(p[2]==1))ok++;
+var e=(1/(1+Math.exp(-z))-p[2])/P.length;G[4*N]+=e;
+for(k=0;N>k;k++){G[3*N+k]+=e*h[k];if(h[k]>0){var gh=e*TH[3*N+k];G[k]+=gh*p[0];G[N+k]+=gh*p[1];G[2*N+k]+=gh}}}
+acc=Math.round(ok/P.length*100);
+for(j=0;n>j;j++){Ma[j]=0.9*Ma[j]+0.1*G[j];Va[j]=0.999*Va[j]+0.001*G[j]*G[j];
+TH[j]-=0.03*(Ma[j]/(1-Math.pow(0.9,T)))/(Math.sqrt(Va[j]/(1-Math.pow(0.999,T)))+1e-8)}}
+function f(x,y){var z=TH[4*N];for(k=0;N>k;k++){var a=TH[k]*x+TH[N+k]*y+TH[2*N+k];if(a>0)z+=TH[3*N+k]*a}return z}
+var M=100,Z=new Float64Array((M+1)*(M+1)),off=document.createElement('canvas');off.width=M;off.height=M;
+var oc=off.getContext('2d'),img=oc.createImageData(M,M),S=500,X0=40,Y0=40;
+function X(x){return X0+(x+1)/2*S}
+function Y(y){return Y0+(1-y)/2*S}
+function key(y,col,dash,lab){g.strokeStyle=col;g.lineWidth=col==GR?2.5:5;g.setLineDash(dash);g.beginPath();g.moveTo(580,y-8);g.lineTo(624,y-8);g.stroke();g.setLineDash([]);txt(lab,640,y,TX,24)}
+init();
+function draw(){var te=(performance.now()-t1)/1000;if(te>8){init();te=0}
+var want=Math.min(1500,Math.floor(te*300));while(want>T)step();
+for(j=0;M>=j;j++)for(i=0;M>=i;i++)Z[j*(M+1)+i]=f(-1+2*i/M,1-2*j/M);
+for(j=0;M>j;j++)for(i=0;M>i;i++){var s=Z[j*(M+1)+i]+Z[j*(M+1)+i+1]+Z[(j+1)*(M+1)+i]+Z[(j+1)*(M+1)+i+1],q=4*(j*M+i),in1=s>0;
+img.data[q]=in1?246:250;img.data[q+1]=in1?224:247;img.data[q+2]=in1?204:240;img.data[q+3]=255}
+oc.putImageData(img,0,0);
+g.clearRect(0,0,W,H);g.imageSmoothingEnabled=false;g.drawImage(off,X0,Y0,S,S);
+g.save();g.beginPath();g.rect(X0,Y0,S,S);g.clip();
+g.strokeStyle=GR;g.lineWidth=2.5;
+for(k=0;N>k;k++){var wx=TH[k],wy=TH[N+k],b=TH[2*N+k],l2=wx*wx+wy*wy||1e-9,l=Math.sqrt(l2),px=-b*wx/l2,py=-b*wy/l2,dx=-wy/l*4,dy=wx/l*4;
+g.beginPath();g.moveTo(X(px-dx),Y(py-dy));g.lineTo(X(px+dx),Y(py+dy));g.stroke()}
+g.strokeStyle=BL;g.lineWidth=2.5;g.setLineDash([10,8]);g.beginPath();g.arc(X(0),Y(0),Math.sqrt(R2)*S/2,0,6.284);g.stroke();g.setLineDash([]);
+g.strokeStyle=OR;g.lineWidth=5;g.lineCap='round';g.beginPath();
+for(j=0;M>j;j++)for(i=0;M>i;i++){var a=Z[j*(M+1)+i],b2=Z[j*(M+1)+i+1],c=Z[(j+1)*(M+1)+i+1],d=Z[(j+1)*(M+1)+i],e=[];
+if((a>0)!=(b2>0))e.push([i+a/(a-b2),j]);
+if((b2>0)!=(c>0))e.push([i+1,j+b2/(b2-c)]);
+if((c>0)!=(d>0))e.push([i+1-c/(c-d),j+1]);
+if((d>0)!=(a>0))e.push([i,j+1-d/(d-a)]);
+for(k=0;e.length>k+1;k+=2){g.moveTo(X0+e[k][0]*S/M,Y0+e[k][1]*S/M);g.lineTo(X0+e[k+1][0]*S/M,Y0+e[k+1][1]*S/M)}}
+g.stroke();
+for(i=0;P.length>i;i++){var p=P[i];g.beginPath();g.arc(X(p[0]),Y(p[1]),5,0,6.284);
+if(p[2]){g.fillStyle=INK;g.fill()}else{g.strokeStyle='#8A8170';g.lineWidth=2;g.stroke()}}
+g.restore();g.strokeStyle='#C9C0AE';g.lineWidth=2;g.strokeRect(X0,Y0,S,S);
+txt('N = '+N+' neurons',580,92,INK,34,'left',700);
+txt('Step '+T,580,146,TX,26);
+txt('Accuracy '+acc+'%',580,192,'#B5531C',28,'left',700);
+key(290,GR,[],'Creases');key(340,OR,[],'Boundary');key(390,BL,[10,8],'True circle');
+g.fillStyle=INK;g.beginPath();g.arc(602,432,6,0,6.284);g.fill();txt('Inside points',640,440,TX,24);
+g.strokeStyle='#8A8170';g.lineWidth=2;g.beginPath();g.arc(602,482,6,0,6.284);g.stroke();txt('Outside points',640,490,TX,24);
+txt('Each corner of the boundary sits on a crease.',40,H-28,TX,26);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Deep Learning Intuition · 22</p>
+<aside>Hyperplanes show up in three places. First, every neuron folds where w·x + b = 0. In 1D that set is a single point, the kink in our piecewise lines. In 2D it is a crease line; in d dimensions it is a (d − 1)-dimensional hyperplane. Second, inside each facet every neuron is fixed on or off, so the output is linear there. Its graph is a flat piece of a hyperplane one dimension up. A piecewise line is just those pieces glued together at the folds. Third, a classifier's last layer outputs the class from the sign of v·h + c, where h holds the hidden outputs. That is one straight cut, a hyperplane, in hidden space; a perceptron or linear SVM is the same cut with no folds before it. Pulled back to the input x, the cut bends: inside a facet h is linear in x, so the boundary is a straight segment, and it can only change direction where it crosses a crease. The animation really trains a one-layer ReLU network in your browser: 160 random points in a square, labeled by whether x₁² + x₂² is below 0.42, with 3, 6, then 12 neurons, full-batch Adam at learning rate 0.03 for 1,500 steps. In a node run of the same code, training accuracy reached 98% with 3 neurons and 100% with 6 and 12. That accuracy is on the training points only. More neurons give more creases, so the polygon gets more corners and hugs the circle more closely. In deeper networks, later layers' hyperplanes are bent by the earlier folds, so boundaries can turn many more times.</aside>
+</section>
