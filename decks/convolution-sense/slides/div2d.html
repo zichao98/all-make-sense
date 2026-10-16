@@ -1,0 +1,7 @@
+<section id="div2d" data-transition="fade" style="background:#15202B;color:#F3EEE3;font-family:'Inter', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;color:#F0995E">Part Two</p>
+<h1 style="font-family:'Source Serif 4', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F3EEE3">Into 2D images</h1>
+<p style="font-size:48px;line-height:1.4;color:#F0995E">The window becomes 3×3. The fold now lives in patch space.</p>
+<p style="font-size:32px;line-height:1.5;color:#B9C4CF;width:1400px">We follow the worked example from Dumoulin and Visin's guide, then write the convolution as a matrix. That shows exactly how it relates to the dense layers from before.</p>
+<aside>Images have two ordered axes, height and width, so the kernel becomes a small square. Nothing else changes: each output is still one neuron applied to one window, and all windows share the same weights. This part uses the numerical example from “A guide to convolution arithmetic for deep learning” by Vincent Dumoulin and Francesco Visin, then rewrites the operation as a sparse matrix. The matrix view connects back to hyperplanes: every row is one neuron's fold.</aside>
+</section>

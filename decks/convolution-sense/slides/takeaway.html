@@ -1,0 +1,32 @@
+<section id="takeaway" data-transition="fade" style="background:#15202B;color:#F3EEE3;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#F0995E">Summary</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#F3EEE3">One-page takeaway</h2>
+<div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#F0995E">A kernel is a neuron, copied</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">One small ReLU neuron at every position: a local window and shared weights.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#F0995E">Kinks ↔ spikes</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">(1, −2, 1) turns kinks into spikes. Spikes ∗ one ramp rebuild the line: a 1D ReLU layer is already a convolution.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#F0995E">Tied rows, few weights</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">As a matrix, each row is a fold and all rows share one kernel. The weight count ignores image size.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<img src="assets/ogendark.svg" alt="o = floor((i + 2p − k) / s) + 1" style="width:322px;height:82px;object-fit:contain">
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">Count where the kernel fits. Pooling uses the same count.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#7FB2E8">Depth widens the view</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">Plain 3-wide layers see 3, 5, 7, 9 inputs. Dilations 1, 2, 4, 8 see 3, 7, 15, 31.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#1F2C3A;padding:28px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:700;color:#7FB2E8">Transposed = C transposed</h3>
+<p style="font-size:26px;line-height:1.5;color:#D5DCE3">Same connections, opposite direction. It restores the shape, not the values.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#8C9AA8">Convolution Sense · 20　　Arithmetic follows Dumoulin &amp; Visin, “A guide to convolution arithmetic for deep learning” (2016).</p>
+<aside>Back to the question: how does the idea of a kink extend to convolution? A ReLU neuron is one fold. In one dimension, a whole layer of them is one ramp shape slid to many places and scaled, which is a convolution of a spike train with a ramp. The second-difference kernel (1, −2, 1) runs that in reverse and turns every kink into a spike. A convolutional layer keeps the neuron but changes what is learned and where it looks. Each copy sees only a small window, every position gets a copy, and all copies share the same weights. In 2D each output is a fold in the space of 3×3 patches, and in matrix form every row is an ordinary dense neuron with tied weights. From there Dumoulin and Visin's arithmetic is just counting: padding adds room, stride jumps, the floor drops leftovers, pooling counts the same way, dilation and depth widen the view, and the transposed convolution runs the same connections backwards to recover the shape.</aside>
+</section>

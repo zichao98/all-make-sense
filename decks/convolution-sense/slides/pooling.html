@@ -1,0 +1,49 @@
+<section id="pooling" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">12 · Pooling</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Pooling counts the same way, with max</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#ECE6DA;padding:20px 32px;border-radius:12px">
+<img src="assets/opool.svg" alt="o = floor((i − k) / s) + 1" style="width:275px;height:92px;object-fit:contain">
+<p style="flex:1;font-size:24px;line-height:1.4;color:#4A5563">Same count, no padding. Here a 6×6 map becomes 3×3.</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">The window and stride work as before. Only the function changes: <b><span style="color:#B5531C">max</span></b> (or average) instead of a weighted sum.</p>
+<div style="display:flex;flex-direction:column;gap:10px">
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Max is folds too:</span></b></p>
+<img src="assets/maxrelu.svg" alt="max(a, b) = a + ReLU(b − a)" style="width:430px;height:34px;object-fit:contain">
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#F0995E">A 2×2 max = 3 kinks, no weights</p>
+<p style="font-size:24px;line-height:1.5;color:#E6E1D6">Max of 4 numbers = max of two maxes. Pooling adds fixed folds and shrinks the map.</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+var I=[[1,3,2,0,1,2],[4,2,1,3,0,1],[0,1,5,2,2,0],[2,3,1,0,4,1],[1,0,2,6,1,3],[3,2,1,0,2,2]],K=2,ST=2,N=6,O=Math.floor((N-K)/ST)+1,M=[],AR=[],AC=[],r,c,a,b;
+for(r=0;O>r;r++){M.push([]);AR.push([]);AC.push([]);for(c=0;O>c;c++){var m=-1,mr=0,mc=0;for(a=0;K>a;a++)for(b=0;K>b;b++){var v=I[r*ST+a][c*ST+b];if(v>m){m=v;mr=a;mc=b}}M[r].push(m);AR[r].push(mr);AC[r].push(mc)}}
+var S=62,XA=40,YA=96,XB=520,YB=96+(N*S-O*S)/2,t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%14,n=Math.floor(t/1.3),k=Math.min(n,O*O-1),pr=Math.floor(k/O),pc=k%O,act=O*O>n;
+g.clearRect(0,0,W,H);
+txt('Input 6×6',XA,70,INK,26,'left',700);txt('Max pool 2×2, stride 2',XB,YB-24,'#B5531C',26,'left',700);
+for(r=0;N>r;r++)for(c=0;N>c;c++){var inw=0;if(act)if(r>=pr*ST)if(pr*ST+K>r)if(c>=pc*ST)if(pc*ST+K>c)inw=1;
+var isMax=0;if(inw)if(r-pr*ST==AR[pr][pc])if(c-pc*ST==AC[pr][pc])isMax=1;
+g.fillStyle=inw?'#F4DCC8':'#DCE7F3';g.fillRect(XA+c*S+2,YA+r*S+2,S-4,S-4);
+if(isMax){g.strokeStyle=OR;g.lineWidth=3;g.beginPath();g.arc(XA+c*S+S/2,YA+r*S+S/2,22,0,6.284);g.stroke()}
+txt(String(I[r][c]),XA+c*S+S/2,YA+r*S+S/2+10,inw?'#8A3E12':'#1F4E80',28,'center',isMax?700:500)}
+for(r=0;O>r;r++)for(c=0;O>c;c++){var kk=r*O+c,sh=act?k>=kk:1;g.fillStyle=sh?'#F4DCC8':'#F3EFE6';g.fillRect(XB+c*S+2,YB+r*S+2,S-4,S-4);
+if(sh)txt(String(M[r][c]),XB+c*S+S/2,YB+r*S+S/2+10,'#8A3E12',28,'center',700)}
+if(act){g.strokeStyle=OR;g.lineWidth=4;g.strokeRect(XA+pc*ST*S,YA+pr*ST*S,K*S,K*S);g.strokeRect(XB+pc*S,YB+pr*S,S,S);
+var vs=[];for(a=0;K>a;a++)for(b=0;K>b;b++)vs.push(I[pr*ST+a][pc*ST+b]);
+txt('max('+vs.join(', ')+') = '+M[pr][pc],XA,H-80,INK,28,'left',600)}
+else txt('9 windows, no overlap: each pixel is used once.',XA,H-80,INK,26,'left',600);
+txt('Circled: the winner. Only it passes a gradient back.',XA,H-34,TX,24);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 16</p>
+<aside>Pooling slides a window just like a convolution, but instead of a weighted sum it applies a fixed function, usually the maximum or the average. The guide points out that the counting argument never used the sum, so the same rule holds: o = floor((i − k)/s) + 1, with no padding in the usual setup. The animation uses the most common choice, 2×2 windows with stride 2, on a 6×6 map I made up for this slide: floor((6 − 2)/2) + 1 = 3, so the output is 3×3, and the windows don't overlap. Here is the link back to kinks. The maximum of two numbers is a plus ReLU(b − a): one fold. The maximum of four numbers is the max of two maxes, so 3 folds. Max pooling therefore adds a few fixed kinks with no trainable weights. In the backward pass, only the winning input gets the gradient. The guide describes pooling as giving some invariance to small translations, because a feature that moves inside its window gives the same maximum.</aside>
+</section>

@@ -1,0 +1,28 @@
+<section id="cover" data-transition="fade" style="background:#15202B;color:#F3EEE3;font-family:'Inter', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:start;gap:32px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;color:#F0995E">From the kinks of a ReLU to the kernels of a CNN</p>
+<h1 style="font-family:'Source Serif 4', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F3EEE3">Convolution Sense</h1>
+<p style="font-size:44px;line-height:1.4;color:#B9C4CF">One small neuron, copied to every position.</p>
+<p style="font-size:26px;color:#8C9AA8;letter-spacing:2px">Kinks · Kernels · Weight sharing · Padding · Stride · Receptive field</p>
+<x-embed style="position:absolute;left:128px;top:640px;width:1664px;height:300px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var R=6,C=14,K=3,OR=R-K+1,OC=C-K+1,S=42,I=[],O=[],r,c,a,b;
+for(r=0;R>r;r++){I.push([]);for(c=0;C>c;c++){var dx=c-4.5,dy=r-2.5,ex=c-10,ey=r-2;I[r].push(Math.max(Math.exp(-(dx*dx+dy*dy)/5),0.9*Math.exp(-(ex*ex+ey*ey)/3.5)))}}
+var KW=[[0,-1,0],[-1,4,-1],[0,-1,0]],mx=0;
+for(r=0;OR>r;r++){O.push([]);for(c=0;OC>c;c++){var s=0;for(a=0;K>a;a++)for(b=0;K>b;b++)s+=KW[a][b]*I[r+a][c+b];s=s>0?s:0;O[r].push(s);if(s>mx)mx=s}}
+function mix(p,q,t){return 'rgb('+Math.round(p[0]+(q[0]-p[0])*t)+','+Math.round(p[1]+(q[1]-p[1])*t)+','+Math.round(p[2]+(q[2]-p[2])*t)+')'}
+var D0=[31,44,58],DB=[127,178,232],DO=[240,153,94],t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%8,n=Math.min(Math.floor(t/0.13),OR*OC),cr=Math.floor(Math.min(n,OR*OC-1)/OC),cc=Math.min(n,OR*OC-1)%OC;
+g.clearRect(0,0,W,H);var X0=60,Y0=(H-R*S)/2,X1=W-60-OC*S,Y1=(H-OR*S)/2;
+for(r=0;R>r;r++)for(c=0;C>c;c++){g.fillStyle=mix(D0,DB,I[r][c]);g.fillRect(X0+c*S+2,Y0+r*S+2,S-4,S-4)}
+for(r=0;OR>r;r++)for(c=0;OC>c;c++){var k=r*OC+c;g.fillStyle=n>k?mix(D0,DO,O[r][c]/mx):'#1A2633';g.fillRect(X1+c*S+2,Y1+r*S+2,S-4,S-4)}
+if(OR*OC>n){var wx=X0+cc*S,wy=Y0+cr*S,ox=X1+cc*S,oy=Y1+cr*S;
+g.strokeStyle='rgba(240,153,94,0.35)';g.lineWidth=1.5;g.beginPath();
+g.moveTo(wx+K*S,wy);g.lineTo(ox,oy);g.moveTo(wx+K*S,wy+K*S);g.lineTo(ox,oy+S);g.stroke();
+g.strokeStyle='#F0995E';g.lineWidth=4;g.strokeRect(wx,wy,K*S,K*S);g.strokeRect(ox,oy,S,S)}
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<aside>This deck answers one question: how does the idea of a kink, one ReLU neuron folding the input once, grow into convolution, the workhorse of image networks? The short answer is in the subtitle. A convolution is one small neuron, with a few weights, run at every position of the input. Along the way we use the counting rules from Dumoulin and Visin's “A guide to convolution arithmetic for deep learning” (2016) to predict output sizes. The animation shows the idea: a 3×3 window slides over the blue input, and each position produces one orange output cell.</aside>
+</section>

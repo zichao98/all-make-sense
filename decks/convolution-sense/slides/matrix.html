@@ -1,0 +1,57 @@
+<section id="matrix" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">06 · Convolution as a matrix</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">A convolution is a dense layer with tied weights</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#ECE6DA;padding:22px 32px;border-radius:12px">
+<img src="assets/ycx.svg" alt="y = C x" style="width:142px;height:36px;object-fit:contain">
+<p style="flex:1;font-size:24px;line-height:1.5;color:#4A5563">Flatten the 4×4 input to 16 numbers and the 2×2 output to 4. C is 4×16.</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Each row</span></b> is one neuron: one hyperplane in 16 dimensions, like any dense neuron.</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">But the rows are tied:</span></b> each holds the same 9 weights, shifted, plus 7 zeros.</p>
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;background:#FFFDF8;border:1px solid #E2DCCF;padding:20px 24px;border-radius:14px">
+<p style="font-size:24px;color:#4A5563">Dense 16 → 4</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:56px;font-weight:600;line-height:1.1;color:#17212B">64</p>
+<p style="font-size:24px;color:#4A5563">free weights</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;background:#F4DCC8;padding:20px 24px;border-radius:14px">
+<p style="font-size:24px;color:#8A3E12">Conv 3×3</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:56px;font-weight:600;line-height:1.1;color:#8A3E12">9</p>
+<p style="font-size:24px;color:#8A3E12">free weights</p>
+</div>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+var KW=[[0,1,2],[2,2,0],[0,1,2]],C=[],r,c,a,b;
+for(r=0;4>r;r++){C.push([]);for(c=0;16>c;c++)C[r].push(null);var pr=Math.floor(r/2),pc=r%2;for(a=0;3>a;a++)for(b=0;3>b;b++)C[r][(pr+a)*4+pc+b]=KW[a][b]}
+var S=46,MX=96,MY=76,GX=96,GY=372,OX=420,OY=418,t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,ar=Math.floor(t/1.8)%4,pr=Math.floor(ar/2),pc=ar%2;
+g.clearRect(0,0,W,H);
+txt('C  (4 × 16)',MX,54,INK,26,'left',700);
+for(r=0;4>r;r++){txt('y'+(r+1),MX-14,MY+r*S+31,r==ar?'#B5531C':TX,24,'right',r==ar?700:400);
+for(c=0;16>c;c++){var v=C[r][c],on=v!==null;
+g.fillStyle=on?(r==ar?'#F4DCC8':'#F2E6DA'):'#F3EFE6';g.fillRect(MX+c*S+1,MY+r*S+1,S-2,S-2);
+txt(on?String(v):'0',MX+c*S+S/2,MY+r*S+31,on?(r==ar?'#8A3E12':'#B08870'):'#CFC6B6',24,'center',on?700:400)}}
+g.strokeStyle=OR;g.lineWidth=4;g.strokeRect(MX-2,MY+ar*S-2,16*S+4,S+4);
+for(c=0;16>c;c++){var col=C[ar][c]!==null;txt(String(c+1),MX+c*S+S/2,MY+4*S+30,col?'#B5531C':'#A39A88',24,'center',col?700:400)}
+txt('Input pixels 1–16',GX,GY-20,INK,26,'left',700);txt('Output',OX,OY-20,'#B5531C',26,'left',700);
+for(r=0;4>r;r++)for(c=0;4>c;c++){var inw=0;if(r>=pr)if(pr+3>r)if(c>=pc)if(pc+3>c)inw=1;
+g.fillStyle=inw?'#F4DCC8':'#DCE7F3';g.fillRect(GX+c*S+1,GY+r*S+1,S-2,S-2);txt(String(r*4+c+1),GX+c*S+S/2,GY+r*S+31,inw?'#8A3E12':'#1F4E80',24,'center',600)}
+g.strokeStyle=OR;g.lineWidth=4;g.strokeRect(GX+pc*S,GY+pr*S,3*S,3*S);
+for(r=0;2>r;r++)for(c=0;2>c;c++){var k=r*2+c;g.fillStyle=k==ar?'#F4DCC8':'#F3EFE6';g.fillRect(OX+c*S+1,OY+r*S+1,S-2,S-2);txt('y'+(k+1),OX+c*S+S/2,OY+r*S+31,k==ar?'#8A3E12':'#A39A88',24,'center',700)}
+txt('Row y'+(ar+1)+' = the window',580,GY+20,INK,26,'left',700);
+txt('at this position.',580,GY+56,TX,24);
+txt('Same 9 numbers,',580,GY+110,TX,24);
+txt('slid along the row.',580,GY+144,TX,24);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 09</p>
+<aside>Dumoulin and Visin make this point with a 4×4 input and a 3×3 kernel, which gives a 2×2 output. Number the 16 input pixels row by row, and the 4 outputs the same way. Then the convolution is an ordinary matrix product y = Cx, with C of size 4×16. Look at one row. It is a dense neuron's weight vector over all 16 pixels, so it defines one hyperplane in 16-dimensional space, like the neurons from the first deck. What makes it a convolution is the pattern: each row contains the same 9 kernel weights, placed on the pixels under its window, and zeros everywhere else. A dense layer from 16 to 4 has 64 free weights; this layer has only 9. The matrix view also gives the backward pass: gradients flow through C transposed. We will use C transposed again for transposed convolutions.</aside>
+</section>

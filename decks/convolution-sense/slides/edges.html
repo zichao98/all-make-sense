@@ -1,0 +1,61 @@
+<section id="edges" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">08 · What a kernel looks for</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">A 3×3 kernel is a tiny pattern detector</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#ECE6DA;padding:22px 32px;border-radius:12px">
+<img src="assets/patch.svg" alt="ReLU(w·p + b)" style="width:288px;height:40px;object-fit:contain">
+<p style="flex:1;font-size:24px;line-height:1.5;color:#4A5563">p = the 9 pixels under the window</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">Each output is one fold, now in the 9-D space of patches. Patches on the bright side of the hyperplane light up.</p>
+<table style="font-size:26px;color:#17212B;font-family:'Inter', Arial, sans-serif">
+<tr style="background:#E7E0D2"><th style="width:45%;text-align:left">Kernel</th><th style="width:55%;text-align:left">Lights up on</th></tr>
+<tr><td>Vertical edge</td><td>Dark → bright, left to right</td></tr>
+<tr><td>Horizontal edge</td><td>Dark → bright, downward</td></tr>
+<tr><td>Laplacian</td><td>Creases: the 2D (1, −2, 1)</td></tr>
+</table>
+<p style="font-size:24px;line-height:1.5;color:#6A727C">Trained networks learn their own kernels; early layers often end up with edge-like ones.</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+var M=40,r,c,a,b,q;
+function relu(z){return z>0?z:0}
+var SH=[],CR=[],NE=[[0.9,0.4,-0.1],[-0.3,1,0.25],[0.7,-0.8,-0.35]];
+for(r=0;M>r;r++){SH.push([]);CR.push([]);for(c=0;M>c;c++){var v=0;if(c>=6)if(19>=c)if(r>=7)if(31>=r)v=1;
+var dx=c-28,dy=r-21;if(55>=dx*dx+dy*dy)v=1;SH[r].push(v);
+var x=c/(M-1)*2-1,y=1-r/(M-1)*2,h=0;for(q=0;3>q;q++)h+=relu(NE[q][0]*x+NE[q][1]*y+NE[q][2]);CR[r].push(h)}}
+var KS=[[[-1,0,1],[-2,0,2],[-1,0,1]],[[-1,-2,-1],[0,0,0],[1,2,1]],[[0,1,0],[1,-4,1],[0,1,0]]];
+var IMG=[SH,SH,CR],NM=['Vertical edge','Horizontal edge','Laplacian'];
+var CAP=[['Bright begins on the left edge of each shape.','Only one side shows: ReLU clips the other.'],['Bright begins on the top edge of each shape.','Same image, kernel turned 90°.'],['Input: heights of a 1-layer ReLU net (3 creases).','Flat facets give 0. Only the creases light up.']];
+function mk(){var o=document.createElement('canvas');o.width=M;o.height=M;return o}
+var oi=[],oo=[],ph,mx;
+for(q=0;3>q;q++){var A=IMG[q],K=KS[q],ci=mk(),co=mk(),di=ci.getContext('2d').createImageData(M,M),dd=co.getContext('2d').createImageData(M,M),hi=0,O=[];
+for(r=0;M>r;r++)for(c=0;M>c;c++)if(A[r][c]>hi)hi=A[r][c];
+mx=0;for(r=0;M>r;r++){O.push([]);for(c=0;M>c;c++){var s=0;if(r>0)if(M-1>r)if(c>0)if(M-1>c)for(a=0;3>a;a++)for(b=0;3>b;b++)s+=K[a][b]*A[r+a-1][c+b-1];s=relu(s);O[r].push(s);if(s>mx)mx=s}}
+for(r=0;M>r;r++)for(c=0;M>c;c++){var k=4*(r*M+c),u=A[r][c]/hi,w=O[r][c]/mx;
+di.data[k]=Math.round(239-(239-31)*u);di.data[k+1]=Math.round(233-(233-78)*u);di.data[k+2]=Math.round(221-(221-128)*u);di.data[k+3]=255;
+dd.data[k]=Math.round(243-(243-224)*w);dd.data[k+1]=Math.round(239-(239-120)*w);dd.data[k+2]=Math.round(230-(230-47)*w);dd.data[k+3]=255}
+ci.getContext('2d').putImageData(di,0,0);co.getContext('2d').putImageData(dd,0,0);oi.push(ci);oo.push(co)}
+var S=300,XA=40,XB=380,Y0=100,t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%15,ph=Math.floor(t/5),u=Math.min((t-ph*5)/3,1),row=Math.floor(u*M),K=KS[ph];
+g.clearRect(0,0,W,H);g.imageSmoothingEnabled=false;
+txt('Input',XA,80,INK,26,'left',700);txt('ReLU(kernel · patch)',XB,80,'#B5531C',26,'left',700);
+g.drawImage(oi[ph],XA,Y0,S,S);g.drawImage(oo[ph],XB,Y0,S,S);
+if(M>row){g.fillStyle='#F3EFE6';g.fillRect(XB,Y0+row*S/M,S,S-row*S/M);
+var cx=Math.floor((t*37)%M);g.strokeStyle=OR;g.lineWidth=3;g.strokeRect(XA+(cx-1)*S/M,Y0+(row-1)*S/M,3*S/M,3*S/M)}
+g.strokeStyle='#C9C0AE';g.lineWidth=2;g.strokeRect(XA,Y0,S,S);g.strokeRect(XB,Y0,S,S);
+txt(NM[ph],798,Y0+196,INK,24,'center',700);txt('Kernel',798,80,INK,26,'center',700);
+for(a=0;3>a;a++)for(b=0;3>b;b++){var v=K[a][b];g.fillStyle=v>0?'#F4DCC8':(0>v?'#DCE7F3':'#F3EFE6');g.fillRect(720+b*52,Y0+a*52,50,50);
+txt(String(v).replace('-','−'),720+b*52+25,Y0+a*52+34,v>0?'#8A3E12':(0>v?'#1F4E80':'#A39A88'),24,'center',700)}
+txt(CAP[ph][0],XA,H-150,INK,26,'left',600);txt(CAP[ph][1],XA,H-110,TX,24);
+txt('Orange = strong response. Right grid = the kernel.',XA,H-36,'#8A7F6B',24);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 11</p>
+<aside>In 2D, a 3×3 kernel computes w·p + b, where p is the 9 pixel values under the window. That is a dense neuron on a 9-dimensional input, the patch. Its fold is a hyperplane in patch space, and patches on the positive side make the output light up. The animation computes three hand-picked kernels live. The vertical-edge kernel (−1 0 1 in each row, weighted 1, 2, 1) responds where brightness increases from left to right, so it lights the left edges of the bright shapes; ReLU clips the right edges. The horizontal version does the same top to bottom. The third input is the height map of a one-layer ReLU network with 3 creases, like the 2D slides in the first deck. The Laplacian kernel, 0 1 0 / 1 −4 1 / 0 1 0, is the 2D version of (1, −2, 1). On every flat facet it gives exactly 0, and it lights up only along the creases. All 3 creases fold upward here, so ReLU keeps them all. In a trained network nobody hand-picks the kernels; first-layer kernels are often observed to look edge-like, but that is an empirical tendency, not a rule.</aside>
+</section>

@@ -1,0 +1,61 @@
+<section id="kinks" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">03 · A kernel that finds kinks</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">The kernel (1, −2, 1) finds every kink</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:20px;background:#ECE6DA;padding:24px 32px;border-radius:12px">
+<img src="assets/secdiff.svg" alt="x_j − 2 x_(j+1) + x_(j+2)" style="width:311px;height:39px;object-fit:contain">
+<p style="font-size:24px;color:#4A5563">second difference</p>
+</div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Straight piece:</span></b> the three samples lie on one line, so the result is exactly 0.</p>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:14px">
+<p style="font-size:28px;color:#4A5563"><b><span style="color:#B5531C">A kink</span></b> where the slope jumps by Δa gives</p>
+<img src="assets/spike.svg" alt="Δa · h" style="width:86px;height:24px;object-fit:contain">
+</div>
+<p style="font-size:24px;line-height:1.5;color:#6A727C">h is the sample spacing. A kink between two samples splits its spike over two outputs.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#F0995E">Kinks in, spikes out</p>
+<p style="font-size:24px;line-height:1.5;color:#E6E1D6">Run it on a one-layer ReLU line and you read back its neurons: where each kink sits and how hard it bends.</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function fm(v){return (Math.round(v*100)/100).toString().replace('-','−')}
+var KN=[4,9,13.5,17],A=[0.6,-1.1,0.9,-0.7],NS=21,i,j;
+function f(x){var s=0;for(var q=0;KN.length>q;q++){var z=x-KN[q];if(z>0)s+=A[q]*z}return s}
+var XS=[],D=[];for(i=0;NS>i;i++)XS.push(f(i));
+for(j=0;NS-2>j;j++)D.push(XS[j]-2*XS[j+1]+XS[j+2]);
+var lo=1e9,hi=-1e9;for(i=0;NS>i;i++){if(lo>XS[i])lo=XS[i];if(XS[i]>hi)hi=XS[i]}
+var PX0=70,PW=800,PY0=80,PH=200,BY=460,BS=80;
+function X(x){return PX0+x/(NS-1)*PW}
+function Y(y){return PY0+PH-(y-lo)/(hi-lo)*PH}
+var t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%10,n=Math.floor(t/0.38),done=Math.min(n+1,NS-2),j0=Math.min(n,NS-3);
+g.clearRect(0,0,W,H);
+txt('Samples of a ReLU line (4 kinks)',40,46,INK,26,'left',700);
+txt('Output of (1, −2, 1)',40,374,'#B5531C',26,'left',700);
+g.setLineDash([6,6]);g.strokeStyle='#9DB6D3';g.lineWidth=2;
+for(i=0;KN.length>i;i++){g.beginPath();g.moveTo(X(KN[i]),PY0-10);g.lineTo(X(KN[i]),BY+BS);g.stroke()}
+g.setLineDash([]);
+g.strokeStyle=BL;g.lineWidth=3;g.beginPath();for(i=0;200>=i;i++){var x=i/200*(NS-1);i?g.lineTo(X(x),Y(f(x))):g.moveTo(X(x),Y(f(x)))}g.stroke();
+for(i=0;NS>i;i++){g.fillStyle=INK;g.beginPath();g.arc(X(i),Y(XS[i]),5,0,6.284);g.fill()}
+g.strokeStyle='#C9C0AE';g.lineWidth=2;g.beginPath();g.moveTo(PX0,BY);g.lineTo(PX0+PW,BY);g.stroke();
+for(j=0;done>j;j++){var v=D[j],x=X(j+1),h=v*BS/1.1;
+if(Math.abs(v)>1e-9){g.fillStyle=OR;g.fillRect(x-9,v>0?BY-h:BY,18,Math.abs(h));txt(fm(v),x,v>0?BY-h-12:BY-h+30,'#B5531C',24,'center',700)}
+else{g.fillStyle=OR;g.beginPath();g.arc(x,BY,4,0,6.284);g.fill()}}
+if(NS-2>n){g.strokeStyle=OR;g.lineWidth=4;for(i=0;3>i;i++){g.beginPath();g.arc(X(j0+i),Y(XS[j0+i]),11,0,6.284);g.stroke()}
+var W3=['1','−2','1'];for(i=0;3>i;i++)txt(W3[i],X(j0+i),PY0+PH+44,'#B5531C',24,'center',700)}
+txt('Straight pieces give exactly 0. The kink at 13.5 falls',40,H-56,TX,24);
+txt('between samples, so its 0.9 splits into 0.45 + 0.45.',40,H-22,TX,24);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Convolution Sense · 05</p>
+<aside>Here is the bridge from kinks to kernels. The blue line is a one-layer ReLU function with 4 kinks: at 4 the slope rises by 0.6, at 9 it drops by 1.1, at 13.5 it rises by 0.9, and at 17 it drops by 0.7. We sample it at every integer, so the spacing is h = 1, and slide the kernel (1, −2, 1) across the samples. This kernel is the discrete second derivative. If the three samples lie on one straight line, the middle one is the average of its neighbours, so the result is exactly 0. If a kink sits on the middle sample, the result equals the slope jump times h. So the output is zero almost everywhere, with a spike at each kink: 0.6, −1.1, −0.7. The kink at 13.5 is not on a sample. Its 0.9 is shared between the two neighbouring outputs, 0.45 each, and the total is still right. The spike positions are the neurons' kink locations, and the spike heights are their output weights. One kernel reads the network back. In two dimensions the same idea, a Laplacian kernel, lights up crease lines.</aside>
+</section>

@@ -1,0 +1,69 @@
+{
+  "v": 4,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-16T01:16:51.633Z"
+  },
+  "lists": "css",
+  "title": "Convolution Sense: From Kinks to Kernels",
+  "cover": "cover",
+  "order": [
+    "cover",
+    "recap",
+    "idea",
+    "slide1d",
+    "kinks",
+    "rebuild",
+    "div2d",
+    "numeric",
+    "matrix",
+    "params",
+    "edges",
+    "channels",
+    "divarith",
+    "padding",
+    "stride",
+    "pooling",
+    "receptive",
+    "transposed",
+    "limits",
+    "takeaway"
+  ],
+  "sections": {
+    "s1": {
+      "description": "A dense neuron watches one spot; a convolution runs one small neuron everywhere",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "Convolution in 1D: sliding windows, (1, −2, 1) turns kinks into spikes, spikes ∗ ramp rebuild the line",
+      "start": "slide1d"
+    },
+    "s3": {
+      "description": "2D: the paper's worked example, convolution as a tied matrix, weight counts, kernels as detectors, channels",
+      "start": "div2d"
+    },
+    "s4": {
+      "description": "Convolution arithmetic: padding, stride, pooling, receptive field and dilation, transposed convolution",
+      "start": "divarith"
+    },
+    "s5": {
+      "description": "Limits and a one-page takeaway",
+      "start": "limits"
+    }
+  },
+  "faces": {
+    "inter": {
+      "family": "Inter",
+      "href": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+    },
+    "source-serif-4": {
+      "family": "Source Serif 4",
+      "href": "https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&display=swap"
+    },
+    "jetbrains-mono": {
+      "family": "JetBrains Mono",
+      "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"
+    }
+  },
+  "designSystems": []
+}
