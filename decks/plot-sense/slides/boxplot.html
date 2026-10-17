@@ -1,0 +1,55 @@
+<section id="boxplot" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">05 · Box plot</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">A box plot can hide the shape</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+
+<div style="display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:24px 32px;border-radius:12px"><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">Middle line:</span></b> the median</p><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">Box:</span></b> the middle 50%, Q1 to Q3 (the IQR)</p><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">Whiskers:</span></b> the furthest points within 1.5 IQR</p><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">Circles:</span></b> points beyond the whiskers</p></div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">The trap:</span></b> the three datasets on the right have the same median and quartiles. One is a bell, one is two clusters, one is flat.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Eye rule: show the points with the box</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">Below a few hundred values, overlay the dots (or use a violin).</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#B8B0A0',GRID='#ECE6DA';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function srt(a){return a.slice().sort(function(p,q){return p-q})}
+function qt(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)}
+function mean(a){var s=0;for(var i=0;a.length>i;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;a.length>i;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}
+function hline(x1,x2,y,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x1,y);g.lineTo(x2,y);g.stroke()}
+function vline(x,y1,y2,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x,y1);g.lineTo(x,y2);g.stroke()}
+function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+var N=150,SETS=[],NM=['Bell-shaped','Two clusters','Flat (uniform)'],i,k;
+function mk(seed,kind){var R=rng(seed),a=[];for(i=0;N>i;i++){var v;if(kind==0)v=gauss(R);if(kind==1)v=(R()>0.5?1:-1)*(1+0.25*gauss(R));if(kind==2)v=R()*2-1;a.push(v)}
+var s=srt(a),q1=qt(s,0.25),md=qt(s,0.5),q3=qt(s,0.75);for(i=0;N>i;i++)a[i]=a[i]>md?(a[i]-md)/(q3-md)*0.675:(a[i]-md)/(md-q1)*0.675;return a}
+SETS.push(mk(3,0));SETS.push(mk(4,1));SETS.push(mk(5,2));
+var J=[],R2=rng(9);for(i=0;N>i;i++)J.push(R2()*2-1);
+function stats(a){var s=srt(a),q1=qt(s,0.25),md=qt(s,0.5),q3=qt(s,0.75),iq=q3-q1,lo=s[0],hi=s[N-1],out=[];for(i=0;N>i;i++){if(s[i]>=q1-1.5*iq){lo=s[i];break}}for(i=N-1;i>=0;i--){if(q3+1.5*iq>=s[i]){hi=s[i];break}}
+for(i=0;N>i;i++)if(s[i]>hi||lo>s[i])out.push(s[i]);return{q1:q1,md:md,q3:q3,lo:lo,hi:hi,out:out}}
+var DN=SETS.map(function(a){var d=[],mx=0;for(i=0;N>i;i++){var c=0;for(k=0;N>k;k++)if(0.18>Math.abs(a[k]-a[i]))c++;d.push(c);if(c>mx)mx=c}return d.map(function(c){return c/mx})});
+var ST=[stats(SETS[0]),stats(SETS[1]),stats(SETS[2])],DUR=4,t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,ci=Math.floor(t/DUR)%3,u=(t%DUR)/DUR,a=SETS[ci],s=ST[ci];
+var X0=60,XW=W-120;function X(v){return X0+(v+3.2)/6.4*XW}
+g.clearRect(0,0,W,H);txt(NM[ci],60,50,INK,30,'left',700);txt('n = 150',W-60,50,TX,24,'right');
+var by=150,bh=70;txt('Box plot',60,by-50,TX,24,'left',700);
+g.strokeStyle=INK;g.lineWidth=3;g.fillStyle='#F4DCC8';g.fillRect(X(s.q1),by-bh/2,X(s.q3)-X(s.q1),bh);g.strokeRect(X(s.q1),by-bh/2,X(s.q3)-X(s.q1),bh);vline(X(s.md),by-bh/2,by+bh/2,OR,5);
+hline(X(s.lo),X(s.q1),by,INK,3);hline(X(s.q3),X(s.hi),by,INK,3);vline(X(s.lo),by-18,by+18,INK,3);vline(X(s.hi),by-18,by+18,INK,3);
+for(k=0;s.out.length>k;k++){g.strokeStyle=INK;g.lineWidth=2;g.beginPath();g.arc(X(s.out[k]),by,6,0,6.2832);g.stroke()}
+var sy=370;txt('The same data as dots',60,sy-110,TX,24,'left',700);var e=ease(u*3);
+var dn=DN[ci];for(i=0;N>i;i++)dot(X(a[i]),sy+J[i]*80*dn[i],4.5,'rgba(45,108,176,'+(0.25+0.5*e)+')');
+txt('Q1 '+fm(s.q1)+'   median '+fm(s.md)+'   Q3 '+fm(s.q3),60,H-30,'#B5531C',26,'left',700);
+requestAnimationFrame(draw)}
+draw();
+function DBG(){ST.forEach((s,j)=>console.log(NM[j],s.q1.toFixed(3),s.md.toFixed(3),s.q3.toFixed(3),s.lo.toFixed(2),s.hi.toFixed(2),s.out.length))}
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Plot Sense · 08　　Whisker and outlier rule: Tukey's 1.5 × IQR convention.</p>
+<aside>A box plot is a five-number summary: the median, the first and third quartiles that bound the box, and whiskers that reach the furthest data points within 1.5 interquartile ranges of the box. Anything beyond is drawn as an individual point. It is compact and great for comparing many groups side by side. But it cannot show shape. The animation cycles through three datasets of 150 values that were transformed to have the same median, 0, and the same quartiles, −0.675 and 0.675. One is bell-shaped, one is two separate clusters with almost nothing in the middle, and one is flat. Their boxes are essentially identical, while the dots below show three different distributions. The 1.5 IQR whisker rule is a convention from John Tukey, not a law.</aside>
+</section>

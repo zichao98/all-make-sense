@@ -1,0 +1,47 @@
+<section id="overplot" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">11 · Too many points</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">With big data, plot density</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+
+<p style="font-size:28px;line-height:1.5;color:#4A5563">20,000 dots overlap into a solid blob. The plot shows where data exist, not how much is there.</p>
+<div style="display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:24px 32px;border-radius:12px"><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">Transparency:</span></b> overlaps get darker</p><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">2D histogram / hexbin:</span></b> count per cell, shown as shade</p><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">Sample:</span></b> plot a random subset</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Eye rule: past a few thousand points</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">Switch from dots to density, or you will miss where the data really are.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#B8B0A0',GRID='#ECE6DA';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function srt(a){return a.slice().sort(function(p,q){return p-q})}
+function qt(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)}
+function mean(a){var s=0;for(var i=0;a.length>i;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;a.length>i;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}
+function hline(x1,x2,y,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x1,y);g.lineTo(x2,y);g.stroke()}
+function vline(x,y1,y2,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x,y1);g.lineTo(x,y2);g.stroke()}
+function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+var R=rng(17),N=20000,PX=[],PY=[],i,k;for(i=0;N>i;i++){if(0.3>R()){PX.push(0.6+0.12*gauss(R));PY.push(0.4+0.12*gauss(R))}else{PX.push(gauss(R)*0.9);PY.push(gauss(R)*0.9)}}
+var NB=46,GRD=[],mx=0;for(k=0;NB*NB>k;k++)GRD.push(0);
+for(i=0;N>i;i++){var bx=Math.floor((PX[i]+3)/6*NB),by=Math.floor((PY[i]+3)/6*NB);if(bx>=0)if(NB>bx)if(by>=0)if(NB>by){GRD[by*NB+bx]++}}for(k=0;NB*NB>k;k++)if(GRD[k]>mx)mx=GRD[k];
+var off=document.createElement('canvas');off.width=920;off.height=920;var og=off.getContext('2d');
+var NM=['Solid dots','Transparent dots (5% opacity)','2D histogram (count per cell)'],DUR=4,t0=performance.now(),drawn=-1;
+function draw(){var t=(performance.now()-t0)/1000,ci=Math.floor(t/DUR)%3,S=460,X0=(W-S)/2,Y0=86;
+g.clearRect(0,0,W,H);txt(NM[ci],40,50,INK,28,'left',700);txt('20,000 points',W-40,50,TX,24,'right');
+g.strokeStyle='#E2DCCF';g.lineWidth=1.5;g.strokeRect(X0,Y0,S,S);
+if(drawn!=ci){og.clearRect(0,0,920,920);if(2>ci){og.fillStyle=ci?'rgba(45,108,176,0.05)':'rgb(45,108,176)';for(i=0;N>i;i++){og.beginPath();og.arc((PX[i]+3)/6*920,(3-PY[i])/6*920,ci?6:5,0,6.2832);og.fill()}}
+else{var cs=920/NB;for(var r2=0;NB>r2;r2++)for(var c2=0;NB>c2;c2++){var v=GRD[r2*NB+c2]/mx;if(v>0){var a=Math.pow(v,0.6);og.fillStyle='rgb('+Math.round(255-(255-138)*a)+','+Math.round(248-(248-62)*a)+','+Math.round(240-(240-18)*a)+')';og.fillRect(c2*cs,(NB-1-r2)*cs,cs+1,cs+1)}}}drawn=ci}
+g.save();g.beginPath();g.rect(X0,Y0,S,S);g.clip();g.drawImage(off,X0,Y0,S,S);g.restore();
+txt(ci==0?'A blob. The dense cluster is invisible.':(ci==1?'A tight cluster appears top right.':'Darker = more points: about 30% sit in that small cluster.'),40,H-24,ci?'#B5531C':INK,26,'left',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Plot Sense · 16　　Simulated data. The 30% share is the mixing weight used to generate it.</p>
+<aside>Scatter plots break down when there are many points, because dots pile on top of each other and the plot turns solid. The animation draws 20,000 points: about 70 percent spread widely and about 30 percent packed into one small cluster. With solid dots, the cluster is invisible; the plot only tells you where data exist. With 5 percent opacity, overlapping regions grow darker and the cluster appears. The 2D histogram counts points per cell and maps the count to a single-hue shade, which is the most direct answer to 'where is most of the data?'. Hexagonal bins do the same with a nicer tiling. Random subsampling also works if you only need the overall shape.</aside>
+</section>

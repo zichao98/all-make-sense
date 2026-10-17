@@ -1,0 +1,53 @@
+<section id="mapping" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">01 · What a plot is</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">A plot maps columns to channels</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+
+<p style="font-size:28px;line-height:1.5;color:#4A5563">A table has rows and columns. A plot turns each row into one mark and each column into one visual channel.</p>
+<div style="display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:24px 32px;border-radius:12px"><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">x position ←</span></b> a number column (price)</p><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">y position ←</span></b> another number column (sales)</p><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">color ←</span></b> a category column (channel)</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Choosing a chart = choosing the channels</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">Give the comparison that matters most the best channel: position along a shared axis.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#B8B0A0',GRID='#ECE6DA';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function srt(a){return a.slice().sort(function(p,q){return p-q})}
+function qt(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)}
+function mean(a){var s=0;for(var i=0;a.length>i;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;a.length>i;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}
+function hline(x1,x2,y,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x1,y);g.lineTo(x2,y);g.stroke()}
+function vline(x,y1,y2,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x,y1);g.lineTo(x,y2);g.stroke()}
+function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+var ROWS=[['A',12,340,'online'],['B',18,410,'store'],['C',25,300,'online'],['D',31,520,'store'],['E',38,260,'online'],['F',45,450,'store']];
+var t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%11,n=Math.min(6,Math.floor(t/1.2)),u=(t%1.2)/1.2,i;
+g.clearRect(0,0,W,H);
+var TX0=36,TY0=70,RH=52,CW=[80,100,100,120];
+var HD=['item','price','sales','channel'],cx=TX0;
+for(i=0;4>i;i++){txt(HD[i],cx,TY0,INK,24,'left',700);cx+=CW[i]}
+var chan=['','→ x','→ y','→ color'];cx=TX0;for(i=0;4>i;i++){txt(chan[i],cx,TY0+30,'#B5531C',24,'left',700);cx+=CW[i]}
+for(var r=0;6>r;r++){var y=TY0+86+r*RH;if(r==n){g.fillStyle='#F4DCC8';g.fillRect(TX0-10,y-32,410,44)}
+cx=TX0;for(i=0;4>i;i++){txt(String(ROWS[r][i]),cx,y,r==n?'#8A3E12':TX,24,'left',r==n?700:400);cx+=CW[i]}}
+var p=P(470,70,400,400,5,50,200,560);
+g.strokeStyle='#E2DCCF';g.lineWidth=1.5;g.strokeRect(p.x0,p.y0,p.w,p.h);
+txt('price →',p.x0+p.w,p.y0+p.h+34,TX,24,'right');txt('sales ↑',p.x0,p.y0-14,TX,24,'left');
+for(r=0;6>r;r++){var dx=p.X(ROWS[r][1]),dy=p.Y(ROWS[r][2]),col=ROWS[r][3]=='online'?OR:BL;
+if(n>r){dot(dx,dy,11,col);txt(ROWS[r][0],dx+16,dy+8,INK,24,'left',700)}
+else if(r==n){var e=ease(u*1.4),sx=TX0+330,sy=TY0+86+r*RH-8;dot(sx+(dx-sx)*e,sy+(dy-sy)*e,11,col)}}
+dot(484,H-40,9,OR);txt('online',500,H-32,TX,24);dot(610,H-40,9,BL);txt('store',626,H-32,TX,24);
+txt('One row → one mark',36,H-32,INK,26,'left',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Plot Sense · 02　　Example data, invented for illustration.</p>
+<aside>Before any chart type, there is one idea. Every plot is a mapping from columns of a table to visual channels. In the animation, each row of a small example table, six items with a price, a sales figure and a sales channel, flies into the scatter plot as one dot. Price becomes horizontal position, sales becomes vertical position, and the channel becomes color. A bar chart maps a category to position and a number to length. A heatmap maps two categories to position and a number to color. Once you see charts this way, choosing one is no longer about names. It is about deciding which column deserves the best channel. The table here is invented for illustration.</aside>
+</section>

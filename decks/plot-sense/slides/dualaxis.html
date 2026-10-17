@@ -1,0 +1,53 @@
+<section id="dualaxis" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">15 · Two measures over time</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Never use two y-axes</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+
+<p style="font-size:28px;line-height:1.5;color:#4A5563">With two axes, the scale of each is arbitrary. Change one and the lines track, separate or cross at will.</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">On the right:</span></b> A and B are unrelated. Only the right axis changes between frames.</p>
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#15202B;padding:22px 32px;border-radius:12px"><img src="assets/idx.svg" alt="index = 100 × y_t / y_0" style="width:277px;height:69px;object-fit:contain"><p style="flex:1;font-size:24px;line-height:1.4;color:#E6E1D6">Put both on one axis as an index: A grew 169%, B 25%.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#B8B0A0',GRID='#ECE6DA';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function srt(a){return a.slice().sort(function(p,q){return p-q})}
+function qt(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)}
+function mean(a){var s=0;for(var i=0;a.length>i;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;a.length>i;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}
+function hline(x1,x2,y,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x1,y);g.lineTo(x2,y);g.stroke()}
+function vline(x,y1,y2,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x,y1);g.lineTo(x,y2);g.stroke()}
+function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+var N=40,R=rng(14),A=[],B=[],i,b=50;for(i=0;N>i;i++){A.push(1000+40*i+30*gauss(R));b+=0.9*gauss(R)+0.35;B.push(b)}
+var bmn=Math.min.apply(null,B),bmx=Math.max.apply(null,B);
+var RG=bmx-bmn,VIEWS=[{lo:bmn-1,hi:bmx+1,t:'Right axis fitted to B: B seems to track A'},{lo:bmn-3*RG,hi:bmx+1,t:'Same data, right axis widened: B looks flat'},{lo:bmn-1,hi:bmx+3*RG,t:'Widened the other way: A races past a flat B'},{lo:0,hi:0,t:'Honest: both indexed to 100 at the start, one axis'}],DUR=4,t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,ci=Math.floor(t/DUR)%4,v=VIEWS[ci];var px=100,py=90,pw=W-260,ph=400;g.clearRect(0,0,W,H);
+txt(v.t,40,52,ci==3?'#B5531C':INK,26,'left',700);hline(px,px+pw,py+ph,'#C9C0AE',2);
+function X(i){return px+i/(N-1)*pw}
+if(3>ci){var al=Math.min.apply(null,A)-20,ah=Math.max.apply(null,A)+20;function YA(y){return py+(ah-y)/(ah-al)*ph}function YB(y){return py+(v.hi-y)/(v.hi-v.lo)*ph}
+vline(px,py,py+ph,BL,2);vline(px+pw,py,py+ph,OR,2);txt('A',px-14,py+8,BL,26,'right',700);txt('B',px+pw+14,py+8,'#B5531C',26,'left',700);
+g.strokeStyle=BL;g.lineWidth=4;g.beginPath();for(i=0;N>i;i++){i?g.lineTo(X(i),YA(A[i])):g.moveTo(X(i),YA(A[i]))}g.stroke();
+g.strokeStyle=OR;g.lineWidth=4;g.beginPath();for(i=0;N>i;i++){i?g.lineTo(X(i),YB(B[i])):g.moveTo(X(i),YB(B[i]))}g.stroke();
+txt(fm(v.lo,0),px+pw+12,py+ph+8,'#B5531C',24,'left');txt(fm(v.hi,0),px+pw+12,py+40,'#B5531C',24,'left')}
+else{var IA=A.map(function(x){return x/A[0]*100}),IB=B.map(function(x){return x/B[0]*100}),all=IA.concat(IB),lo=Math.min.apply(null,all)-5,hi=Math.max.apply(null,all)+5;function Y(y){return py+(hi-y)/(hi-lo)*ph}
+hline(px,px+pw,Y(100),GRID,2);txt('100',px-10,Y(100)+8,TX,24,'right');
+g.strokeStyle=BL;g.lineWidth=4;g.beginPath();for(i=0;N>i;i++){i?g.lineTo(X(i),Y(IA[i])):g.moveTo(X(i),Y(IA[i]))}g.stroke();
+g.strokeStyle=OR;g.lineWidth=4;g.beginPath();for(i=0;N>i;i++){i?g.lineTo(X(i),Y(IB[i])):g.moveTo(X(i),Y(IB[i]))}g.stroke();
+txt('A +'+Math.round(IA[N-1]-100)+'%',px+pw+12,Y(IA[N-1])+8,BL,24,'left',700);txt('B '+(IB[N-1]>=100?'+':'−')+Math.abs(Math.round(IB[N-1]-100))+'%',px+pw+12,Y(IB[N-1])+8,'#B5531C',24,'left',700)}
+txt('A and B were generated independently.',40,H-24,TX,24,'left');
+requestAnimationFrame(draw)}
+draw();
+function DBG(){console.log('A',A[0].toFixed(0),A[N-1].toFixed(0),'B',B[0].toFixed(1),B[N-1].toFixed(1),bmn.toFixed(1),bmx.toFixed(1))}
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Plot Sense · 21</p>
+<aside>A dual-axis chart puts two measures with different units on the same plot, one scaled to the left axis and one to the right. The problem is that the alignment between the two scales is arbitrary, and the eye reads crossings and parallel movement as meaningful. In the animation, series A is a steadily rising measure and series B is a random walk with a slight upward drift, generated independently of A. Only the range of the right axis changes from frame to frame. Fit the right axis to B and B appears to track A, because both happen to trend up. Widen it and B looks flat. Widen it the other way and A seems to race past a flat B. None of these is a property of the data. The honest alternative is to index both series to 100 at the start and draw them on a single axis: A grew 169 percent while B grew 25 percent. Or use two separate charts stacked with the same time axis.</aside>
+</section>
