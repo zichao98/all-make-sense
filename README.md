@@ -52,14 +52,7 @@ python -m http.server 8788 --directory dist
 
 ## 部署
 
-**自動：** 推到 `main`（包括在 GitHub 網頁上直接改檔案、或合併 PR）就會由 GitHub Actions（`.github/workflows/deploy.yml`）build 並部署到 Cloudflare，約一兩分鐘後網站更新。PR 只會跑 `node build.mjs --all --strict` 檢查，不會部署。
-
-第一次要在 repo 的 Settings → Secrets and variables → Actions 加兩個 secret：
-
-| 名稱 | 內容 |
-|---|---|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare 的 API token（用「Edit Cloudflare Workers」範本建立） |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare 帳號 ID（Workers 首頁右側可以複製） |
+**自動：** 這個 repo 連著 Cloudflare Workers Builds。推到 `main`（包括在 GitHub 網頁上直接改檔案、或合併 PR）時，Cloudflare 會跑 `wrangler deploy`，它先執行 `wrangler.jsonc` 裡的 `build.command`（`node build.mjs`）產生 `dist/`，再上傳，約一兩分鐘後網站更新。PR 上另外有 GitHub Actions（`.github/workflows/check.yml`）跑 `node build.mjs --all --strict` 檢查。
 
 **手動：**
 

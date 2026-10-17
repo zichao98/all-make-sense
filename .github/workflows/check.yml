@@ -1,0 +1,19 @@
+# 每個 PR 和推到 main 時，先用嚴格模式 build 全部簡報（含 _template）。
+# 部署由 Cloudflare Workers Builds 負責（它連著這個 repo，會跑 wrangler.jsonc 裡的 build.command）。
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Strict build of every deck
+        run: node build.mjs --all --strict
