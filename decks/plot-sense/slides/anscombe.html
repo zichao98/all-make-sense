@@ -1,0 +1,42 @@
+<section id="anscombe" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">03 · Why plot at all</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Same summary, four different stories</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+
+<div style="display:flex;flex-direction:column"><div style="display:flex;flex-direction:row;align-items:center;background:#E7E0D2;padding:8px 16px"><p style="width:60%;font-size:24px;font-weight:700;text-align:left;color:#17212B">Statistic</p><p style="width:40%;font-size:24px;font-weight:700;text-align:right;color:#17212B">All four sets</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:60%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">Mean of x</p><p style="width:40%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">9.00</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:60%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">Mean of y</p><p style="width:40%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">7.50</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:60%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">Variance of x</p><p style="width:40%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">11.00</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:60%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">Variance of y</p><p style="width:40%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">4.12–4.13</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:60%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">Correlation r</p><p style="width:40%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">0.816</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:60%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">Best-fit line</p><p style="width:40%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">y = 3.00 + 0.500x</p></div></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Eye rule: plot before you summarize</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">Means and correlations compress the data. The plot shows what they threw away.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#B8B0A0',GRID='#ECE6DA';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function srt(a){return a.slice().sort(function(p,q){return p-q})}
+function qt(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)}
+function mean(a){var s=0;for(var i=0;a.length>i;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;a.length>i;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}
+function hline(x1,x2,y,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x1,y);g.lineTo(x2,y);g.stroke()}
+function vline(x,y1,y2,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x,y1);g.lineTo(x,y2);g.stroke()}
+function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+var X1=[10,8,13,9,11,14,6,4,12,7,5],DS=[[X1,[8.04,6.95,7.58,8.81,8.33,9.96,7.24,4.26,10.84,4.82,5.68]],[X1,[9.14,8.14,8.74,8.77,9.26,8.10,6.13,3.10,9.13,7.26,4.74]],[X1,[7.46,6.77,12.74,7.11,7.81,8.84,6.08,5.39,8.15,6.42,5.73]],[[8,8,8,8,8,8,8,19,8,8,8],[6.58,5.76,7.71,8.84,8.47,7.04,5.25,12.50,5.56,7.91,6.89]]];
+var NM=['I · a noisy line','II · a smooth curve','III · a line + one outlier','IV · one point sets the slope'],t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%10,i,k;g.clearRect(0,0,W,H);
+for(k=0;4>k;k++){var cx=k%2,cy=Math.floor(k/2),p=P(60+cx*430,60+cy*290,370,200,2,20,2,14);
+g.strokeStyle='#E2DCCF';g.lineWidth=1.5;g.strokeRect(p.x0,p.y0,p.w,p.h);txt(NM[k],p.x0,p.y0-14,INK,24,'left',700);
+var np=Math.min(11,Math.floor(t/0.25));for(i=0;np>i;i++)dot(p.X(DS[k][0][i]),p.Y(DS[k][1][i]),7,BL);
+var e=ease((t-3)/1.5);if(e>0){g.strokeStyle=OR;g.lineWidth=3;g.beginPath();g.moveTo(p.X(3),p.Y(4.5));g.lineTo(p.X(3+16*e),p.Y(4.5+8*e));g.stroke()}}
+if(t>4.5)txt('Same orange line in all four: y = 3.00 + 0.500x',60,H-12,'#B5531C',24,'left',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Plot Sense · 05　　Anscombe, “Graphs in Statistical Analysis” (1973). Statistics recomputed for this deck.</p>
+<aside>Francis Anscombe built these four small datasets in 1973 to make one point. Each has 11 points. All four have the same mean of x, 9.00, the same mean of y, 7.50, the same variances, the same correlation, 0.816, and the same least-squares line, y = 3.00 + 0.500x. These values were recomputed for this slide. But the plots tell four different stories. Set I is a noisy straight line. Set II is a smooth curve, so a straight line is the wrong model. Set III is a perfect line with one outlier that drags the fit. Set IV has ten points at the same x and one far point that alone decides the slope. The summary is identical; the conclusions are not. This is the strongest argument for plotting first.</aside>
+</section>

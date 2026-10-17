@@ -1,0 +1,11 @@
+{
+  "title": "Plot Sense",
+  "subtitle": "How each chart turns data into an answer",
+  "description": "Pick the question first: histograms and bin width, box plots that hide shape, log axes, honest bars, pies vs bars, intervals, scatter and correlation, overplotting, heatmap color, smoothing lag, growth on log axes and the dual-axis trap.",
+  "date": "2026-10-17",
+  "tags": [
+    "Data visualization",
+    "Statistics",
+    "Math intuition"
+  ]
+}

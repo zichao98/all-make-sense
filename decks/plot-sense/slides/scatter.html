@@ -1,0 +1,46 @@
+<section id="scatter" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">10 · Scatter and correlation</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Correlation is weaker than it sounds</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+
+<p style="font-size:28px;line-height:1.5;color:#4A5563">r measures how tightly points hug a straight line, from −1 to 1. Square it to see how much of y it explains.</p>
+<div style="display:flex;flex-direction:column"><div style="display:flex;flex-direction:row;align-items:center;background:#E7E0D2;padding:8px 16px"><p style="width:50%;font-size:24px;font-weight:700;text-align:left;color:#17212B">r</p><p style="width:50%;font-size:24px;font-weight:700;text-align:right;color:#17212B">r²</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:50%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">0.3</p><p style="width:50%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">0.09</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:50%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">0.5</p><p style="width:50%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">0.25</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:50%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">0.7</p><p style="width:50%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">0.49</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:50%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">0.9</p><p style="width:50%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">0.81</p></div></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Eye rule: r = 0.5 explains only 25%</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">And r says nothing about curves or cause. Look at the plot.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#B8B0A0',GRID='#ECE6DA';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function srt(a){return a.slice().sort(function(p,q){return p-q})}
+function qt(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)}
+function mean(a){var s=0;for(var i=0;a.length>i;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;a.length>i;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}
+function hline(x1,x2,y,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x1,y);g.lineTo(x2,y);g.stroke()}
+function vline(x,y1,y2,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x,y1);g.lineTo(x,y2);g.stroke()}
+function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+var RS=[0,0.3,0.5,0.8,0.95,-0.7],N=150,R=rng(2),Z1=[],Z2=[],i;for(i=0;N>i;i++){Z1.push(gauss(R));Z2.push(gauss(R))}
+function stdz(a){var m=mean(a),s=sd(a);for(var j=0;a.length>j;j++)a[j]=(a[j]-m)/s}stdz(Z1);stdz(Z2);var pj=0;for(i=0;N>i;i++)pj+=Z1[i]*Z2[i];pj/=(N-1);for(i=0;N>i;i++)Z2[i]-=pj*Z1[i];stdz(Z2);
+function cor(a,b){var ma=mean(a),mb=mean(b),s=0,sa=0,sb=0;for(var i=0;a.length>i;i++){s+=(a[i]-ma)*(b[i]-mb);sa+=(a[i]-ma)*(a[i]-ma);sb+=(b[i]-mb)*(b[i]-mb)}return s/Math.sqrt(sa*sb)}
+var DUR=3.2,t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,ci=Math.floor(t/DUR)%RS.length,u=(t%DUR)/DUR,pr=RS[(ci+RS.length-1)%RS.length],r=pr+(RS[ci]-pr)*ease(u*2.5),Y=[];
+for(i=0;N>i;i++)Y.push(r*Z1[i]+Math.sqrt(1-r*r)*Z2[i]);var rr=cor(Z1,Y);
+var p=P(60,80,460,460,-3.2,3.2,-3.2,3.2);g.clearRect(0,0,W,H);g.strokeStyle='#E2DCCF';g.lineWidth=1.5;g.strokeRect(p.x0,p.y0,p.w,p.h);
+g.save();g.beginPath();g.rect(p.x0,p.y0,p.w,p.h);g.clip();for(i=0;N>i;i++)dot(p.X(Z1[i]),p.Y(Y[i]),5,'rgba(45,108,176,0.7)');g.restore();
+txt('r = '+fm(rr),580,150,INK,40,'left',700);txt('r² = '+(rr*rr).toFixed(2),580,210,'#B5531C',32,'left',700);
+txt('x explains '+Math.round(rr*rr*100)+'% of',580,262,TX,26);txt("y's variance",580,298,TX,26);
+txt('150 points',60,58,TX,24,'left');
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Plot Sense · 15</p>
+<aside>The correlation coefficient r measures how tightly the points in a scatter plot cluster around a straight line, from −1 for a perfect falling line through 0 to +1 for a perfect rising line. The animation sweeps through r = 0, 0.3, 0.5, 0.8, 0.95 and −0.7 on 150 points and shows the measured r and r squared. The surprise for most people is how weak moderate correlations look: at r = 0.3 the cloud is almost round. r squared is the share of the variance of y that a straight line in x explains, so r = 0.5 explains only 25 percent and r = 0.9 explains 81 percent. Two warnings: r only measures straight-line association, so a perfect curve can have a low r, as Anscombe's second dataset showed, and correlation alone never establishes cause.</aside>
+</section>

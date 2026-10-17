@@ -1,0 +1,48 @@
+<section id="cover" data-transition="fade" style="background:#15202B;color:#F3EEE3;font-family:'Inter', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:start;gap:32px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;color:#F0995E">How to read, choose and trust a chart</p>
+<h1 style="font-family:'Source Serif 4', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F3EEE3">Plot Sense</h1>
+<p style="font-size:44px;line-height:1.4;color:#B9C4CF">Every chart answers one question. Pick the question first.</p>
+<p style="font-size:26px;color:#8C9AA8;letter-spacing:2px">Histogram · Box plot · Bar · Scatter · Heatmap · Line · Log axis</p>
+<x-embed style="position:absolute;left:128px;top:640px;width:1664px;height:300px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#B8B0A0',GRID='#ECE6DA';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function srt(a){return a.slice().sort(function(p,q){return p-q})}
+function qt(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)}
+function mean(a){var s=0;for(var i=0;a.length>i;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;a.length>i;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}
+function hline(x1,x2,y,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x1,y);g.lineTo(x2,y);g.stroke()}
+function vline(x,y1,y2,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x,y1);g.lineTo(x,y2);g.stroke()}
+function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+var R=rng(21),N=240,D=[],i,k;
+for(i=0;N>i;i++){var v=R()>0.4?-1.2+0.6*gauss(R):1.4+0.5*gauss(R);D.push(Math.max(-2.95,Math.min(2.95,v)))}
+var BW=0.2,NB=30,CNT=[],POS=[],JIT=[];for(k=0;NB>k;k++)CNT.push(0);
+for(i=0;N>i;i++){var b=Math.min(NB-1,Math.floor((D[i]+3)/BW));POS.push([b,CNT[b]]);CNT[b]++;JIT.push(R()*2-1)}
+var S=srt(D),Q1=qt(S,0.25),MD=qt(S,0.5),Q3=qt(S,0.75),IQ=Q3-Q1,LO=S[0],HI=S[N-1];
+for(i=0;N>i;i++){if(S[i]>=Q1-1.5*IQ){LO=S[i];break}}for(i=N-1;i>=0;i--){if(Q3+1.5*IQ>=S[i]){HI=S[i];break}}
+var NAMES=['Raw values','Dot plot','Histogram','Box plot'],t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%12,ph=Math.floor(t/3),u=(t%3)/3;
+var X0=60,XW=W-120,BASE=H-34,DS=8.5;function X(v){return X0+(v+3)/6*XW}
+g.clearRect(0,0,W,H);
+hline(X0,X0+XW,BASE+6,'#2E3D4D',2);
+var stack=ph==1?ease(u*2):(ph==2?1:0),fadeDots=ph==2?1-ease(u*2):(ph==3?0.25:1),bars=ph==2?ease(u*2):(ph==3?0:0);
+if(ph==0)stack=0;
+if(bars>0){g.globalAlpha=bars;for(k=0;NB>k;k++){if(CNT[k]){var x=X0+k*BW/6*XW;g.fillStyle='#7FB2E8';g.fillRect(x+1,BASE-CNT[k]*DS,BW/6*XW-2,CNT[k]*DS)}}g.globalAlpha=1}
+g.globalAlpha=fadeDots;for(i=0;N>i;i++){var sx=X(D[i]),sy=H/2+JIT[i]*40;if(ph==3){sy=H/2-40+JIT[i]*26}
+var tx=X0+(POS[i][0]+0.5)*BW/6*XW,ty=BASE-POS[i][1]*DS-DS/2;var x2=sx+(tx-sx)*stack,y2=sy+(ty-sy)*stack;dot(x2,y2,3.6,'#F0995E')}g.globalAlpha=1;
+if(ph==3){var e=ease(u*2.5),by=H/2+50,bh=56;g.globalAlpha=e;g.strokeStyle='#F3EEE3';g.lineWidth=3;g.strokeRect(X(Q1),by-bh/2,X(Q3)-X(Q1),bh);vline(X(MD),by-bh/2,by+bh/2,'#F0995E',4);
+hline(X(LO),X(Q1),by,'#F3EEE3',3);hline(X(Q3),X(HI),by,'#F3EEE3',3);vline(X(LO),by-16,by+16,'#F3EEE3',3);vline(X(HI),by-16,by+16,'#F3EEE3',3);g.globalAlpha=1}
+txt(NAMES[ph],W-24,40,'#F3EEE3',28,'right',700);txt('same 240 numbers',W-24,74,'#8C9AA8',24,'right');
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<aside>This deck is about one skill: looking at data and knowing which picture will answer your question, and what that picture can hide. The animation is the whole idea in miniature. The same 240 numbers are shown four ways. As raw dots they look like a smear. Stacked into columns they become a dot plot, which is a histogram made of dots, and two humps appear. As bars it is an ordinary histogram. As a box plot it shrinks to five numbers, and the two humps vanish. None of these is wrong. Each answers a different question, and each throws something away. Every chart and number in the deck is computed live in the browser or was checked with a script.</aside>
+</section>

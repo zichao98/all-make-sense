@@ -1,0 +1,47 @@
+<section id="pie" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">08 · Pie charts</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Pies hide close differences</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+
+<p style="font-size:28px;line-height:1.5;color:#4A5563">A pie asks you to compare angles. With five shares between 16% and 24%, that is close to guessing.</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">Sorted bars put the same numbers on one baseline, so rank and size read instantly.</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Part-to-whole with many parts?</span></b> One stacked bar keeps the whole visible and still uses length.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Eye rule: pie only for 2–3 parts</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">Or when one part dominates and the message is “most of the whole”. Otherwise: sorted bars.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#B8B0A0',GRID='#ECE6DA';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function srt(a){return a.slice().sort(function(p,q){return p-q})}
+function qt(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)}
+function mean(a){var s=0;for(var i=0;a.length>i;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;a.length>i;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}
+function hline(x1,x2,y,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x1,y);g.lineTo(x2,y);g.stroke()}
+function vline(x,y1,y2,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x,y1);g.lineTo(x,y2);g.stroke()}
+function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+var SETS=[[23,19,21,17,20],[18,22,20,24,16],[21,20,17,23,19]],L=['A','B','C','D','E'],DUR=5,t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,si=Math.floor(t/DUR)%3,u=(t%DUR)/DUR,V=SETS[si],i,ord=[0,1,2,3,4];
+ord.sort(function(a,b){return V[b]-V[a]});
+g.clearRect(0,0,W,H);txt('Shares of one whole (they sum to 100)',40,48,INK,26,'left',700);
+var cx=230,cy=300,rad=170,a0=-Math.PI/2;
+for(i=0;5>i;i++){var a1=a0+V[i]/100*6.2832;g.fillStyle=BL;g.beginPath();g.moveTo(cx,cy);g.arc(cx,cy,rad,a0,a1);g.closePath();g.fill();g.strokeStyle='#FFFDF8';g.lineWidth=4;g.stroke();
+var am=(a0+a1)/2;txt(L[i],cx+Math.cos(am)*rad*0.62,cy+Math.sin(am)*rad*0.62+9,'#FFFDF8',28,'center',700);a0=a1}
+txt('Pie: compare angles',cx,cy+rad+52,TX,24,'center',700);
+var bx=500,by=120,bw=360,bh=48;txt('Sorted bars: compare lengths',bx,by-30,TX,24,'left',700);
+for(i=0;5>i;i++){var k=ord[i],y=by+i*(bh+18),len=V[k]/25*(bw-60);g.fillStyle=k==ord[0]?OR:BL;g.fillRect(bx+40,y,len,bh);txt(L[k],bx+10,y+34,INK,26,'left',700);if(u>0.5)txt(V[k]+'%',bx+48+len,y+34,INK,24,'left',700)}
+txt(u>0.5?'Largest: '+L[ord[0]]+' at '+V[ord[0]]+'%. The bars told you first.':'Which share is largest?',40,H-24,u>0.5?'#B5531C':INK,26,'left',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Plot Sense · 12</p>
+<aside>A pie shows parts of a whole, and that is its one strength: everyone sees immediately that the slices add up to 100 percent. Its weakness is that it encodes value as angle and area, which people judge poorly. The animation shows three sets of five shares, each between 16 and 24 percent and summing to 100. In the pie, picking the largest slice is hard and ranking all five is harder. In the sorted bar chart beside it the same numbers line up on one baseline and the order is obvious. Use a pie for two or three parts, or when one part is clearly dominant and the message is about the whole. For anything that needs ranking or close comparison, use sorted bars, or a single stacked bar if part-to-whole matters.</aside>
+</section>

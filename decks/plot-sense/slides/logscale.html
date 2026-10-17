@@ -1,0 +1,49 @@
+<section id="logscale" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">06 · Skew and the log axis</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Skewed data needs a log axis</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+
+<p style="font-size:28px;line-height:1.5;color:#4A5563">Response times, incomes, file sizes: most values are small, a few are huge. On a linear axis everything piles into one spike.</p>
+<div style="display:flex;flex-direction:column;gap:10px;background:#ECE6DA;padding:24px 32px;border-radius:12px"><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">Median:</span></b> 98 ms</p><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">Mean:</span></b> 165 ms, pulled up by the tail</p><p style="font-size:26px;line-height:1.45;color:#4A5563"><b><span style="color:#B5531C">99th percentile:</span></b> 1,150 ms</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Eye rule: max ≫ median? Try a log axis</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">Report the median and a high percentile (p95, p99), not just the mean.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0',GR='#B8B0A0',GRID='#ECE6DA';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz){g.fillStyle=col;g.textAlign='left';for(var i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+function P(x0,y0,w,h,a,b,c,d){return{x0:x0,y0:y0,w:w,h:h,X:function(x){return x0+(x-a)/(b-a)*w},Y:function(y){return y0+(d-y)/(d-c)*h}}}
+function srt(a){return a.slice().sort(function(p,q){return p-q})}
+function qt(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo)}
+function mean(a){var s=0;for(var i=0;a.length>i;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;a.length>i;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}
+function hline(x1,x2,y,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x1,y);g.lineTo(x2,y);g.stroke()}
+function vline(x,y1,y2,col,lw){g.strokeStyle=col;g.lineWidth=lw||1.5;g.beginPath();g.moveTo(x,y1);g.lineTo(x,y2);g.stroke()}
+function ease(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)}
+var R=rng(12),N=1000,D=[],i,k;for(i=0;N>i;i++)D.push(100*Math.exp(gauss(R)));
+var S=srt(D),MED=qt(S,0.5),MEAN=mean(D),P99=qt(S,0.99),DUR=4.5,t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,lg=Math.floor(t/DUR)%2,K=40,C=[],mx=0,lo,hi;
+if(lg){lo=Math.log10(5);hi=Math.log10(5000)}else{lo=0;hi=2000}
+for(k=0;K>k;k++)C.push(0);for(i=0;N>i;i++){var v=lg?Math.log10(D[i]):D[i],b=Math.floor((v-lo)/(hi-lo)*K);if(b>=0)if(K>b)C[b]++}for(k=0;K>k;k++)if(C[k]>mx)mx=C[k];
+var p=P(60,100,W-120,370,lo,hi,0,1);g.clearRect(0,0,W,H);
+txt(lg?'Log axis':'Linear axis',60,52,INK,30,'left',700);txt('1,000 response times',W-60,52,TX,24,'right');
+hline(p.x0,p.x0+p.w,p.y0+p.h,'#C9C0AE',2);var bw=p.w/K;
+for(k=0;K>k;k++){var hh=C[k]/mx*p.h*0.92;g.fillStyle=BL;g.fillRect(p.x0+k*bw+1,p.y0+p.h-hh,bw-2,hh)}
+var ticks=lg?[10,100,1000]:[0,500,1000,1500,2000];for(k=0;ticks.length>k;k++){var tv=lg?Math.log10(ticks[k]):ticks[k],tx=p.X(tv);vline(tx,p.y0+p.h,p.y0+p.h+8,'#C9C0AE',2);txt(ticks[k]+' ms',tx,p.y0+p.h+36,TX,24,'center')}
+function mark(v,lab,col,dy){var x=p.X(lg?Math.log10(v):v);vline(x,p.y0,p.y0+p.h,col,3);g.font='700 24px '+F;var tw=g.measureText(lab).width;g.fillStyle='rgba(255,253,248,0.95)';g.fillRect(x+4,p.y0+dy-22,tw+10,30);txt(lab,x+9,p.y0+dy,col,24,'left',700)}
+mark(MEAN,'mean '+MEAN.toFixed(0),'#8A3E12',62);mark(MED,'median '+MED.toFixed(0),'#B5531C',24);
+txt(lg?'On a log axis the skew becomes a symmetric bell.':'Linear: one spike, and a tail to '+S[N-1].toFixed(0)+' ms off the chart.',60,H-30,INK,26,'left',700);
+requestAnimationFrame(draw)}
+draw();
+function DBG(){console.log('median',MED.toFixed(1),'mean',MEAN.toFixed(1),'p99',P99.toFixed(0),'max',S[N-1].toFixed(0),'p95',qt(S,0.95).toFixed(0),'over2000',D.filter(v=>v>2000).length)}
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Plot Sense · 09　　Simulated log-normal data. The “max ≫ median” test is a rule of thumb.</p>
+<aside>Many real quantities are right-skewed: most values are modest and a few are enormous. The animation uses 1,000 simulated response times from a log-normal distribution with a median around 100 ms. On a linear axis almost everything sits in the first few bars and the tail, up to 2,681 ms, runs off the chart. On a log axis, where each step is a factor of 10, the same data become a symmetric bell and you can read the spread. Skew also separates the mean from the median: here the median is 98 ms but the mean is 165 ms, because a few slow requests pull it up. The 99th percentile is 1,150 ms. For skewed data, the median and high percentiles describe the experience better than the mean. Treat the max-versus-median test as a rule of thumb.</aside>
+</section>
