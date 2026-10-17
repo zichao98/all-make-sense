@@ -1,0 +1,32 @@
+<section id="cover" data-transition="fade" style="background:#15202B;color:#F3EEE3;font-family:'Inter', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:start;gap:32px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;color:#F0995E">What engineering math is doing inside deep learning</p>
+<h1 style="font-family:'Source Serif 4', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F3EEE3">Engineering Math Sense</h1>
+<p style="font-size:44px;line-height:1.4;color:#B9C4CF">Four lines of training code. Seven branches of math.</p>
+<p style="font-size:26px;color:#8C9AA8;letter-spacing:2px">Linear algebra · Calculus · Probability · Numerics · Optimization · ODEs · Fourier</p>
+<x-embed style="position:absolute;left:128px;top:640px;width:1664px;height:300px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz,al){g.font=(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';var w=0,i;for(i=0;s.length>i;i++){g.font=(/[a-z]/i.test(s[i])?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';w+=g.measureText(s[i]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';for(i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+var A=0.02,B=1,ETA=1.8,NS=70,P=[[-9.5,1.5]],i;
+for(i=0;NS>i;i++){var p=P[i];P.push([p[0]*(1-ETA*A),p[1]*(1-ETA*B)])}
+function L(p){return 0.5*(A*p[0]*p[0]+B*p[1]*p[1])}
+var t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%9,n=Math.min(NS,Math.floor(t/0.1)),S=80,cx=W/2,cy=H/2,k;
+g.clearRect(0,0,W,H);
+for(k=1;9>=k;k++){var c=0.03*k*k;g.strokeStyle='rgba(127,178,232,'+(0.55-0.04*k)+')';g.lineWidth=2;g.beginPath();g.ellipse(cx,cy,Math.sqrt(2*c/A)*S,Math.sqrt(2*c/B)*S,0,0,6.2832);g.stroke()}
+g.fillStyle='#7FB2E8';g.beginPath();g.arc(cx,cy,6,0,6.2832);g.fill();
+g.strokeStyle='#F0995E';g.lineWidth=3;g.beginPath();for(k=0;n>=k;k++){var x=cx+P[k][0]*S,y=cy-P[k][1]*S;k?g.lineTo(x,y):g.moveTo(x,y)}g.stroke();
+for(k=0;n>=k;k++){g.fillStyle=k==n?'#F3EEE3':'#F0995E';g.beginPath();g.arc(cx+P[k][0]*S,cy-P[k][1]*S,k==n?8:4,0,6.2832);g.fill()}
+txt('step '+n,W-24,40,'#B9C4CF',26,'right',700);txt('loss '+L(P[n]).toFixed(3),W-24,76,'#F0995E',26,'right',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<aside>This deck turns a short article, “高等工程数学与深度学习之间的关系” (The relationship between advanced engineering mathematics and deep learning) by Capstone Lab, into a set of intuitions you can use. The article's claim is simple: matrices, gradients, probability and iteration are not prerequisites you finish and forget. They are what the algorithm is actually doing. We keep its structure, a toolkit table and a symptom-to-math debugging index, and add a picture, a computed example and a rule of thumb for each branch. The animation is real gradient descent on a long, narrow valley. The path zig-zags across the steep direction and creeps along the flat one, which is the most common shape of a training problem. Every number in the deck was computed for it.</aside>
+</section>

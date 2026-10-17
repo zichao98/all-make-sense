@@ -1,0 +1,122 @@
+{
+  "iter": {
+    "width": 243,
+    "height": 34,
+    "tex": "\\theta \\leftarrow \\theta - \\eta\\,\\nabla L(\\theta)"
+  },
+  "nyq": {
+    "width": 183,
+    "height": 35,
+    "tex": "f_s > 2\\,f_{\\max}"
+  },
+  "ywx": {
+    "width": 219,
+    "height": 36,
+    "tex": "\\mathbf{y} = W\\mathbf{x} + \\mathbf{b}"
+  },
+  "svd": {
+    "width": 227,
+    "height": 39,
+    "tex": "W = U\\,\\Sigma\\,V^{\\top}"
+  },
+  "kappa": {
+    "width": 224,
+    "height": 36,
+    "tex": "\\kappa = \\sigma_{\\max} / \\sigma_{\\min}"
+  },
+  "chain": {
+    "width": 274,
+    "height": 87,
+    "tex": "\\frac{\\partial L}{\\partial w} = \\frac{\\partial L}{\\partial y}\\cdot\\frac{\\partial y}{\\partial w}"
+  },
+  "ce": {
+    "width": 267,
+    "height": 36,
+    "tex": "L = -\\ln p_{\\mathrm{correct}}"
+  },
+  "lnk": {
+    "width": 148,
+    "height": 30,
+    "tex": "L_0 \\approx \\ln K"
+  },
+  "softmax": {
+    "width": 703,
+    "height": 99,
+    "tex": "\\mathrm{softmax}(\\mathbf{z})_i = \\frac{e^{\\,z_i - m}}{\\sum_k e^{\\,z_k - m}}, \\quad m = \\max_j z_j"
+  },
+  "gd1": {
+    "width": 298,
+    "height": 38,
+    "tex": "\\theta_{k+1} = (1 - \\eta\\lambda)\\,\\theta_k"
+  },
+  "stab": {
+    "width": 162,
+    "height": 84,
+    "tex": "\\eta < \\frac{2}{\\lambda_{\\max}}"
+  },
+  "gd": {
+    "width": 294,
+    "height": 32,
+    "tex": "\\theta_{k+1} = \\theta_k - \\eta\\,\\nabla L(\\theta_k)"
+  },
+  "euler": {
+    "width": 276,
+    "height": 32,
+    "tex": "x_{k+1} = x_k + h\\, f(x_k)"
+  },
+  "resnet": {
+    "width": 247,
+    "height": 32,
+    "tex": "\\mathbf{x}_{l+1} = \\mathbf{x}_l + F(\\mathbf{x}_l)"
+  },
+  "convthm": {
+    "width": 401,
+    "height": 38,
+    "tex": "\\mathcal{F}\\{f * g\\} = \\mathcal{F}\\{f\\}\\cdot\\mathcal{F}\\{g\\}"
+  },
+  "varw": {
+    "width": 268,
+    "height": 90,
+    "tex": "\\mathrm{Var}(W_{ij}) = \\frac{g^2}{n_{\\mathrm{in}}}"
+  },
+  "gain": {
+    "width": 341,
+    "height": 43,
+    "tex": "\\gamma^{L} = \\gamma \\times \\gamma \\times \\cdots \\times \\gamma"
+  },
+  "lowrank": {
+    "width": 154,
+    "height": 31,
+    "tex": "W \\approx A B^{\\top}"
+  },
+  "stabdark": {
+    "width": 164,
+    "height": 34,
+    "tex": "\\eta < 2/\\lambda_{\\max}"
+  },
+  "tgd": {
+    "width": 188,
+    "height": 30,
+    "tex": "\\theta \\leftarrow (1-\\eta\\lambda)\\,\\theta"
+  },
+  "teu": {
+    "width": 196,
+    "height": 30,
+    "tex": "x \\leftarrow (1-h\\lambda)\\,x"
+  },
+  "tres": {
+    "width": 184,
+    "height": 30,
+    "tex": "\\mathbf{x} \\leftarrow \\mathbf{x} + F(\\mathbf{x})"
+  },
+  "tst1": {
+    "width": 103,
+    "height": 30,
+    "tex": "\\eta < 2/\\lambda"
+  },
+  "tst2": {
+    "width": 105,
+    "height": 30,
+    "tex": "h < 2/\\lambda"
+  }
+}

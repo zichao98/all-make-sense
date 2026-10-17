@@ -1,0 +1,46 @@
+<section id="linalg" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">06 · Linear algebra</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">A matrix stretches space along two axes</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#ECE6DA;padding:22px 32px;border-radius:12px"><img src="assets/ywx.svg" alt="y = W x + b" style="width:219px;height:36px;object-fit:contain"><p style="flex:1;font-size:24px;line-height:1.4;color:#4A5563">One layer: multiply by W, then shift by b.</p></div>
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#ECE6DA;padding:22px 32px;border-radius:12px"><img src="assets/svd.svg" alt="W = U Σ Vᵀ" style="width:227px;height:39px;object-fit:contain"><p style="flex:1;font-size:24px;line-height:1.4;color:#4A5563">Every matrix: rotate, stretch along two axes by σ₁ and σ₂, rotate.</p></div>
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#F4DCC8;padding:22px 32px;border-radius:12px"><img src="assets/kappa.svg" alt="κ = σ_max / σ_min" style="width:224px;height:36px;object-fit:contain"><p style="flex:1;font-size:24px;line-height:1.4;color:#8A3E12">How unevenly W stretches. Near 1 is healthy; large means one direction is almost crushed.</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Rule of thumb: you lose about log₁₀ κ digits</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">float32 carries about 7 digits. With κ = 10⁴, expect about 3 reliable digits when you solve with W.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz,al){g.font=(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';var w=0,i;for(i=0;s.length>i;i++){g.font=(/[a-z]/i.test(s[i])?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';w+=g.measureText(s[i]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';for(i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+var MS=[{m:[1.5,0.8,0.3,0.9],n:'Well-conditioned'},{m:[1.2,1.05,0.95,0.9],n:'Nearly singular'}],DUR=7,t0=performance.now();
+function svd(a,b,c,d){var E=(a+d)/2,Fv=(a-d)/2,G=(c+b)/2,Hh=(c-b)/2,Q=Math.sqrt(E*E+Hh*Hh),Rr=Math.sqrt(Fv*Fv+G*G),s1=Q+Rr,s2=Math.abs(Q-Rr),a1=Math.atan2(G,Fv),a2=Math.atan2(Hh,E),th=(a2-a1)/2,ph=(a2+a1)/2;return{s1:s1,s2:s2,ph:ph}}
+function draw(){var t=(performance.now()-t0)/1000,ci=Math.floor(t/DUR)%2,u=(t%DUR)/DUR,M=MS[ci].m,e=Math.min(1,Math.max(0,(u-0.08)/0.4)),k;e=e*e*(3-2*e);
+var a=1+(M[0]-1)*e,b=M[1]*e,c=M[2]*e,d=1+(M[3]-1)*e,cx=W/2,cy=H/2+10,S=110;
+function P(x,y){return[cx+(a*x+b*y)*S,cy-(c*x+d*y)*S]}
+g.clearRect(0,0,W,H);
+for(k=-4;4>=k;k++){g.strokeStyle=k==0?'#C9C0AE':'#ECE6DA';g.lineWidth=k==0?2:1.5;g.beginPath();var p=P(k,-4),q=P(k,4);g.moveTo(p[0],p[1]);g.lineTo(q[0],q[1]);p=P(-4,k);q=P(4,k);g.moveTo(p[0],p[1]);g.lineTo(q[0],q[1]);g.stroke()}
+g.strokeStyle=BL;g.lineWidth=2.5;g.setLineDash([7,6]);g.beginPath();g.arc(cx,cy,S,0,6.2832);g.stroke();g.setLineDash([]);
+g.fillStyle='rgba(224,120,47,0.14)';g.strokeStyle=OR;g.lineWidth=4;g.beginPath();for(k=0;120>=k;k++){var th=k/120*6.2832,r=P(Math.cos(th),Math.sin(th));k?g.lineTo(r[0],r[1]):g.moveTo(r[0],r[1])}g.fill();g.stroke();
+var sv=svd(a,b,c,d);
+if(u>0.5){var al=Math.min(1,(u-0.5)*5);g.globalAlpha=al;var ux=Math.cos(sv.ph),uy=Math.sin(sv.ph);
+g.strokeStyle='#8A3E12';g.lineWidth=3.5;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+ux*sv.s1*S,cy-uy*sv.s1*S);g.stroke();
+g.beginPath();g.moveTo(cx,cy);g.lineTo(cx-uy*sv.s2*S,cy-ux*sv.s2*S);g.stroke();
+mt('σ₁',cx+ux*sv.s1*S+10,cy-uy*sv.s1*S-8,'#8A3E12',28);mt('σ₂',cx-uy*sv.s2*S-40,cy-ux*sv.s2*S-8,'#8A3E12',28);g.globalAlpha=1}
+txt(MS[ci].n,40,52,INK,28,'left',700);
+mt('W = ['+M[0]+', '+M[1]+'; '+M[2]+', '+M[3]+']',40,92,TX,24);
+txt('σ₁ = '+sv.s1.toFixed(2)+'   σ₂ = '+sv.s2.toFixed(2),W-40,52,'#8A3E12',26,'right',700);
+var kap=sv.s1/Math.max(sv.s2,1e-9);txt('κ = '+(kap>99?kap.toFixed(0):kap.toFixed(1)),W-40,92,ci?'#B5531C':INK,28,'right',700);
+txt('Dashed: unit circle.  Orange: where W sends it.',40,H-28,TX,24,'left');
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Engineering Math Sense · 10</p>
+<aside>A layer computes y = Wx + b. The singular value decomposition says any matrix acts in three moves: rotate, stretch along two perpendicular axes by the singular values σ₁ and σ₂, and rotate again. The animation shows a unit circle becoming an ellipse whose semi-axes are exactly σ₁ and σ₂. For the first matrix they are 1.85 and 0.60, so the condition number κ = σ₁/σ₂ is 3.1. The second matrix has nearly parallel columns: σ₁ = 2.06 and σ₂ = 0.040, so κ is about 52 and the circle collapses toward a line. A direction that gets crushed is hard to recover, which is why a large κ makes inverse problems and training unstable. The classic rule from numerical analysis is that solving a system with W can lose about log₁₀ κ significant digits. float32 has a machine epsilon of about 1.19 × 10⁻⁷, roughly seven digits. So κ = 10⁴ leaves about three. Singular values come back later as the per-layer gain in the vanishing-gradient slide.</aside>
+</section>

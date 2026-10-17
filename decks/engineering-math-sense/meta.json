@@ -1,0 +1,11 @@
+{
+  "title": "Engineering Math Sense",
+  "subtitle": "The math inside every training step",
+  "description": "What linear algebra, calculus, probability, numerics, optimization, ODEs and Fourier analysis each do inside a training loop, plus a symptom-to-math map for debugging. Adapted from a Capstone Lab article.",
+  "date": "2026-10-17",
+  "tags": [
+    "Deep learning",
+    "Math intuition",
+    "Engineering math"
+  ]
+}

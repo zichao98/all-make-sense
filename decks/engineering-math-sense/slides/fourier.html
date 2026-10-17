@@ -1,0 +1,52 @@
+<section id="fourier" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">12 · Fourier analysis</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">In frequency space, filtering is multiplication</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:10px;align-items:start;background:#ECE6DA;padding:20px 32px;border-radius:12px"><img src="assets/convthm.svg" alt="F{f * g} = F{f} · F{g}" style="width:401px;height:38px;object-fit:contain"><p style="font-size:24px;line-height:1.4;color:#4A5563">Convolution in time = multiplication in frequency.</p></div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Signal concentrates; noise spreads.</span></b> Two tones are two tall bars. Dropping everything above 8 cycles halves the error.</p>
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;background:#FFFDF8;border:1px solid #E2DCCF;padding:20px 24px;border-radius:14px"><p style="font-size:24px;color:#17212B">Direct, n = 4,096</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:52px;font-weight:600;line-height:1.1;color:#17212B">16.8 M</p><p style="font-size:24px;color:#17212B">multiplications</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;background:#F4DCC8;padding:20px 24px;border-radius:14px"><p style="font-size:24px;color:#8A3E12">Through the FFT</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:52px;font-weight:600;line-height:1.1;color:#8A3E12">0.15 M</p><p style="font-size:24px;color:#8A3E12">about 110× fewer</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Eye rule: repeating or shift-invariant?</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">Then look at the spectrum first.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz,al){g.font=(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';var w=0,i;for(i=0;s.length>i;i++){g.font=(/[a-z]/i.test(s[i])?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';w+=g.measureText(s[i]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';for(i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+var N=128,R=rng(3),X=[],C=[],Sg=[],k,n;
+function clean(t){return Math.sin(6.2832*3*t)+0.5*Math.sin(6.2832*7*t)}
+for(n=0;N>n;n++){C.push(clean(n/N));X.push(C[n]+0.45*gauss(R))}
+var RE=[],IM=[],MAG=[];for(k=0;N/2>=k;k++){var a=0,b=0;for(n=0;N>n;n++){a+=X[n]*Math.cos(6.2832*k*n/N);b-=X[n]*Math.sin(6.2832*k*n/N)}RE.push(a);IM.push(b);MAG.push(Math.sqrt(a*a+b*b)/(N/2))}
+function recon(cut){var y=[];for(n=0;N>n;n++){var s=RE[0]/N;for(k=1;cut>=k;k++){var w=k==N/2?1:2;s+=w*(RE[k]*Math.cos(6.2832*k*n/N)-IM[k]*Math.sin(6.2832*k*n/N))/N}y.push(s)}return y}
+var DUR=9,t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%DUR,cut=t>1.2?Math.max(8,Math.round(64-(t-1.2)*28)):64,Y=recon(cut),err=0;
+for(n=0;N>n;n++)err+=(Y[n]-C[n])*(Y[n]-C[n]);err=Math.sqrt(err/N);
+g.clearRect(0,0,W,H);
+var px=48,py=70,pw=W-96,ph=220;function XX(n){return px+n/(N-1)*pw}function YY(v){return py+ph/2-v*ph/5.2}
+txt('Time domain',px,py-18,INK,24,'left',700);txt('error vs clean signal: '+err.toFixed(2),px+pw,py-18,'#B5531C',24,'right',700);
+g.strokeStyle='#E2DCCF';g.lineWidth=1.5;g.strokeRect(px,py,pw,ph);
+g.strokeStyle='#B8B0A0';g.lineWidth=1.5;g.beginPath();for(n=0;N>n;n++){n?g.lineTo(XX(n),YY(X[n])):g.moveTo(XX(n),YY(X[n]))}g.stroke();
+g.strokeStyle=BL;g.lineWidth=2.5;g.setLineDash([7,6]);g.beginPath();for(n=0;N>n;n++){n?g.lineTo(XX(n),YY(C[n])):g.moveTo(XX(n),YY(C[n]))}g.stroke();g.setLineDash([]);
+g.strokeStyle=OR;g.lineWidth=4;g.beginPath();for(n=0;N>n;n++){n?g.lineTo(XX(n),YY(Y[n])):g.moveTo(XX(n),YY(Y[n]))}g.stroke();
+var sy=370,sh=150,bw=pw/(N/2+1);
+txt('Frequency domain (|DFT|)',px,sy-18,INK,24,'left',700);txt('keep frequencies ≤ '+cut,px+pw,sy-18,'#B5531C',24,'right',700);
+g.strokeStyle='#E2DCCF';g.strokeRect(px,sy,pw,sh);
+for(k=0;N/2>=k;k++){var hgt=Math.min(1,MAG[k]/1.05)*(sh-10);g.fillStyle=k>cut?'#D8D0C0':(k==3||k==7?BL:OR);g.fillRect(px+k*bw+1,sy+sh-hgt,bw-2,hgt)}
+g.strokeStyle='#B5531C';g.lineWidth=2.5;g.setLineDash([6,5]);g.beginPath();g.moveTo(px+(cut+1)*bw,sy);g.lineTo(px+(cut+1)*bw,sy+sh);g.stroke();g.setLineDash([]);
+txt('0',px,sy+sh+30,TX,24,'left');txt('64 cycles',px+pw,sy+sh+30,TX,24,'right');
+txt('Gray: noisy.  Blue dashed: clean (3 + 7 cycles).  Orange: filtered.',px,H-14,TX,24,'left');
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Engineering Math Sense · 16　　Operation counts for a full circular convolution of length 4,096, constant factors ignored.</p>
+<aside>Fourier analysis rewrites a signal as a sum of sines. Two facts make it useful. First, the convolution theorem: convolving two signals is the same as multiplying their spectra. Filtering becomes a mask on frequencies. Second, structure and noise look different there. The animation builds a clean signal from 3 and 7 cycles, adds Gaussian noise with standard deviation 0.45, and computes the discrete Fourier transform of 128 samples directly in the browser. The two tones stand out as two tall bars, and the noise is spread thinly over all 64 frequencies. Keeping only frequencies up to 8 cuts the error against the clean signal from 0.41 to 0.20. The FFT computes a transform in about n log₂ n operations instead of n². For a full circular convolution of length 4,096 that is about 16.8 million multiplications directly versus about 150,000 through three FFTs and a pointwise product, roughly 110 times fewer, ignoring constant factors. That is why large convolutions and spectral methods go through the FFT.</aside>
+</section>

@@ -1,0 +1,25 @@
+// name        color     size  LaTeX
+iter         #8A3E12   34   \theta \leftarrow \theta - \eta\,\nabla L(\theta)
+nyq          #8A3E12   38   f_s > 2\,f_{\max}
+ywx          #17212B   40   \mathbf{y} = W\mathbf{x} + \mathbf{b}
+svd          #17212B   40   W = U\,\Sigma\,V^{\top}
+kappa        #8A3E12   36   \kappa = \sigma_{\max} / \sigma_{\min}
+chain        #17212B   38   \frac{\partial L}{\partial w} = \frac{\partial L}{\partial y}\cdot\frac{\partial y}{\partial w}
+ce           #17212B   40   L = -\ln p_{\mathrm{correct}}
+lnk          #F0995E   34   L_0 \approx \ln K
+softmax      #17212B   40   \mathrm{softmax}(\mathbf{z})_i = \frac{e^{\,z_i - m}}{\sum_k e^{\,z_k - m}}, \quad m = \max_j z_j
+gd1          #17212B   38   \theta_{k+1} = (1 - \eta\lambda)\,\theta_k
+stab         #8A3E12   38   \eta < \frac{2}{\lambda_{\max}}
+gd           #17212B   32   \theta_{k+1} = \theta_k - \eta\,\nabla L(\theta_k)
+euler        #17212B   32   x_{k+1} = x_k + h\, f(x_k)
+resnet       #17212B   32   \mathbf{x}_{l+1} = \mathbf{x}_l + F(\mathbf{x}_l)
+convthm      #17212B   38   \mathcal{F}\{f * g\} = \mathcal{F}\{f\}\cdot\mathcal{F}\{g\}
+varw         #8A3E12   38   \mathrm{Var}(W_{ij}) = \frac{g^2}{n_{\mathrm{in}}}
+gain         #17212B   38   \gamma^{L} = \gamma \times \gamma \times \cdots \times \gamma
+lowrank      #F0995E   34   W \approx A B^{\top}
+stabdark     #F0995E   34   \eta < 2/\lambda_{\max}
+tgd          #17212B   30   \theta \leftarrow (1-\eta\lambda)\,\theta
+teu          #17212B   30   x \leftarrow (1-h\lambda)\,x
+tres         #17212B   30   \mathbf{x} \leftarrow \mathbf{x} + F(\mathbf{x})
+tst1         #17212B   30   \eta < 2/\lambda
+tst2         #17212B   30   h < 2/\lambda
