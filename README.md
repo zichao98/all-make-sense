@@ -52,6 +52,10 @@ python -m http.server 8788 --directory dist
 
 ## 部署
 
+**自動：** 這個 repo 連著 Cloudflare Workers Builds。推到 `main`（包括在 GitHub 網頁上直接改檔案、或合併 PR）時，Cloudflare 會跑 `wrangler deploy`，它先執行 `wrangler.jsonc` 裡的 `build.command`（`node build.mjs`）產生 `dist/`，再上傳，約一兩分鐘後網站更新。PR 上另外有 GitHub Actions（`.github/workflows/check.yml`）跑 `node build.mjs --all --strict` 檢查。
+
+**手動：**
+
 ```bash
 npm run deploy
 ```

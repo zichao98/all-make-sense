@@ -1,0 +1,22 @@
+<section id="memory" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">17 · Memory</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Count the bytes before you buy GPUs</h2>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px"><p style="font-size:32px;font-weight:700;color:#17212B">One parameter</p><p style="font-size:26px;color:#4A5563">float32 with Adam</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:56px;font-weight:600;line-height:1.1;color:#17212B">16 B</p><p style="font-size:24px;line-height:1.4;color:#4A5563">weight 4 + gradient 4 + two moments 8</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#FFFDF8;border:1px solid #E2DCCF;padding:28px;border-radius:16px"><p style="font-size:32px;font-weight:700;color:#17212B">1 billion parameters</p><p style="font-size:26px;color:#4A5563">same recipe</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:56px;font-weight:600;line-height:1.1;color:#17212B">16 GB</p><p style="font-size:24px;line-height:1.4;color:#4A5563">before activations</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#F4DCC8;padding:28px;border-radius:16px"><p style="font-size:32px;font-weight:700;color:#8A3E12">7 billion parameters</p><p style="font-size:26px;color:#8A3E12">same recipe</p><p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:56px;font-weight:600;line-height:1.1;color:#8A3E12">112 GB</p><p style="font-size:24px;line-height:1.4;color:#8A3E12">before activations</p></div>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#ECE6DA;padding:24px 28px;border-radius:14px">
+<p style="font-size:28px;font-weight:700;color:#17212B">Low rank shrinks the bill</p>
+<p style="font-size:26px;line-height:1.4;color:#4A5563">A 4096 × 4096 matrix has 16,777,216 entries. Two rank-8 factors, 4096 × 8 each, have 65,536: 0.39%.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#15202B;padding:24px 28px;border-radius:14px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:16px"><p style="font-size:28px;font-weight:700;color:#F0995E">Train only</p><img src="assets/lowrank.svg" alt="W ≈ A Bᵀ" style="width:154px;height:31px;object-fit:contain"></div>
+<p style="font-size:26px;line-height:1.4;color:#E6E1D6">Freeze W and learn a small low-rank update instead. That is the idea behind LoRA fine-tuning.</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#FFFDF8;border:1px solid #E2DCCF;padding:24px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#17212B">Inference is far cheaper</p><p style="font-size:26px;line-height:1.4;color:#4A5563">16-bit weights alone take 2 bytes per parameter: 7 billion parameters fit in 14 GB.</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Engineering Math Sense · 22　　GB = 10⁹ bytes. Activations grow with batch size and sequence length and come on top.</p>
+<aside>Training memory starts with simple arithmetic. In plain float32 with the Adam optimizer, each parameter needs its weight (4 bytes), its gradient (4 bytes) and Adam's two running moments (8 bytes): 16 bytes. A model with one billion parameters therefore needs 16 GB before storing a single activation, and seven billion parameters need 112 GB. Mixed precision and optimizer tricks change the constants but not the habit: multiply parameters by bytes per parameter first. Linear algebra also offers a way out. A 4096 by 4096 weight matrix has 16,777,216 entries. If the change you need is approximately low rank, you can write it as A times B transposed with A and B each 4096 by 8, which is 65,536 numbers, 0.39 percent of the full matrix. Low-rank adaptation methods such as LoRA fine-tune large models this way.</aside>
+</section>

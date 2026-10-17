@@ -2,6 +2,8 @@
 {
   "name": "all-make-sense",
   "compatibility_date": "2026-09-01",
+  // wrangler deploy / versions upload 會先跑這個指令產生 dist/（Cloudflare Workers Builds 也一樣）
+  "build": { "command": "node build.mjs" },
   "assets": {
     "directory": "./dist",
     "html_handling": "auto-trailing-slash",

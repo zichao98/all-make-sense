@@ -1,0 +1,48 @@
+<section id="optim" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">10 · Optimization</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">The steepest direction caps the step size</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#ECE6DA;padding:22px 32px;border-radius:12px"><img src="assets/gd1.svg" alt="θ_(k+1) = (1 − ηλ) θ_k" style="width:298px;height:38px;object-fit:contain"><p style="flex:1;font-size:24px;line-height:1.4;color:#4A5563">On a bowl with curvature λ, each step multiplies the error by 1 − ηλ.</p></div>
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#F4DCC8;padding:22px 32px;border-radius:12px"><img src="assets/stab.svg" alt="η < 2 / λ_max" style="width:162px;height:84px;object-fit:contain"><p style="flex:1;font-size:24px;line-height:1.4;color:#8A3E12">Every direction must shrink. The steepest curvature, λmax, sets the limit.</p></div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">The flattest direction sets the time.</span></b> At κ = 100, a 100× cut takes about 460 steps.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Bouncing or blowing up? η is near 2/λmax.</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">Steady but slow? The problem is κ. Rescale directions (normalization, Adam) instead of pushing η.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz,al){g.font=(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';var w=0,i;for(i=0;s.length>i;i++){g.font=(/[a-z]/i.test(s[i])?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';w+=g.measureText(s[i]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';for(i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+var L1=1,L2=10,ETAS=[0.05,0.18,0.21],NS=30,PATHS=[],c,k;
+for(c=0;3>c;c++){var p=[[-2.6,0.9]];for(k=0;NS>k;k++){var q=p[k];p.push([q[0]*(1-ETAS[c]*L1),q[1]*(1-ETAS[c]*L2)])}PATHS.push(p)}
+function loss(q){return 0.5*(L1*q[0]*q[0]+L2*q[1]*q[1])}
+var NOTE=['Calm but slow: the flat direction crawls.','Zig-zags across the valley, yet converges.','Above 2/λmax = 0.2: every bounce grows.'];
+var DUR=6.5,t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,ci=Math.floor(t/DUR)%3,u=t%DUR,n=Math.min(NS,Math.floor(u/0.15)),P=PATHS[ci],e;
+g.clearRect(0,0,W,H);
+var cx=270,cy=300,S=80,px=40,py=150,pw=460,ph=300;
+g.save();g.beginPath();g.rect(px,py,pw,ph);g.clip();
+for(e=1;7>=e;e++){var lv=0.03*e*e*e;g.strokeStyle='rgba(45,108,176,'+(0.6-0.06*e)+')';g.lineWidth=2;g.beginPath();g.ellipse(cx,cy,Math.sqrt(2*lv/L1)*S,Math.sqrt(2*lv/L2)*S,0,0,6.2832);g.stroke()}
+g.strokeStyle=OR;g.lineWidth=3;g.beginPath();for(k=0;n>=k;k++){var x=cx+P[k][0]*S,y=cy-P[k][1]*S;k?g.lineTo(x,y):g.moveTo(x,y)}g.stroke();
+for(k=0;n>=k;k++){g.fillStyle=k==n?INK:OR;g.beginPath();g.arc(cx+P[k][0]*S,cy-P[k][1]*S,k==n?7:4,0,6.2832);g.fill()}
+g.restore();g.strokeStyle='#E2DCCF';g.lineWidth=1.5;g.strokeRect(px,py,pw,ph);
+txt('Path on the loss bowl',px,py-14,INK,24,'left',700);
+var lx=580,lw=290,lt=Math.log(1e3),lb=Math.log(1e-5);function LX(k){return lx+k/NS*lw}function LY(l){return py+(lt-Math.log(Math.max(l,1e-5)))/(lt-lb)*ph}
+g.strokeStyle='#E2DCCF';g.strokeRect(lx,py,lw,ph);txt('Loss (log)',lx,py-14,INK,24,'left',700);
+g.save();g.beginPath();g.rect(lx,py,lw,ph);g.clip();g.strokeStyle=OR;g.lineWidth=3;g.beginPath();for(k=0;n>=k;k++){k?g.lineTo(LX(k),LY(loss(P[k]))):g.moveTo(LX(k),LY(loss(P[k])))}g.stroke();g.restore();
+txt('step '+n,lx+lw,py+ph+32,TX,24,'right');txt('loss '+(loss(P[n])>=0.01?loss(P[n]).toFixed(2):loss(P[n]).toExponential(1).replace('-','−')),lx,py+ph+32,'#B5531C',24,'left',700);
+txt('η = '+ETAS[ci].toFixed(2)+'     η × λmax = '+(ETAS[ci]*L2).toFixed(1),40,64,ci==2?'#B5531C':INK,30,'left',700);
+txt('Curvatures λ = 1 and 10 (κ = 10)',W-40,64,TX,24,'right');
+txt(NOTE[ci],40,H-40,ci==2?'#B5531C':INK,26,'left',700);
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Engineering Math Sense · 14　　Exact for a quadratic bowl; real losses are only locally quadratic.</p>
+<aside>Near a minimum, a loss looks like a bowl. Along a direction with curvature λ, one gradient step multiplies the error by 1 − ηλ. If that factor has magnitude below 1 the error shrinks; above 1 it grows. Since every direction has to shrink, the learning rate must satisfy η < 2/λmax. The animation uses curvatures 1 and 10, so the limit is 0.2. At η = 0.05 the path is smooth but crawls along the flat direction, loss 0.16 after 30 steps. At η = 0.18 the steep direction overshoots and bounces with factor −0.8, yet everything converges, loss about 3 × 10⁻⁵. At η = 0.21 the factor is −1.1 and each bounce grows: loss about 1,200 after 30 steps. The flat direction sets the time. At η = 1/λmax it shrinks by 1 − 1/κ per step, so with κ = 100 a 100-fold reduction takes ln 100 / −ln 0.99 ≈ 458 steps. Ill-conditioning is fixed by changing the geometry: normalization layers and adaptive optimizers effectively rescale directions.</aside>
+</section>

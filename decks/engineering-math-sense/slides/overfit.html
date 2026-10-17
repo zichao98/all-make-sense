@@ -1,0 +1,56 @@
+<section id="overfit" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">16 · Overfitting</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Perfect on training data, wrong in between</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<p style="font-size:28px;line-height:1.5;color:#4A5563">Fit polynomials to 10 noisy samples of a sine wave. The noise has std 0.2, so 0.2 is the best possible test error.</p>
+<div style="display:flex;flex-direction:column"><div style="display:flex;flex-direction:row;align-items:center;background:#E7E0D2;padding:8px 16px"><p style="width:30%;font-size:24px;font-weight:700;text-align:left;color:#17212B">Degree</p><p style="width:35%;font-size:24px;font-weight:700;text-align:right;color:#17212B">Train error</p><p style="width:35%;font-size:24px;font-weight:700;text-align:right;color:#17212B">Test error</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:30%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">1</p><p style="width:35%;font-size:26px;line-height:1.35;text-align:right;color:#17212B">0.42</p><p style="width:35%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">0.46</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:30%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">3</p><p style="width:35%;font-size:26px;line-height:1.35;text-align:right;color:#17212B">0.15</p><p style="width:35%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">0.24</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:30%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">9</p><p style="width:35%;font-size:26px;line-height:1.35;text-align:right;color:#17212B">0.00</p><p style="width:35%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">2.31</p></div></div>
+<p style="font-size:24px;line-height:1.5;color:#4A5563">Median RMSE over 2,000 random datasets.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Eye rule: train ≪ test is a statistics problem</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">More optimization will not fix it. More data, a simpler model or regularization will.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz,al){g.font=(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';var w=0,i;for(i=0;s.length>i;i++){g.font=(/[a-z]/i.test(s[i])?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';w+=g.measureText(s[i]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';for(i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+var R=rng(502),N=10,SIG=0.2,X=[],Y=[],TX=[],TY=[],i,k,a,b;
+function f(x){return Math.sin(Math.PI*x)}
+for(i=0;N>i;i++){X.push(-0.95+1.9*(i+0.15+0.7*R())/N);Y.push(f(X[i])+SIG*gauss(R))}
+for(i=0;200>i;i++){var x=-0.95+1.9*R();TX.push(x);TY.push(f(x)+SIG*gauss(R))}
+function fitp(d){var M=d+1,A=[],a,b,i,k;for(a=0;M>a;a++){A.push([]);for(b=0;M+1>b;b++)A[a].push(0)}
+for(i=0;N>i;i++){var p=[];for(a=0;M>a;a++)p.push(Math.pow(X[i],a));for(a=0;M>a;a++){for(b=0;M>b;b++)A[a][b]+=p[a]*p[b];A[a][M]+=p[a]*Y[i]}}
+for(a=0;M>a;a++){var pv=a;for(b=a+1;M>b;b++)if(Math.abs(A[b][a])>Math.abs(A[pv][a]))pv=b;var tm=A[a];A[a]=A[pv];A[pv]=tm;
+for(b=0;M>b;b++)if(b!=a){var r=A[b][a]/A[a][a];for(k=a;M+1>k;k++)A[b][k]-=r*A[a][k]}}
+var c=[];for(a=0;M>a;a++)c.push(A[a][M]/A[a][a]);return c}
+function ev(c,x){var s=0,a;for(a=c.length-1;a>=0;a--)s=s*x+c[a];return s}
+function rmse(c,xs,ys){var s=0;for(var q=0;xs.length>q;q++){var e=ev(c,xs[q])-ys[q];s+=e*e}return Math.sqrt(s/xs.length)}
+var DEG=[1,3,9],FIT=[],TR=[],TE=[];for(k=0;3>k;k++){var cc=fitp(DEG[k]);FIT.push(cc);TR.push(rmse(cc,X,Y));TE.push(rmse(cc,TX,TY))}
+var NM=['Too simple','About right','Memorized'],DUR=5,t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,ci=Math.floor(t/DUR)%3,u=(t%DUR)/DUR,c=FIT[ci],j;
+var px=40,py=96,pw=560,ph=440;function XX(x){return px+(x+1)/2*pw}function YY(y){return py+(1.9-y)/3.8*ph}
+g.clearRect(0,0,W,H);
+txt('Degree '+DEG[ci]+' polynomial · '+NM[ci],40,52,ci==2?'#B5531C':INK,28,'left',700);
+g.strokeStyle='#E2DCCF';g.lineWidth=1.5;g.strokeRect(px,py,pw,ph);
+g.save();g.beginPath();g.rect(px,py,pw,ph);g.clip();
+for(i=0;200>i;i++){g.fillStyle='rgba(122,130,140,0.35)';g.beginPath();g.arc(XX(TX[i]),YY(TY[i]),3.5,0,6.2832);g.fill()}
+g.strokeStyle=BL;g.lineWidth=2.5;g.setLineDash([7,6]);g.beginPath();for(j=0;300>=j;j++){var x=-1+2*j/300;j?g.lineTo(XX(x),YY(f(x))):g.moveTo(XX(x),YY(f(x)))}g.stroke();g.setLineDash([]);
+var e2=Math.min(1,u*2.5);g.strokeStyle=OR;g.lineWidth=4;g.beginPath();for(j=0;300*e2>=j;j++){var x2=-0.97+1.94*j/300;j?g.lineTo(XX(x2),YY(ev(c,x2))):g.moveTo(XX(x2),YY(ev(c,x2)))}g.stroke();
+for(i=0;N>i;i++){g.fillStyle=INK;g.beginPath();g.arc(XX(X[i]),YY(Y[i]),7,0,6.2832);g.fill()}
+g.restore();
+var bx=650,bw=70,by=py+40,bh=320,mx=2.5;
+function bar(x,v,lab,col){var hh=Math.min(1,v/mx)*bh;g.fillStyle='#EFE9DD';g.fillRect(x,by,bw,bh);g.fillStyle=col;g.fillRect(x,by+bh-hh,bw,hh);txt(v.toFixed(2),x+bw/2,by+bh-hh-10,col==OR?'#B5531C':INK,24,'center',700);txt(lab,x+bw/2,by+bh+34,TX,24,'center')}
+bar(bx,TR[ci],'train',INK);bar(bx+110,TE[ci],'test',OR);
+txt('RMSE',bx,py+10,INK,24,'left',700);
+txt('Black: 10 training points.  Gray: 200 new points.',40,H-28,TX,24,'left');
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Engineering Math Sense · 21</p>
+<aside>The fifth row of the symptom map: great on training data, worse in production. Take 10 points from a sine wave plus Gaussian noise with standard deviation 0.2, and fit polynomials by least squares. Degree 1 is too simple: training and test errors are both high, 0.42 and 0.46. Degree 3 is about right: 0.15 train and 0.24 test, close to the floor of 0.2 set by the noise itself. Degree 9 has 10 coefficients for 10 points, so it passes through every training point and the training error is zero. Between the points it swings wildly, and the median test error is 2.31, ten times worse than degree 3. These are medians over 2,000 random datasets; the animation shows one dataset close to the median: 0.41, 0.15 and 0.00 train, 0.46, 0.23 and 2.32 test. When training error is far below test error, the optimizer has done its job too well. The fix lives in statistics: more data, fewer effective parameters, regularization, or a split that reflects the deployment distribution.</aside>
+</section>

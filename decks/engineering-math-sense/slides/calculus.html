@@ -1,0 +1,51 @@
+<section id="calculus" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">07 · Calculus</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Backprop multiplies local slopes</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;align-items:start;background:#ECE6DA;padding:20px 32px;border-radius:12px"><img src="assets/chain.svg" alt="∂L/∂w = ∂L/∂y · ∂y/∂w" style="width:274px;height:87px;object-fit:contain"></div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563">Each node only knows its own slope. Backprop multiplies them from the loss back to every weight.</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Why it scales:</span></b> one backward pass costs a small multiple of one forward pass, for 10 weights or 10 billion.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">A gradient is a direction, not a destination</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">−∇L points downhill from where you stand. How far to step is the optimizer’s job.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz,al){g.font=(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';var w=0,i;for(i=0;s.length>i;i++){g.font=(/[a-z]/i.test(s[i])?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';w+=g.measureText(s[i]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';for(i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+var X0=1.5,TG=2,ETA=0.1,IT=[{w:0.8,b:-0.2}],k;
+for(k=0;3>k;k++){var s=IT[k];s.u=s.w*X0;s.y=s.u+s.b;s.L=(s.y-TG)*(s.y-TG);s.dy=2*(s.y-TG);s.dw=s.dy*X0;s.db=s.dy;IT.push({w:s.w-ETA*s.dw,b:s.b-ETA*s.db})}
+var DUR=7.5,t0=performance.now();
+function box(x,y,lab,val,on,col){g.fillStyle=on?'#FFFDF8':'#F6F3EC';g.strokeStyle=on?col:'#D8D0C0';g.lineWidth=on?3:2;g.beginPath();g.roundRect(x-62,y-40,124,80,12);g.fill();g.stroke();mt(lab,x,y-6,INK,26,'center');txt(on?val:'',x,y+28,col,24,'center',700)}
+function op(x,y,s){g.fillStyle='#ECE6DA';g.beginPath();g.arc(x,y,34,0,6.2832);g.fill();mt(s,x,y+9,INK,28,'center')}
+function edge(x1,y1,x2,y2){g.strokeStyle='#C9C0AE';g.lineWidth=2.5;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();var a=Math.atan2(y2-y1,x2-x1);g.fillStyle='#C9C0AE';g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-14*Math.cos(a-0.4),y2-14*Math.sin(a-0.4));g.lineTo(x2-14*Math.cos(a+0.4),y2-14*Math.sin(a+0.4));g.fill()}
+function gr(x,y,v,on){if(on){g.fillStyle='#F4DCC8';g.beginPath();g.roundRect(x-62,y-20,124,40,10);g.fill();txt(fm(v),x,y+9,'#8A3E12',24,'center',700)}}
+function draw(){var t=(performance.now()-t0)/1000,it=Math.floor(t/DUR)%3,u=t%DUR,s=IT[it],BLU='#1F4E80';
+var fw=Math.floor(u/0.55),bw=u>3.2?Math.floor((u-3.2)/0.55):-1,up=u>5.6;
+g.clearRect(0,0,W,H);
+txt('Iteration '+(it+1)+'   ·   '+(up?'update':(bw>=0?'backward: multiply local slopes, right to left':'forward: compute values, left to right')),40,46,INK,26,'left',700);
+var Y=230;
+edge(150,140,226,205);edge(150,320,226,255);edge(334,Y,434,Y);edge(510,330,484,Y+31);edge(506,Y,674,Y);edge(745,330,723,Y+31);edge(744,Y,798,Y);
+op(300,Y,'×');op(470,Y,'+');op(710,Y,'(·)²');
+box(88,130,'x',fm(X0),1,BLU);box(88,330,'w',fm(s.w),1,BLU);box(530,370,'b',fm(s.b),1,BLU);box(760,370,'t',fm(TG),1,BLU);
+if(fw>=1)txt('wx = '+fm(s.u),376,Y-48,BLU,24,'center',700);
+if(fw>=2)txt('y = '+fm(s.y),620,Y-50,BLU,24,'center',700);
+if(fw>=3){g.fillStyle='#FFFDF8';g.strokeStyle=BLU;g.lineWidth=3;g.beginPath();g.roundRect(800,Y-40,90,80,12);g.fill();g.stroke();mt('L',845,Y-6,INK,26,'center');txt(fm(s.L,3),845,Y+28,BLU,24,'center',700)}
+gr(845,Y+70,1,bw>=0);gr(620,Y+70,s.dy,bw>=1);gr(376,Y+70,s.dy,bw>=2);gr(530,450,s.db,bw>=2);gr(88,410,s.dw,bw>=3);
+var by=H-104;
+if(bw>=1)if(3>bw){mt('∂L/∂y = 2(y − t) = '+fm(s.dy),40,by,'#8A3E12',26)}
+if(bw>=3)if(!up){mt('∂L/∂w = ∂L/∂y · x = ('+fm(s.dy)+')('+fm(X0)+') = '+fm(s.dw),40,by,'#8A3E12',26)}
+if(up){var n=IT[it+1];mt('w ← '+fm(s.w)+' − 0.1 × ('+fm(s.dw)+') = '+fm(n.w),40,by,INK,26);mt('b ← '+fm(s.b)+' − 0.1 × ('+fm(s.db)+') = '+fm(n.b),40,by+44,INK,26)}
+txt('Blue: values (forward).  Orange: gradients ∂L/∂(·) (backward).',40,H-14,TX,24,'left');
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Engineering Math Sense · 11</p>
+<aside>loss.backward() is the chain rule applied mechanically. The animation uses the smallest possible graph: x = 1.5, weight w = 0.8, bias b = −0.2, target t = 2, and loss L = (y − t)². Forward: wx = 1.2, y = 1.0, L = 1.0. Backward, starting from ∂L/∂L = 1: the square node has local slope 2(y − t) = −2. The plus node passes the gradient through unchanged to both wx and b, so ∂L/∂b = −2. The multiply node scales it by x, so ∂L/∂w = −2 × 1.5 = −3. Then the update with learning rate 0.1 gives w = 1.10 and b = 0.00, and the loss drops to 0.1225, then 0.015 on the next iteration. Each node needed only its own local derivative. That is why reverse-mode differentiation is cheap: the cost of all the gradients is a small constant multiple of the cost of the forward pass, no matter how many parameters there are.</aside>
+</section>

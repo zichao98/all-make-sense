@@ -1,0 +1,44 @@
+<section id="init" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">15 · Initialization</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Initialization sets the per-layer gain</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#F4DCC8;padding:22px 32px;border-radius:12px"><img src="assets/varw.svg" alt="Var(W_ij) = g² / n_in" style="width:268px;height:90px;object-fit:contain"><p style="flex:1;font-size:24px;line-height:1.4;color:#8A3E12">Random weights, scaled by the number of inputs to the layer.</p></div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">ReLU zeroes about half its inputs,</span></b> so each layer multiplies the signal’s variance by g²/2. Only g² = 2 holds it steady.</p>
+<div style="display:flex;flex-direction:column"><div style="display:flex;flex-direction:row;align-items:center;background:#E7E0D2;padding:8px 16px"><p style="width:22%;font-size:24px;font-weight:700;text-align:left;color:#17212B">g²</p><p style="width:38%;font-size:24px;font-weight:700;text-align:right;color:#17212B">Gain per layer</p><p style="width:40%;font-size:24px;font-weight:700;text-align:right;color:#17212B">Scale at layer 20</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:22%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">1</p><p style="width:38%;font-size:26px;line-height:1.35;text-align:right;color:#17212B">0.71</p><p style="width:40%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">0.0014</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:22%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">2 (He)</p><p style="width:38%;font-size:26px;line-height:1.35;text-align:right;color:#17212B">1.00</p><p style="width:40%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">1.41</p></div><div style="display:flex;flex-direction:row;align-items:center;gap:0px;padding:8px 16px;border-bottom:1px solid #DDD5C5"><p style="width:22%;font-size:26px;line-height:1.35;text-align:left;color:#17212B;font-weight:700">3</p><p style="width:38%;font-size:26px;line-height:1.35;text-align:right;color:#17212B">1.22</p><p style="width:40%;font-size:26px;line-height:1.35;text-align:right;color:#17212B;font-weight:700">81</p></div></div>
+<p style="font-size:24px;line-height:1.5;color:#4A5563">g² = 2 is He initialization (He et al., 2015). The plot on the right is a real forward pass.</p>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz,al){g.font=(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';var w=0,i;for(i=0;s.length>i;i++){g.font=(/[a-z]/i.test(s[i])?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';w+=g.measureText(s[i]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';for(i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+var NW=256,L=20,B=8,GS=[3,2,1],COL=['#B5531C',OR,BL],RES=[],c;
+function run(g2,seed){var R=rng(seed),h=[],i,j,b,out=[],l;for(b=0;B>b;b++){h.push([]);for(i=0;NW>i;i++)h[b].push(gauss(R))}
+for(l=0;L>l;l++){var sd=Math.sqrt(g2/NW),Wm=[];for(i=0;NW>i;i++){var row=new Float64Array(NW);for(j=0;NW>j;j++)row[j]=sd*gauss(R);Wm.push(row)}
+var nh=[],ss=0;for(b=0;B>b;b++){var r=[],x=h[b];for(i=0;NW>i;i++){var s=0,w=Wm[i];for(j=0;NW>j;j++)s+=w[j]*x[j];ss+=s*s;r.push(s>0?s:0)}nh.push(r)}
+out.push(Math.sqrt(ss/(B*NW)));h=nh}return out}
+for(c=0;3>c;c++)RES.push(run(GS[c],11));
+var DUR=8,t0=performance.now();
+function draw(){var t=((performance.now()-t0)/1000)%DUR,n=Math.min(L,1+Math.floor(t/0.22)),l,e;
+var px=120,py=80,pw=560,ph=400,lt=2,lb=-3;function XX(l){return px+(l-1)/(L-1)*pw}function YY(v){return py+(lt-Math.log(v)/Math.LN10)/(lt-lb)*ph}
+g.clearRect(0,0,W,H);
+txt('Activation scale through a 20-layer ReLU network',40,44,INK,26,'left',700);
+for(e=lb;lt>=e;e++){var y=YY(Math.pow(10,e));g.strokeStyle=e==0?'#C9C0AE':'#ECE6DA';g.lineWidth=e==0?2:1.5;g.beginPath();g.moveTo(px,y);g.lineTo(px+pw,y);g.stroke();txt(['0.001','0.01','0.1','1','10','100'][e+3],px-14,y+8,TX,24,'right')}
+txt('layer 1',px,py+ph+36,TX,24,'left');txt('layer 20',px+pw,py+ph+36,TX,24,'right');
+for(c=0;3>c;c++){var r=RES[c];g.strokeStyle=COL[c];g.lineWidth=4;g.beginPath();for(l=1;n>=l;l++){l>1?g.lineTo(XX(l),YY(r[l-1])):g.moveTo(XX(l),YY(r[l-1]))}g.stroke();
+g.fillStyle=COL[c];g.beginPath();g.arc(XX(n),YY(r[n-1]),7,0,6.2832);g.fill();
+if(n>=8){var v=r[n-1],s=v>=10?v.toFixed(0):(v>=0.1?v.toFixed(2):v.toPrecision(2));mt('g² = '+GS[c],XX(n)+16,YY(v)-2,COL[c],26);txt(s,XX(n)+16,YY(v)+26,COL[c],24,"left",700)}}
+txt('Std of pre-activations, width 256, Gaussian weights.',40,H-28,TX,24,'left');
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#7A828C">Engineering Math Sense · 20　　Scale = standard deviation of pre-activations; input has unit variance. Table: theory; plot: one random draw.</p>
+<aside>Here is the gain from the previous slide, set by a single number. Initialize each weight with variance g² divided by the number of inputs. A ReLU passes about half of its inputs and zeroes the rest, so each layer multiplies the variance of the signal by g²/2, and the standard deviation by the square root of that: 0.71 for g² = 1, 1.00 for g² = 2, 1.22 for g² = 3. Over 20 layers that compounds. Starting from unit-variance input, the first layer's pre-activations have standard deviation √g², and then nineteen more factors follow. For g² = 1 the scale at layer 20 is about 0.0014, for g² = 2 it stays at 1.41, and for g² = 3 it reaches about 81. The animation actually runs a 20-layer ReLU network of width 256 on eight random inputs in your browser and plots the measured standard deviation per layer. This draw gives 0.00138, 1.41 and 81.2, matching the theory. g² = 2 is the He initialization from He, Zhang, Ren and Sun's 2015 paper on rectifiers.</aside>
+</section>

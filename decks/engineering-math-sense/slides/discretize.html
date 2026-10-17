@@ -1,0 +1,40 @@
+<section id="discretize" data-transition="fade" style="background:#F6F3EC;color:#17212B;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<div style="position:absolute;left:880px;top:296px;width:912px;height:624px;background:#FFFDF8;border:1px solid #E2DCCF;border-radius:20px"></div>
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#B5531C">03 · Discretize</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;color:#17212B">Sample too slowly and you see a fake signal</h2>
+<div style="width:688px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:24px;background:#F4DCC8;padding:22px 32px;border-radius:12px"><img src="assets/nyq.svg" alt="f_s > 2 f_max" style="width:183px;height:35px;object-fit:contain"><p style="flex:1;font-size:24px;line-height:1.4;color:#8A3E12">To capture frequency f, take more than two samples per cycle (Nyquist).</p></div>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">The trap:</span></b> a 9 Hz wave sampled 10 times a second gives exactly the samples of a 1 Hz wave. The data cannot tell them apart.</p>
+<p style="font-size:28px;line-height:1.5;color:#4A5563"><b><span style="color:#B5531C">Same idea elsewhere:</span></b> pixels per edge in an image, time steps per oscillation in a simulation.</p>
+<div style="display:flex;flex-direction:column;gap:6px;background:#15202B;padding:22px 28px;border-radius:14px"><p style="font-size:28px;font-weight:700;color:#F0995E">Eye rule: two samples per wiggle is the floor</p><p style="font-size:24px;line-height:1.5;color:#E6E1D6">Below it, fast detail does not disappear. It folds into slow detail that looks real.</p></div>
+</div>
+<x-embed style="position:absolute;left:880px;top:296px;width:912px;height:624px"><!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}canvas{display:block;width:100%;height:100%}</style></head><body><canvas id="c"></canvas><script>
+var cv=document.getElementById('c'),g=cv.getContext('2d'),W,H;
+function fit(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0)}
+onresize=fit;fit();
+var F='"Segoe UI","Microsoft JhengHei","PingFang TC",sans-serif',TX='#4A5563',INK='#17212B',OR='#E0782F',BL='#2D6CB0';
+function txt(s,x,y,col,sz,al,wt){g.fillStyle=col||TX;g.font=(wt||400)+' '+(sz||26)+'px '+F;g.textAlign=al||'left';g.fillText(s,x,y)}
+function mt(s,x,y,col,sz,al){g.font=(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';var w=0,i;for(i=0;s.length>i;i++){g.font=(/[a-z]/i.test(s[i])?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';w+=g.measureText(s[i]).width}
+if(al=='center')x-=w/2;if(al=='right')x-=w;g.fillStyle=col;g.textAlign='left';for(i=0;s.length>i;i++){var ch=s[i];g.font=(/[a-z]/i.test(ch)?'italic ':'')+(sz+2)+'px "Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif';g.fillText(ch,x,y);x+=g.measureText(ch).width}}
+function fm(v,n){n=n==null?2:n;var s=v.toFixed(n);if(Number(s)==0)s=(0).toFixed(n);return s.replace('-','−')}
+function rng(s){return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function gauss(R){var u=R()+1e-12,v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v)}
+var FS=10,CASES=[2,4,6,9],DUR=4,t0=performance.now();
+function draw(){var t=(performance.now()-t0)/1000,ci=Math.floor(t/DUR)%CASES.length,u=(t%DUR)/DUR,f=CASES[ci],fa=f-Math.round(f/FS)*FS,i;
+var px=48,py=110,pw=W-96,ph=330;function X(s){return px+s*pw}function Y(v){return py+ph/2-v*ph*0.42}
+g.clearRect(0,0,W,H);
+txt('True signal: '+f+' Hz',px,48,BL,28,'left',700);txt('Sampled '+FS+' times per second',W-48,48,TX,24,'right');
+g.strokeStyle='#E2DCCF';g.lineWidth=1.5;g.beginPath();g.moveTo(px,Y(0));g.lineTo(px+pw,Y(0));g.stroke();
+g.strokeStyle=BL;g.lineWidth=2.5;g.setLineDash([7,6]);g.beginPath();for(i=0;600>=i;i++){var s=i/600,y=Math.sin(6.2832*f*s);i?g.lineTo(X(s),Y(y)):g.moveTo(X(s),Y(y))}g.stroke();g.setLineDash([]);
+var show=Math.min(1,u*1.8);if(show>0.55){g.strokeStyle=OR;g.lineWidth=4;g.globalAlpha=Math.min(1,(show-0.55)*4);g.beginPath();for(i=0;600>=i;i++){var s2=i/600,y2=Math.sin(6.2832*fa*s2);i?g.lineTo(X(s2),Y(y2)):g.moveTo(X(s2),Y(y2))}g.stroke();g.globalAlpha=1}
+var nk=Math.floor(show*(FS+1)/0.55);for(i=0;FS>=i;i++){if(i>nk)break;var s3=i/FS,y3=Math.sin(6.2832*f*s3);g.strokeStyle='#C9C0AE';g.lineWidth=2;g.beginPath();g.moveTo(X(s3),Y(0));g.lineTo(X(s3),Y(y3));g.stroke();g.fillStyle=OR;g.beginPath();g.arc(X(s3),Y(y3),8,0,6.2832);g.fill()}
+txt('0 s',px,py+ph+34,TX,24,'left');txt('1 s',px+pw,py+ph+34,TX,24,'right');
+var ok=FS>2*f,lab=Math.abs(fa);
+txt('The samples look like: '+lab+' Hz',px,H-80,ok?INK:'#B5531C',30,'left',700);
+txt(ok?'More than 2 samples per cycle: the wave is recovered.':'Fewer than 2 samples per cycle: a slower fake (alias).',px,H-36,TX,24,'left');
+requestAnimationFrame(draw)}
+draw();
+</script></body></html></x-embed>
+<p style="position:absolute;left:128px;bottom:64px;width:600px;font-size:24px;color:#7A828C">Engineering Math Sense · 06</p>
+<aside>Discretization is the first place information can be lost without any warning. The sampling theorem says that to represent a frequency f you need a sampling rate above 2f. The animation samples at 10 Hz. At 2 Hz and 4 Hz there are more than two samples per cycle and the orange curve through the samples is the true wave. At 6 Hz and 9 Hz there are fewer. The samples of a 9 Hz sine at 10 Hz are exactly the samples of a 1 Hz sine with the sign flipped, and 6 Hz looks like 4 Hz. This is aliasing. The same logic applies to images, where an edge needs enough pixels, and to simulations, where a time step that is too large for the fastest oscillation produces nonsense. Real systems sample with margin above the theoretical floor.</aside>
+</section>

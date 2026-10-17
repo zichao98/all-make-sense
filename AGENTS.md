@@ -72,6 +72,7 @@ tools/                         tex2svg.mjs、new-deck.mjs
 ## 部署
 
 - Cloudflare Workers（只有靜態檔），名稱 `all-make-sense`，設定在 `wrangler.jsonc`。
+- **推到 `main` 會由 Cloudflare Workers Builds 自動部署**（`wrangler.jsonc` 的 `build.command` 會先跑 `node build.mjs`），一般不需要手動部署；PR 上的 GitHub Actions 只跑嚴格檢查。
 - 指令：`node build.mjs && npx wrangler deploy`（需要先 `npx wrangler login`）。
 - 在使用者這台 Windows 電腦上，環境變數裡有一個舊的 `CLOUDFLARE_API_TOKEN`，權限不夠（403），會蓋過 `wrangler login`。部署時用 `env -u CLOUDFLARE_API_TOKEN npx -y wrangler@4 deploy`。
 - 部署後確認首頁、`/<slug>/`、以及一個 `assets/` 檔案都回 200。
